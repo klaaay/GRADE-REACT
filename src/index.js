@@ -7,7 +7,6 @@ import Login from './components/login/Login.jsx'
 
 import store from './store/configureStore.js';
 
-import 'antd/dist/antd.css';
 
 ReactDOM.render(
   <Provider store={store}>
