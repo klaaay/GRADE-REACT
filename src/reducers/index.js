@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux-immutable';
-import github from './data/githubReducers';// import routes from './routes';
+import login from './loginReducers'
 
 
 const rootReducer = combineReducers({
-  github
+  login
 });
 
 export default rootReducer;

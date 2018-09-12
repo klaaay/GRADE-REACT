@@ -1,7 +1,8 @@
 import Immutable from 'immutable'
 
-export const GithubState = Immutable.fromJS({
-  status:false,
-  userId: '',
-  data: {}
-});
+export const UserState = Immutable.fromJS({
+  userName: '',
+  password: '',
+  message: '',
+  status: false
+})

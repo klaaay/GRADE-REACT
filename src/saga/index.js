@@ -1,41 +1,27 @@
-import { call, put, takeLatest, select, fork,all } from 'redux-saga/effects'
+import { call, takeLatest, select, fork, all } from 'redux-saga/effects'
 
-import { fetchData, myTest } from '../api/githubGet.js'
+import { login_confirm } from '../api/login.js'
 
-function* getApiData() {
+function* loginConfirm() {
   try {
-    const userName = yield select(state => (state.getIn(['github', 'userId'])));
-    const data = yield call(fetchData, userName);
-    yield put({
-      type: 'GITHUB_GET',
-      payload: { data: data }
-    })
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-function* getMyTest() {
-  try {
-    const data = yield call(myTest);
-    console.log(data);
+    const userName = yield select(state => (state.getIn(['login', 'userName'])));
+    const password = yield select(state => (state.getIn(['login', 'password'])));
+    console.log(userName);
+    console.log(password);
+    const data = yield call(login_confirm, userName, password);
+    console.log(data)
   } catch (e) {
     console.log(e)
   }
 }
 
-function* watchUserIdChange() {
-  yield takeLatest('CHAGE_USER_ID', getApiData);
-}
-
-function* watchUserIdChange_test() {
-  yield takeLatest('CHAGE_USER_ID', getMyTest);
+function* watchLoginConfirm() {
+  yield takeLatest('VALIDATE_USER', loginConfirm);
 }
 
 export default function* root() {
   yield all([
-    fork(watchUserIdChange),
-    fork(watchUserIdChange_test)
+    fork(watchLoginConfirm)
   ])
 }
 
