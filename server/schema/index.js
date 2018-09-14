@@ -8,9 +8,10 @@ var db = mongoose.connect("mongodb://127.0.0.1:27017/grade", function (err) {
 });
 var Schema = mongoose.Schema;
 
-exports.admin = new Schema({
+exports.user = new Schema({
   userName: String,
-  password: String
+  password: String,
+  role:String
 });
 
 

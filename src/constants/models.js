@@ -4,5 +4,6 @@ export const UserState = Immutable.fromJS({
   userName: '',
   password: '',
   message: '',
-  status: false
+  role:'',
+  status: 'await'
 })

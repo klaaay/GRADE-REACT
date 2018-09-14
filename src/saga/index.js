@@ -1,4 +1,5 @@
-import { call, takeLatest, select, fork, all } from 'redux-saga/effects'
+import { call, takeLatest, select, fork, all, put } from 'redux-saga/effects'
+import { browserHistory } from 'react-router';
 
 import { login_confirm } from '../api/login.js'
 
@@ -6,10 +7,15 @@ function* loginConfirm() {
   try {
     const userName = yield select(state => (state.getIn(['login', 'userName'])));
     const password = yield select(state => (state.getIn(['login', 'password'])));
-    console.log(userName);
-    console.log(password);
     const data = yield call(login_confirm, userName, password);
-    console.log(data)
+    yield put({ type: 'LOGIN_RESULT', payload: data })
+    const status = yield select(state => (state.getIn(['login', 'status'])));
+    if(status === 'success'){
+      const role = yield select(state => (state.getIn(['login', 'role'])));
+      if(role === 'admin'){
+        browserHistory.push('/admin');
+      }
+    }
   } catch (e) {
     console.log(e)
   }
