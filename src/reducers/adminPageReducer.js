@@ -2,6 +2,12 @@ import { handleActions } from 'redux-actions'
 import { AdminPageState } from '../constants/models'
 
 const AdminPageReducer = handleActions({
+  CHANGE_ROUTE: (state) => (
+    state.merge({
+      status: 'await'
+    })
+  ),
+
   ROLE_CHANGE: (state, { payload }) => (
     state.merge({
       role: payload.role
@@ -20,8 +26,21 @@ const AdminPageReducer = handleActions({
       status: payload.status,
       message: payload.message
     })
-  )
+  ),
 
+  START_CHANGE_PASSWORD: (state, { payload }) => (
+    state.merge({
+      oldPass: payload.oldPass,
+      newPass: payload.newPass,
+      reNewPass: payload.reNewPass
+    })
+  ),
+  CHANGE_PASSWORD_RESULT: (state, { payload }) => (
+    state.merge({
+      status: payload.status,
+      message: payload.message
+    })
+  )
 }, AdminPageState)
 
 export default AdminPageReducer

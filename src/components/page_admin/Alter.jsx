@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Alert } from 'antd';
 
-const AddAlter = props => {
+const Alter = props => {
   if (props.status === 'await') {
     return <div></div>
   }
@@ -17,4 +17,4 @@ const AddAlter = props => {
     )
   }
 }
-export default AddAlter;
+export default Alter;

@@ -9,10 +9,15 @@ export const LoginState = Immutable.fromJS({
 })
 
 export const AdminPageState = Immutable.fromJS({
+  message:'',
+  status:'await',
+  //add router
   userName:'',
   password:'',
   repass:'',
   role:'',
-  message:'',
-  status:'await'
+  //change password router
+  oldPass:'',
+  newPass:'',
+  reNewPass:''
 })

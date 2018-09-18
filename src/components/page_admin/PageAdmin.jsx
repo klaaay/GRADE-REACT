@@ -1,16 +1,17 @@
-
-
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router';
+import { connect } from 'react-redux'
 
 import { Layout, Menu, Icon } from 'antd';
 import $ from 'jquery'
+
+import { changeRoute } from '../../actions/admin.js'
 
 import './PageAdmin.less'
 
 const { Header, Sider, Content } = Layout;
 
-export default class PageAdmin extends Component {
+class PageAdmin extends Component {
   state = {
     collapsed: false,
     openKeys: ['sub1'],
@@ -38,12 +39,13 @@ export default class PageAdmin extends Component {
   changeRouter = (router) => {
     browserHistory.push('/admin/' + router)
   }
-  
+
   componentDidMount = () => {
     $('.teacher_route').trigger('click');
   }
 
   render() {
+    const { onChangeRoute } = this.props
     return (
       <Layout>
         <Sider
@@ -58,6 +60,7 @@ export default class PageAdmin extends Component {
             <Menu.Item key="1"
               className="teacher_route"
               onClick={(e) => {
+                onChangeRoute()
                 this.changeRouter('teacher')
               }}
             >
@@ -66,6 +69,7 @@ export default class PageAdmin extends Component {
             </Menu.Item>
             <Menu.Item key="2"
               onClick={(e) => {
+                onChangeRoute()
                 this.changeRouter('student')
               }}
             >
@@ -74,6 +78,7 @@ export default class PageAdmin extends Component {
             </Menu.Item>
             <Menu.Item key="3"
               onClick={(e) => {
+                onChangeRoute()
                 this.changeRouter('add')
               }}
             >
@@ -106,3 +111,11 @@ export default class PageAdmin extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  onChangeRoute: (e) => {
+    dispatch(changeRoute())
+  }
+})
+
+export default connect(null, mapDispatchToProps)(PageAdmin)

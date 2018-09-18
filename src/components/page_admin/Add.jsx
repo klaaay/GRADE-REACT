@@ -6,7 +6,7 @@ import $ from 'jquery'
 
 import { startAddUser,roleChange } from '../../actions/admin.js'
 
-import AddAlter from './AddAlter.jsx'
+import Alter from './Alter.jsx'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -22,8 +22,6 @@ class Add extends Component {
   render() {
     const { onStartAddUser,onHandleSelectChange } = this.props
     const { status, message } = this.props
-    console.log(status)
-    console.log(message)
     return (
       <Form>
         <FormItem
@@ -78,7 +76,7 @@ class Add extends Component {
         <FormItem
           wrapperCol={{ span: 8, offset: 8 }}
         >
-        <AddAlter
+        <Alter
           status={status}
           message={message}
         />

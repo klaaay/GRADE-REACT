@@ -82,7 +82,7 @@ app.post('/admin/add', (req, res) => {
         if (doc[0]) {
           res.send({
             status: 'failed',
-            message: '该账户名已经存在',
+            message: '该账户名已经存在'
           })
         } else {
           var user_doc = new User({
@@ -118,6 +118,49 @@ app.post('/admin/add', (req, res) => {
           })
         }
       })
+    }
+  }
+})
+
+app.post('/admin/change', (req, res) => {
+  console.log(req.body);
+  var userName = req.body.userName;
+  var relOld = req.body.relOld;
+  var oldPass = req.body.oldPass;
+  var newPass = req.body.newPass;
+  var reNewPass = req.body.reNewPass;
+  if (!oldPass || !newPass || !reNewPass) {
+    res.send({
+      status: 'failed',
+      message: '请填写完整信息'
+    })
+  } else {
+    if (relOld !== oldPass) {
+      res.send({
+        status: 'failed',
+        message: '原密码错误'
+      })
+    } else {
+      if (newPass === oldPass) {
+        res.send({
+          status: 'failed',
+          message: '新密码不能与原密码相同'
+        })
+      } else {
+        if (newPass !== reNewPass) {
+          res.send({
+            status: 'failed',
+            message: '输入两次密码不一致'
+          })
+        } else {
+          var a = User.update({ userName: userName }, { $set: { password: newPass } }).exec();
+          console.log(a);
+          res.send({
+            status: 'success',
+            message: '密码修改成功'
+          })
+        }
+      }
     }
   }
 })
