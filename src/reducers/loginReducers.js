@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { UserState } from '../constants/models'
+import { LoginState } from '../constants/models'
 
 const loginReducer = handleActions({
   CHANGE_USER_NAME: (state, { payload }) => (
@@ -22,6 +22,6 @@ const loginReducer = handleActions({
       role: payload.role
     })
   )
-}, UserState)
+}, LoginState)
 
 export default loginReducer;
