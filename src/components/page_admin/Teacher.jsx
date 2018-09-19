@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import { Table, Icon } from 'antd';
 
@@ -19,86 +20,39 @@ const columns = [{
 }
 ];
 
-const data = [];
+let data = [];
 
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    userName: `Edward King ${i}`,
-    password: 32,
-    modify: <Icon
-      type="edit"
-      theme="outlined"
-      onClick={(e) => {
-        console.log(e.target.parentNode.parentNode.parentNode)
-      }}
-    />,
-    delete: <Icon
-      type="delete"
-      theme="outlined"
-      onClick={(e) => {
-        console.log(e.target.parentNode.parentNode.parentNode)
-      }}
-    />
-  });
-}
-
-export default class Teacher extends Component {
-  state = {
-    selectedRowKeys: [], // Check here to configure the default column
-  };
-
-  onSelectChange = (selectedRowKeys) => {
-    console.log(data[0]);
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
-  }
-
+class Teacher extends Component {
   render() {
-    const { selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-      hideDefaultSelections: true,
-      selections: [{
-        key: 'all-data',
-        text: 'Select All Data',
-        onSelect: () => {
-          this.setState({
-            selectedRowKeys: [...Array(46).keys()], // 0...45
-          });
-        },
-      }, {
-        key: 'odd',
-        text: 'Select Odd Row',
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-            if (index % 2 !== 0) {
-              return false;
-            }
-            return true;
-          });
-          this.setState({ selectedRowKeys: newSelectedRowKeys });
-        },
-      }, {
-        key: 'even',
-        text: 'Select Even Row',
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-            if (index % 2 !== 0) {
-              return true;
-            }
-            return false;
-          });
-          this.setState({ selectedRowKeys: newSelectedRowKeys });
-        },
-      }],
-      onSelection: this.onSelection,
-    };
+    const { teacherList } = this.props
+    data = [];
+    for (let i = 0; i < teacherList.toJS().length; i++) {
+      data.push({
+        key: i,
+        userName: teacherList.toJS()[i].userName,
+        password: teacherList.toJS()[i].password,
+        modify: <Icon
+          type="edit"
+          theme="outlined"
+          onClick={(e) => {
+          }}
+        />,
+        delete: <Icon
+          type="delete"
+          theme="outlined"
+          onClick={(e) => {
+          }}
+        />
+      });
+    }
     return (
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} />
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  teacherList: state.getIn(['admin', 'teacherList'])
+})
+
+export default connect(mapStateToProps)(Teacher)

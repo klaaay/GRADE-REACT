@@ -10,6 +10,10 @@ export const RECEIVE_API_DATA = 'RECEIVE_API_DATA';
 //admin page
 export const CHANGE_ROUTE = 'CHANGE_ROUTE';
 
+//admin page - teacher&student roouter
+export const TEACHER_LIST_SEARCH = 'TEACHER_LIST_SEARCH';
+export const STUDENT_LIST_SEARCH = 'STUDENT_LIST_SEARCH';
+
 //admin page - add router
 export const ROLE_CHANGE = 'ROLE_CHANGE';
 export const START_ADD_USER = 'START_ADD_USER';

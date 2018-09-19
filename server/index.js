@@ -165,4 +165,24 @@ app.post('/admin/change', (req, res) => {
   }
 })
 
+app.post('/admin/search_list', (req, res) => {
+  console.log(req.body.role);
+  if (req.body.role === 'teacher') {
+    User.find({ role: 'teacher' }, { userName: 1, password: 1, _id: 0 }, function (err, doc) {
+      console.log(doc)
+      res.send({
+        teacherList: doc
+      })
+    })
+  } else if (req.body.role === 'student') {
+    User.find({ role: 'student' }, { userName: 1, password: 1, _id: 0 }, function (err, doc) {
+      console.log(doc)
+      res.send({
+        studentList: doc
+      })
+    })
+  }
+
+})
+
 server.listen(port, () => console.log(`Listening on port ${port}`));

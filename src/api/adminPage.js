@@ -1,3 +1,23 @@
+export const search_role_list = async (role) => {
+  let data = {
+    role: role
+  }
+  let data_str = JSON.stringify(data);
+  let fetchOption = {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', },
+    body: data_str
+  }
+  try {
+    const response = await fetch('/admin/search_list', fetchOption);
+    const body = await response.json();
+    return body;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+
 export const add_user = async (userName, password, repass, role) => {
   let user = {
     userName: userName,
@@ -14,7 +34,6 @@ export const add_user = async (userName, password, repass, role) => {
   try {
     const response = await fetch('/admin/add', fetchOption);
     const body = await response.json();
-    console.log(body)
     return body;
   } catch (e) {
     console.log(e)

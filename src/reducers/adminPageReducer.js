@@ -8,6 +8,19 @@ const AdminPageReducer = handleActions({
     })
   ),
 
+  TEACHER_LIST_SEARCH: (state) => (state),
+  STUDENT_LIST_SEARCH: (state) => (state),
+  TEACHER_LIST_SEARCH_RESULT:(state,{payload})=>(
+    state.merge({
+      teacherList: payload.teacherList
+    })
+  ),
+  STUDENT_LIST_SEARCH_RESULT:(state,{payload})=>(
+    state.merge({
+      studentList: payload.studentList
+    })
+  ),
+
   ROLE_CHANGE: (state, { payload }) => (
     state.merge({
       role: payload.role

@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Layout, Menu, Icon } from 'antd';
 import $ from 'jquery'
 
-import { changeRoute } from '../../actions/admin.js'
+import { changeRoute, teacherListSearch, studentListSearch } from '../../actions/admin.js'
 
 import './PageAdmin.less'
 
@@ -45,7 +45,7 @@ class PageAdmin extends Component {
   }
 
   render() {
-    const { onChangeRoute } = this.props
+    const { onChangeRoute, onTeacherListSearch, onStudentListSearch } = this.props
     return (
       <Layout>
         <Sider
@@ -61,6 +61,7 @@ class PageAdmin extends Component {
               className="teacher_route"
               onClick={(e) => {
                 onChangeRoute()
+                onTeacherListSearch()
                 this.changeRouter('teacher')
               }}
             >
@@ -70,6 +71,7 @@ class PageAdmin extends Component {
             <Menu.Item key="2"
               onClick={(e) => {
                 onChangeRoute()
+                onStudentListSearch()
                 this.changeRouter('student')
               }}
             >
@@ -115,6 +117,12 @@ class PageAdmin extends Component {
 const mapDispatchToProps = (dispatch) => ({
   onChangeRoute: (e) => {
     dispatch(changeRoute())
+  },
+  onTeacherListSearch: (e) => {
+    dispatch(teacherListSearch())
+  },
+  onStudentListSearch: (e) => {
+    dispatch(studentListSearch())
   }
 })
 
