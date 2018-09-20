@@ -44,6 +44,7 @@ class PageAdmin extends Component {
     $('.teacher_route').trigger('click');
   }
 
+
   render() {
     const { onChangeRoute, onTeacherListSearch, onStudentListSearch } = this.props
     return (
@@ -81,13 +82,22 @@ class PageAdmin extends Component {
             <Menu.Item key="3"
               onClick={(e) => {
                 onChangeRoute()
+                this.changeRouter('class')
+              }}
+            >
+              <Icon type="video-camera" />
+              <span>班级管理</span>
+            </Menu.Item>
+            <Menu.Item key="4"
+              onClick={(e) => {
+                onChangeRoute()
                 this.changeRouter('add')
               }}
             >
               <Icon type="video-camera" />
               <span>添加账号</span>
             </Menu.Item>
-            <Menu.Item key="4"
+            <Menu.Item key="5"
               onClick={(e) => {
                 this.changeRouter('change')
               }}

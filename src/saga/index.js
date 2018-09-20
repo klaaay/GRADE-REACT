@@ -17,6 +17,10 @@ function* loginConfirm() {
       const role = yield select(state => (state.getIn(['login', 'role'])));
       if (role === 'admin') {
         browserHistory.push('/admin');
+      } else if (role === 'teacher') {
+        browserHistory.push('/teacher');
+      } else if (role === 'student') {
+        browserHistory.push('/student');
       }
     }
   } catch (e) {
