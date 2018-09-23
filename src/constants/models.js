@@ -5,6 +5,7 @@ export const LoginState = Immutable.fromJS({
   password: '',
   message: '',
   role: '',
+  id: '',
   status: 'await'
 })
 
@@ -30,4 +31,16 @@ export const AdminPageState = Immutable.fromJS({
   nowClassStudentList: [],
   addRole: '',
   addName: ''
+})
+
+export const TeacherPageState = Immutable.fromJS({
+  message: '',
+  status: '',
+  //task
+  classList: [],
+  classes: [],
+  title: '',
+  content: '',
+  publishTime: '',
+  endTime: ''
 })

@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const taskSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
-  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class' }],
+  classes: [String],
   title: String,
   content: String,
-  publish_time: Date,
-  end_time: Date,
-  Homework_done: { type: mongoose.Schema.Types.ObjectId, ref: 'TaskDone' },
+  publish_time: String,
+  end_time: String,
+  Homework_done: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TaskDone' }],
   done: Boolean,
 })
 

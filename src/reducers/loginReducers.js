@@ -19,7 +19,8 @@ const loginReducer = handleActions({
     state.merge({
       status: payload.status,
       message: payload.message,
-      role: payload.role
+      role: payload.role,
+      id: payload.id
     })
   )
 }, LoginState)

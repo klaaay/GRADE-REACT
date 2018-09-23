@@ -25,3 +25,10 @@ export const CHANGE_PASSWORD_RESULT = 'CHANGE_PASSWORD_RESULT';
 
 //admin page - class control router
 export const START_ADD_ROLE = 'START_ADD_ROLE';
+
+
+//teacher page
+export const CLASS_LIST_SEARCH = 'CLASS_LIST_SEARCH';
+export const TASK_CLASSES_CHANGE = 'TASK_CLASSES_CHANGE';
+export const TASK_TIME_CHANGE = 'TASK_TIME_CHANGE'
+export const START_TASK_PUBLISH = 'START_TASK_PUBLISH';

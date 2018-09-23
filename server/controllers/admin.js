@@ -156,15 +156,17 @@ exports.class_control = (req, res, next) => {
     Teacher.find({ name: addName })
       .exec()
       .then(doc => {
-        Class.update({name:nowClass},{$push:{teachers:doc[0].name}})
+        Class.update({ name: nowClass }, { $push: { teachers: doc[0].name } })
           .exec()
       })
-  }else if(addRole === 'student'){
-    Student.find({name:addName})
+  } else if (addRole === 'student') {
+    Student.find({ name: addName })
       .exec()
-      .then(doc =>{
-        Class.update({name:nowClass},{$push:{classMates:doc[0].name}})
+      .then(doc => {
+        Class.update({ name: nowClass }, { $push: { classMates: doc[0].name } })
           .exec()
       })
+    Student.update({ name: addName }, { $set: { class: nowClass } })
+      .exec()
   }
 }

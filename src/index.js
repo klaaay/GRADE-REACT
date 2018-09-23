@@ -13,6 +13,7 @@ import ChangePassword from './components/page_admin/changePassword/Change.jsx'
 import ClassControl from './components/page_admin/classControl/Class.jsx'
 
 import PageTeacher from './components/page_teacher/PageTeacher.jsx'
+import Task from './components/page_teacher/publishTask/Task.jsx'
 
 import PageStudent from './components/page_student/PageStudent.jsx'
 
@@ -36,6 +37,7 @@ ReactDOM.render(
           </Route>
         </Route>
         <Route path="/teacher" component={PageTeacher}>
+          <Route path="/teacher/task" component={Task} />
         </Route>
         <Route path="/student" component={PageStudent}>
         </Route>

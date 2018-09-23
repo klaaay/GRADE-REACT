@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router';
 
 import { Layout, Menu, Icon } from 'antd';
 
+import { classListSearch } from '../../actions/teacher'
+
 const { Header, Sider, Content } = Layout;
 
-export default class PageTeacher extends Component {
+ class PageTeacher extends Component {
   state = {
     collapsed: false
   };
@@ -15,11 +19,16 @@ export default class PageTeacher extends Component {
     });
   }
 
+  changeRouter = (router) => {
+    browserHistory.push('/teacher/' + router)
+  }
+
   componentDidMount = () => {
 
   }
 
   render() {
+    const { onClassListSearch } = this.props
     return (
       <Layout>
         <Sider
@@ -34,6 +43,8 @@ export default class PageTeacher extends Component {
             <Menu.Item key="1"
               className="homework_publish"
               onClick={(e) => {
+                onClassListSearch()
+                this.changeRouter('task')
               }}
             >
               <Icon type="user" />
@@ -65,3 +76,16 @@ export default class PageTeacher extends Component {
     );
   }
 }
+
+
+const mapStateToProps = (state) => ({
+
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  onClassListSearch: (e) => {
+    dispatch(classListSearch())
+  }
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(PageTeacher)
