@@ -1,65 +1,11 @@
-const express = require('express');
-const path = require('path');
-var bodyParser = require('body-parser')
-var console = require('tracer').colorConsole();
+const mongoose = require("mongoose");
 
-const app = express();
-const server = require('http').createServer(app);
-const port = process.env.PORT || 5000;
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-var mongoose = require('./schema/').mongoose;
-var schema = require('./schema/')
-
-var User = mongoose.model('User', schema.User);
-var Admin = mongoose.model('Admin', schema.Admin);
-var Teacher = mongoose.model('Teacher', schema.Teacher);
-var Student = mongoose.model('Student', schema.Student);
-var Class = mongoose.model('Class', schema.Class);
-var Homework_teacher = mongoose.model('Homework_teacher', schema.Homework_teacher);
-var Homework_student = mongoose.model('Homework_student', schema.Homework_student)
+const User = require("../models/User");
+const Teacher = require("../models/Teacher");
+const Student = require("../models/Student");
 
 
-app.post('/login', (req, res) => {
-  var userName = req.body.userName;
-  var user = mongoose.model('User', schema.user);
-  user.find({ userName: userName }, function (err, doc) {
-    if (doc[0]) {
-      console.log('userName success');
-      var password = req.body.password;
-      user.find({ password: password }, { role: 1 }, function (err, doc) {
-        if (doc[0]) {
-          const role = doc[0].role;
-          console.log(role);
-          console.log('password success');
-          res.send({
-            status: 'success',
-            message: '登陆成功',
-            role: role
-          })
-        } else {
-          console.log('password failed');
-          res.send({
-            status: 'failed',
-            message: '密码错误',
-            role: ''
-          })
-        }
-      })
-    } else {
-      console.log('not exists');
-      res.send({
-        status: 'failed',
-        message: '账号不存在',
-        role: ''
-      })
-    }
-  })
-})
-
-app.post('/admin/add', (req, res) => {
+exports.add_user = (req, res) => {
   console.log(req.body);
   var userName = req.body.userName;
   var password = req.body.password;
@@ -77,8 +23,7 @@ app.post('/admin/add', (req, res) => {
         message: '密码输入不一致',
       })
     } else {
-      var user = mongoose.model('User', schema.user);
-      user.find({ userName: userName }, function (err, doc) {
+      User.find({ userName: userName }, function (err, doc) {
         if (doc[0]) {
           res.send({
             status: 'failed',
@@ -120,9 +65,9 @@ app.post('/admin/add', (req, res) => {
       })
     }
   }
-})
+}
 
-app.post('/admin/change', (req, res) => {
+exports.change_password = (req, res) => {
   console.log(req.body);
   var userName = req.body.userName;
   var relOld = req.body.relOld;
@@ -163,9 +108,9 @@ app.post('/admin/change', (req, res) => {
       }
     }
   }
-})
+}
 
-app.post('/admin/search_list', (req, res) => {
+exports.search_user_list = (req, res) => {
   console.log(req.body.role);
   if (req.body.role === 'teacher') {
     User.find({ role: 'teacher' }, { userName: 1, password: 1, _id: 0 }, function (err, doc) {
@@ -182,7 +127,4 @@ app.post('/admin/search_list', (req, res) => {
       })
     })
   }
-
-})
-
-server.listen(port, () => console.log(`Listening on port ${port}`));
+}
