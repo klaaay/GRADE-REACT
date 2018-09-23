@@ -10,12 +10,12 @@ const AdminPageReducer = handleActions({
 
   TEACHER_LIST_SEARCH: (state) => (state),
   STUDENT_LIST_SEARCH: (state) => (state),
-  TEACHER_LIST_SEARCH_RESULT:(state,{payload})=>(
+  TEACHER_LIST_SEARCH_RESULT: (state, { payload }) => (
     state.merge({
       teacherList: payload.teacherList
     })
   ),
-  STUDENT_LIST_SEARCH_RESULT:(state,{payload})=>(
+  STUDENT_LIST_SEARCH_RESULT: (state, { payload }) => (
     state.merge({
       studentList: payload.studentList
     })
@@ -31,6 +31,7 @@ const AdminPageReducer = handleActions({
       userName: payload.userName,
       password: payload.password,
       repass: payload.repass,
+      name: payload.name,
       status: 'await',
     })
   ),
@@ -52,6 +53,13 @@ const AdminPageReducer = handleActions({
     state.merge({
       status: payload.status,
       message: payload.message
+    })
+  ),
+
+  START_ADD_ROLE: (state, { payload }) => (
+    state.merge({
+      addRole: payload.addRole,
+      addName: payload.addName
     })
   )
 }, AdminPageState)

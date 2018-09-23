@@ -2,7 +2,7 @@ import { call, takeLatest, select, fork, all, put } from 'redux-saga/effects'
 import { browserHistory } from 'react-router';
 
 import { login_confirm } from '../api/login.js'
-import { add_user, change_password, search_role_list } from '../api/adminPage.js'
+import { add_user, change_password, search_role_list,class_control } from '../api/adminPage.js'
 
 
 //login
@@ -65,8 +65,9 @@ function* addUser() {
     const userName = yield select(state => (state.getIn(['admin', 'userName'])));
     const password = yield select(state => (state.getIn(['admin', 'password'])));
     const repass = yield select(state => (state.getIn(['admin', 'repass'])));
+    const name = yield select(state => (state.getIn(['admin', 'name'])));
     const role = yield select(state => (state.getIn(['admin', 'role'])));
-    const data = yield call(add_user, userName, password, repass, role);
+    const data = yield call(add_user, userName, password, repass, name,role);
     yield put({ type: 'ADD_USER_RESULT', payload: data })
   } catch (e) {
     console.log(e)
@@ -96,13 +97,31 @@ function* watchChangePassword() {
   yield takeLatest('START_CHANGE_PASSWORD', changePassword);
 }
 
+function*  classControl(){
+  try {
+    const addRole = yield select(state => (state.getIn(['admin', 'addRole'])));
+    const addName = yield select(state => (state.getIn(['admin', 'addName'])));
+    const nowClass = yield select(state => (state.getIn(['admin', 'nowClass'])));
+    const data = yield call(class_control, addRole, addName,nowClass);
+    console.log(data)
+    // yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+function* watchClassControl(){
+  yield takeLatest('START_ADD_ROLE',classControl)
+}
+
 export default function* root() {
   yield all([
     fork(watchLoginConfirm),
     fork(watchAddUser),
     fork(watchChangePassword),
     fork(watchTeacherList),
-    fork(watchStudentList)
+    fork(watchStudentList),
+    fork(watchClassControl)
   ])
 }
 

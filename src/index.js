@@ -6,12 +6,11 @@ import { browserHistory, Router, Route, IndexRoute } from 'react-router';
 import Login from './components/login/Login.jsx'
 
 import PageAdmin from './components/page_admin/PageAdmin.jsx'
-import Student from './components/page_admin/Student.jsx'
-import Teacher from './components/page_admin/Teacher.jsx'
-import Add from './components/page_admin/Add.jsx'
-import Change from './components/page_admin/Change.jsx'
-import Class from './components/page_admin/Class.jsx'
-import ClassAdd from './components/page_admin/ClassAdd.jsx'
+import StudentList from './components/page_admin/studentList/Student.jsx'
+import TeacherList from './components/page_admin/teacherList/Teacher.jsx'
+import AddUser from './components/page_admin/addUser/Add.jsx'
+import ChangePassword from './components/page_admin/changePassword/Change.jsx'
+import ClassControl from './components/page_admin/classControl/Class.jsx'
 
 import PageTeacher from './components/page_teacher/PageTeacher.jsx'
 
@@ -29,12 +28,11 @@ ReactDOM.render(
       <Route path="/" >
         <IndexRoute component={Login} />
         <Route path="/admin" component={PageAdmin}>
-          <Route path="/admin/student" component={Student} />
-          <Route path="/admin/teacher" component={Teacher} />
-          <Route path="/admin/add" component={Add} />
-          <Route path="/admin/change" component={Change} />
-          <Route path="/admin/class" component={Class} >
-            <Route path="/admin/class/:add" component={ClassAdd} />
+          <Route path="/admin/student" component={StudentList} />
+          <Route path="/admin/teacher" component={TeacherList} />
+          <Route path="/admin/add" component={AddUser} />
+          <Route path="/admin/change" component={ChangePassword} />
+          <Route path="/admin/class" component={ClassControl} >
           </Route>
         </Route>
         <Route path="/teacher" component={PageTeacher}>

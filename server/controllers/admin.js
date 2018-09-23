@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 
+var console = require('tracer').colorConsole();
+
 const User = require("../models/User");
 const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
+const Class = require("../models/Class");
 
 
 exports.add_user = (req, res) => {
@@ -10,6 +13,7 @@ exports.add_user = (req, res) => {
   var userName = req.body.userName;
   var password = req.body.password;
   var repass = req.body.repass;
+  var name = req.body.name;
   var role = req.body.role;
   if (!userName || !password || !repass || !role) {
     res.send({
@@ -40,7 +44,8 @@ exports.add_user = (req, res) => {
             user_doc.save(function (err, doc) {
               console.log(doc);
               var teacher_doc = new Teacher({
-                id: user_doc._id
+                id: user_doc._id,
+                name: name
               })
               teacher_doc.save(function (err, doc) {
                 console.log(doc);
@@ -50,7 +55,8 @@ exports.add_user = (req, res) => {
             user_doc.save(function (err, doc) {
               console.log(doc);
               var student_doc = new Student({
-                id: user_doc._id
+                id: user_doc._id,
+                name: name
               })
               student_doc.save(function (err, doc) {
                 console.log(doc);
@@ -126,5 +132,39 @@ exports.search_user_list = (req, res) => {
         studentList: doc
       })
     })
+  }
+}
+
+exports.class_control = (req, res, next) => {
+  console.log(req.body);
+  const { addRole, addName, nowClass } = req.body;
+  console.log(addName)
+  if (addRole === 'class') {
+    const class_doc = new Class({
+      _id: new mongoose.Types.ObjectId(),
+      name: addName
+    });
+    class_doc
+      .save()
+      .then(result => {
+        console.log(result);
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  } else if (addRole === 'teacher') {
+    Teacher.find({ name: addName })
+      .exec()
+      .then(doc => {
+        Class.update({name:nowClass},{$push:{teachers:doc[0].name}})
+          .exec()
+      })
+  }else if(addRole === 'student'){
+    Student.find({name:addName})
+      .exec()
+      .then(doc =>{
+        Class.update({name:nowClass},{$push:{classMates:doc[0].name}})
+          .exec()
+      })
   }
 }

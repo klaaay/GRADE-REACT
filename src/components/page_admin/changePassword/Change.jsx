@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import { Form, Input, Button } from 'antd';
 import $ from 'jquery'
 
-import { startChangePassword } from '../../actions/admin.js'
+import { startChangePassword } from '../../../actions/admin.js'
 
-import Alter from './Alter.jsx'
+import Alter from '../public/Alter.jsx'
 
 const FormItem = Form.Item;
 

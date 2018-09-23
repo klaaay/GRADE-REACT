@@ -15,6 +15,7 @@ export const AdminPageState = Immutable.fromJS({
   userName: '',
   password: '',
   repass: '',
+  name: '',
   role: '',
   //change password router
   oldPass: '',
@@ -22,5 +23,11 @@ export const AdminPageState = Immutable.fromJS({
   reNewPass: '',
   //teacher&student list
   teacherList: [],
-  studentList: []
+  studentList: [],
+  //class control
+  nowClass: '软工161',
+  nowClassTeacherList: [],
+  nowClassStudentList: [],
+  addRole: '',
+  addName: ''
 })

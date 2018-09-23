@@ -8,7 +8,7 @@ const taskSchema = mongoose.Schema({
   content: String,
   publish_time: Date,
   end_time: Date,
-  Homework_done: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TaskDone' }],
+  Homework_done: { type: mongoose.Schema.Types.ObjectId, ref: 'TaskDone' },
   done: Boolean,
 })
 

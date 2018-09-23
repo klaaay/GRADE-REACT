@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import { Form, Select, Input, Button } from 'antd';
 import $ from 'jquery'
 
-import { startAddUser,roleChange } from '../../actions/admin.js'
+import { startAddUser, roleChange } from '../../../actions/admin.js'
 
-import Alter from './Alter.jsx'
+import Alter from '../public/Alter.jsx'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -20,7 +20,7 @@ class Add extends Component {
   // }
 
   render() {
-    const { onStartAddUser,onHandleSelectChange } = this.props
+    const { onStartAddUser, onHandleSelectChange } = this.props
     const { status, message } = this.props
     return (
       <Form>
@@ -30,7 +30,7 @@ class Add extends Component {
           wrapperCol={{ span: 8 }}
         >
           <Input
-          className="add_userName"
+            className="add_userName"
           />
         </FormItem>
         <FormItem
@@ -38,8 +38,8 @@ class Add extends Component {
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 8 }}
         >
-          <Input 
-          className="add_password"
+          <Input
+            className="add_password"
           />
         </FormItem>
         <FormItem
@@ -47,8 +47,17 @@ class Add extends Component {
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 8 }}
         >
-          <Input 
-          className="add_repass"
+          <Input
+            className="add_repass"
+          />
+        </FormItem>
+        <FormItem
+          label="姓名"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 8 }}
+        >
+          <Input
+            className="add_name"
           />
         </FormItem>
         <FormItem
@@ -67,19 +76,19 @@ class Add extends Component {
         <FormItem
           wrapperCol={{ span: 8, offset: 8 }}
         >
-          <Button 
-          type="primary" 
-          block
-          onClick = {onStartAddUser}
+          <Button
+            type="primary"
+            block
+            onClick={onStartAddUser}
           >添加</Button>
         </FormItem>
         <FormItem
           wrapperCol={{ span: 8, offset: 8 }}
         >
-        <Alter
-          status={status}
-          message={message}
-        />
+          <Alter
+            status={status}
+            message={message}
+          />
         </FormItem>
 
       </Form>
@@ -101,8 +110,9 @@ const mapDispatchToProps = (dispatch) => ({
     var userName = $('.add_userName').val();
     var password = $('.add_password').val();
     var repass = $('.add_repass').val();
-    return dispatch(startAddUser(userName,password,repass))
+    var name = $('.add_name').val();
+    return dispatch(startAddUser(userName, password, repass,name))
   }
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(Add);
+export default connect(mapStateToProps, mapDispatchToProps)(Add);

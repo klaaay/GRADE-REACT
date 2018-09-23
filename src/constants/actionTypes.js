@@ -22,3 +22,6 @@ export const ADD_USER_RESULT = 'ADD_USER_RESULT';
 //admin page - change password router
 export const START_CHANGE_PASSWORD = 'START_CHANGE_PASSWORD';
 export const CHANGE_PASSWORD_RESULT = 'CHANGE_PASSWORD_RESULT';
+
+//admin page - class control router
+export const START_ADD_ROLE = 'START_ADD_ROLE';
