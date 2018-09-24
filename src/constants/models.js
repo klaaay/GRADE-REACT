@@ -44,3 +44,10 @@ export const TeacherPageState = Immutable.fromJS({
   publishTime: '',
   endTime: ''
 })
+
+export const StudentPageState = Immutable.fromJS({
+  message: '',
+  status: '',
+  //task
+  taskList: []
+})

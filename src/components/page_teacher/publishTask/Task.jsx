@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { Select, DatePicker, Button, Form, Input } from 'antd';
 import $ from 'jquery'
+import dayjs from 'dayjs'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -24,14 +25,6 @@ const { TextArea } = Input;
 
 const dateFormat = 'YYYY-MM-DD';
 
-// function handleChange(value) {
-//   console.log(`selected ${value}`);
-// }
-
-// function onChange(dates, dateStrings) {
-//   console.log('From: ', dates[0], ', to: ', dates[1]);
-//   console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-// }
 
 class Task extends Component {
   render() {
@@ -115,14 +108,15 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onTaskTimeChange: (dates, dateStrings) => {
     console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-    return dispatch(taskTimeChange(dateStrings[0],dateStrings[1]));
+    console.log(dayjs(dateStrings[0]).toObject());
+    return dispatch(taskTimeChange(dateStrings[0], dateStrings[1]));
   },
   onStartTaskPublish: (e) => {
     var title = $('.task_title').val();
     var content = $('.task_content').val();
     console.log(title);
     console.log(content);
-    return dispatch(startTaskPublish(title,content));
+    return dispatch(startTaskPublish(title, content));
   }
 })
 

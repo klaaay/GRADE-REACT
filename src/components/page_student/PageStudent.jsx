@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router';
 
 import { Layout, Menu, Icon } from 'antd';
 
+import { startGetTasks } from '../../actions/student'
+
 const { Header, Sider, Content } = Layout;
 
-export default class PageStudent extends Component {
+class PageStudent extends Component {
   state = {
     collapsed: false
   };
@@ -15,10 +19,16 @@ export default class PageStudent extends Component {
     });
   }
 
+  changeRouter = (router) => {
+    browserHistory.push('/student/' + router)
+  }
+
   componentDidMount = () => {
+    browserHistory.push('/student/task')
   }
 
   render() {
+    const { onStartGetTasks } = this.props
     return (
       <Layout>
         <Sider
@@ -33,6 +43,8 @@ export default class PageStudent extends Component {
             <Menu.Item key="1"
               className="homework_route"
               onClick={(e) => {
+                onStartGetTasks()
+                this.changeRouter('task')
               }}
             >
               <Icon type="user" />
@@ -56,3 +68,15 @@ export default class PageStudent extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  onStartGetTasks: (e) => {
+    return dispatch(startGetTasks())
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageStudent)

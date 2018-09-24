@@ -24,7 +24,7 @@ const { Header, Sider, Content } = Layout;
   }
 
   componentDidMount = () => {
-
+    browserHistory.push('/teacher/task')
   }
 
   render() {

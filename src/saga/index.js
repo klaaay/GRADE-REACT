@@ -1,5 +1,6 @@
 import { fork, all } from 'redux-saga/effects'
 import { watchLoginConfirm } from './login.js'
+
 import {
   watchAddUser,
   watchTeacherList,
@@ -7,10 +8,15 @@ import {
   watchChangePassword,
   watchClassControl
 } from './admin'
+
 import {
   watchSearchClassList,
   watchPublishTask
 } from './teacher'
+
+import {
+  watchGetTasks
+} from './student'
 
 export default function* root() {
   yield all([
@@ -21,7 +27,7 @@ export default function* root() {
     fork(watchStudentList),
     fork(watchClassControl),
     fork(watchSearchClassList),
-    fork(watchPublishTask)
+    fork(watchPublishTask),
+    fork(watchGetTasks)
   ])
 }
-

@@ -7,8 +7,9 @@ exports.user_login = (req, res, next) => {
     if (doc[0]) {
       console.log('userName success');
       var password = req.body.password;
-      User.find({ password: password }, { role: 1, _id: 1 }, function (err, doc) {
-        if (doc[0]) {
+      User.find({ userName: userName }, function (err, doc) {
+        console.log(doc[0]);
+        if (doc[0].password === password) {
           const role = doc[0].role;
           const id = doc[0]._id;
           console.log(id);

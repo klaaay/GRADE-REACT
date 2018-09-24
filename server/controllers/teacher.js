@@ -6,6 +6,7 @@ const User = require("../models/User");
 const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
 const Class = require("../models/Class");
+const Task = require("../models/Task")
 
 exports.search_class_list = (req, res, next) => {
   console.log(req.body);
@@ -25,9 +26,12 @@ exports.search_class_list = (req, res, next) => {
               return item.name
             }
           })
-          console.log(result);
+          var true_resut = result.filter(item => {
+            return !!item;
+          })
+          console.log(true_resut);
           res.json({
-            classList: result
+            classList: true_resut
           })
         })
     })
@@ -35,4 +39,23 @@ exports.search_class_list = (req, res, next) => {
 
 exports.publish_task = (req, res, next) => {
   console.log(req.body);
+  const { publisherId, classes, title, content, publishTime, endTime } = req.body;
+  Teacher.find({ id: publisherId })
+    .exec()
+    .then(doc => {
+      var teacherName = doc[0].name;
+      var Task_doc = new Task({
+        _id: new mongoose.Types.ObjectId(),
+        publisher: teacherName,
+        classes: classes,
+        title: title,
+        content: content,
+        publishTime: publishTime,
+        endTime: endTime
+      })
+      Task_doc.save(function (err, doc) {
+        console.log(doc)
+      })
+    })
+
 }
