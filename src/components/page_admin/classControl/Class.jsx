@@ -7,6 +7,7 @@ import $ from 'jquery'
 
 import {
   startAddRole,
+  startGetClassList,
   startGetNowClassInfo
 } from '../../../actions/admin.js'
 
@@ -22,7 +23,6 @@ class Class extends Component {
     modalTeacherVisible: false,
     modalStudentVisible: false
   }
-
 
   setModalClassVisible(modalClassVisible) {
     this.setState({ modalClassVisible });
@@ -40,13 +40,15 @@ class Class extends Component {
   }
 
   render() {
-    const { classes,nowClassTeacherList,nowClassStudentList } = this.props
-    const { onStartAddClass, onStartAddTeacher, onStartAddStudent, onStartGetNowClassInfo } = this.props
+    const { nowClass, classes, nowClassTeacherList, nowClassStudentList } = this.props
+    const { onStartAddClass, onStartAddTeacher, onStartAddStudent, onStartGetNowClassInfo,refreshClassList, } = this.props
     return (
       <div id="">
         <div className="class-selection">
-          <Select defaultValue="软工161" style={{ width: 250, marginRight: 10 }}
+          <Select defaultValue={nowClass} style={{ width: 250, marginRight: 10 }}
             onChange={onStartGetNowClassInfo}>
+            <Option
+              value=""></Option>
             {
               classes.map((item, index) => (
                 <Option
@@ -89,6 +91,7 @@ class Class extends Component {
           visible={this.state.modalClassVisible}
           onOk={() => {
             onStartAddClass()
+            refreshClassList()
             this.setModalClassVisible(false)
           }}
           onCancel={() => this.setModalClassVisible(false)}
@@ -105,6 +108,7 @@ class Class extends Component {
           visible={this.state.modalTeacherVisible}
           onOk={() => {
             onStartAddTeacher()
+            // refreshClassInfo(nowClass)
             this.setModalTeacherVisible(false)
           }}
           onCancel={() => this.setModalTeacherVisible(false)}
@@ -120,6 +124,7 @@ class Class extends Component {
           visible={this.state.modalStudentVisible}
           onOk={() => {
             onStartAddStudent()
+            // refreshClassInfo(nowClass)
             this.setModalStudentVisible(false)
           }}
           onCancel={() => this.setModalStudentVisible(false)}
@@ -135,9 +140,10 @@ class Class extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  nowClass: state.getIn(['admin', 'nowClass']),
   classes: state.getIn(['admin', 'classes']),
-  nowClassTeacherList:state.getIn(['admin', 'nowClassTeacherList']),
-  nowClassStudentList:state.getIn(['admin', 'nowClassStudentList'])
+  nowClassTeacherList: state.getIn(['admin', 'nowClassTeacherList']),
+  nowClassStudentList: state.getIn(['admin', 'nowClassStudentList'])
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -160,7 +166,13 @@ const mapDispatchToProps = (dispatch) => ({
   onStartGetNowClassInfo: (value) => {
     console.log(`selected ${value}`);
     return dispatch(startGetNowClassInfo(value));
-  }
+  },
+  refreshClassList: () => {
+    return dispatch(startGetClassList());
+  },
+  // refreshClassInfo:(className)=>{
+  //   return dispatch(startGetNowClassInfo(className));
+  // }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Class);

@@ -22,6 +22,16 @@ const loginReducer = handleActions({
       role: payload.role,
       id: payload.id
     })
+  ),
+  LOG_OUT: (state) => (
+    state.merge({
+      userName: '',
+      password: '',
+      message: '',
+      role: '',
+      id: '',
+      status: 'await'
+    })
   )
 }, LoginState)
 

@@ -6,10 +6,13 @@ import { Layout, Menu, Icon } from 'antd';
 import $ from 'jquery'
 
 import { classListSearch } from '../../actions/teacher'
+import {
+  logOut
+} from '../../actions/login.js';
 
 const { Header, Sider, Content } = Layout;
 
- class PageTeacher extends Component {
+class PageTeacher extends Component {
   state = {
     collapsed: false
   };
@@ -29,7 +32,7 @@ const { Header, Sider, Content } = Layout;
   }
 
   render() {
-    const { onClassListSearch } = this.props
+    const { onClassListSearch, onLogOut } = this.props
     return (
       <Layout>
         <Sider
@@ -68,6 +71,14 @@ const { Header, Sider, Content } = Layout;
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
+            <div className="hidden"></div>
+            <Icon type="logout" theme="outlined"
+              style={{ color: '#1890FF' }}
+              onClick={(e) => {
+                browserHistory.push('/')
+                onLogOut()
+              }
+              } />
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}
@@ -86,7 +97,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onClassListSearch: (e) => {
     dispatch(classListSearch())
+  },
+  onLogOut: () => {
+    dispatch(logOut());
   }
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(PageTeacher)
+export default connect(mapStateToProps, mapDispatchToProps)(PageTeacher)

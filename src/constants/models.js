@@ -27,7 +27,7 @@ export const AdminPageState = Immutable.fromJS({
   studentList: [],
   //class control
   classes:[],
-  nowClass: '软工161',
+  nowClass: '',
   nowClassTeacherList: [],
   nowClassStudentList: [],
   addRole: '',

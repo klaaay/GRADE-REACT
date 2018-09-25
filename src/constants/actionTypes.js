@@ -2,6 +2,7 @@
 export const CHANGE_USER_NAME = 'CHANGE_USER_NAME';
 export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
 export const VALIDATE_USER = 'VALIDATE_USER';
+export const LOG_OUT = 'LOG_OUT';
 
 export const REQUEST_API_DATA = 'REQUEST_API_DATA';
 export const RECEIVE_API_DATA = 'RECEIVE_API_DATA';

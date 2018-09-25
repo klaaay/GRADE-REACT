@@ -6,6 +6,9 @@ import { Layout, Menu, Icon } from 'antd';
 import $ from 'jquery'
 
 import { startGetTasks } from '../../actions/student'
+import {
+  logOut
+} from '../../actions/login.js';
 
 const { Header, Sider, Content } = Layout;
 
@@ -29,7 +32,7 @@ class PageStudent extends Component {
   }
 
   render() {
-    const { onStartGetTasks } = this.props
+    const { onStartGetTasks,onLogOut } = this.props
     return (
       <Layout>
         <Sider
@@ -60,6 +63,14 @@ class PageStudent extends Component {
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
+            <div className="hidden"></div>
+            <Icon type="logout" theme="outlined"
+              style={{ color: '#1890FF' }}
+              onClick={(e) => {
+                browserHistory.push('/')
+                onLogOut()
+              }
+              } />
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}
@@ -77,6 +88,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onStartGetTasks: (e) => {
     return dispatch(startGetTasks())
+  },
+  onLogOut:()=>{
+    dispatch(logOut());
   }
 })
 

@@ -10,8 +10,11 @@ import {
   teacherListSearch,
   studentListSearch,
   startGetClassList,
-  startGetNowClassInfo
-} from '../../actions/admin.js'
+} from '../../actions/admin.js';
+
+import {
+  logOut
+} from '../../actions/login.js';
 
 import './PageAdmin.less'
 
@@ -52,7 +55,7 @@ class PageAdmin extends Component {
 
 
   render() {
-    const { onChangeRoute, onTeacherListSearch, onStudentListSearch, onStartGetClassList,onDefaultGetNowClassInfo } = this.props
+    const { onChangeRoute, onTeacherListSearch, onStudentListSearch, onStartGetClassList,onLogOut } = this.props
     return (
       <Layout>
         <Sider
@@ -89,7 +92,6 @@ class PageAdmin extends Component {
               onClick={(e) => {
                 onChangeRoute()
                 onStartGetClassList()
-                onDefaultGetNowClassInfo()
                 this.changeRouter('class')
               }}
             >
@@ -122,6 +124,14 @@ class PageAdmin extends Component {
               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
+            <div className="hidden"></div>
+            <Icon type="logout" theme="outlined"
+              style={{ color: '#1890FF' }}
+              onClick={(e) => {
+                browserHistory.push('/')
+                onLogOut()
+              }
+              } />
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}
@@ -145,8 +155,11 @@ const mapDispatchToProps = (dispatch) => ({
   onStartGetClassList: e => {
     dispatch(startGetClassList());
   },
-  onDefaultGetNowClassInfo: (e) => {
-    return dispatch(startGetNowClassInfo('软工161'));
+  // onDefaultGetNowClassInfo: (e) => {
+  //   return dispatch(startGetNowClassInfo('软工161'));
+  // }
+  onLogOut:()=>{
+    dispatch(logOut());
   }
 })
 
