@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
 import { Layout, Menu, Icon } from 'antd';
+import $ from 'jquery'
 
 import { startGetTasks } from '../../actions/student'
 
@@ -24,7 +25,7 @@ class PageStudent extends Component {
   }
 
   componentDidMount = () => {
-    browserHistory.push('/student/task')
+    $('.homework_student_route').trigger('click');
   }
 
   render() {
@@ -41,7 +42,7 @@ class PageStudent extends Component {
           </div>
           <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1"
-              className="homework_route"
+              className="homework_student_route"
               onClick={(e) => {
                 onStartGetTasks()
                 this.changeRouter('task')
@@ -60,7 +61,7 @@ class PageStudent extends Component {
               onClick={this.toggle}
             />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}
           </Content>
         </Layout>

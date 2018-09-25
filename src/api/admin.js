@@ -64,6 +64,41 @@ export const change_password = async (userName, relOld, oldPass, newPass, reNewP
   }
 }
 
+export const get_classes = async()=>{
+  let fetchOption = {
+    method: 'GET'
+  }
+  try {
+    const response = await fetch('/admin/getClasses', fetchOption);
+    const body = await response.json();
+    console.log(body)
+    return body;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const get_now_class_info = async(nowClass)=>{
+  let data = {
+    nowClass: nowClass
+  }
+  let data_str = JSON.stringify(data)
+  let fetchOption = {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', },
+    body: data_str
+  }
+  try {
+    const response = await fetch('/admin/getClassInfo', fetchOption);
+    const body = await response.json();
+    console.log(body)
+    return body;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+
 export const class_control = async(addRole,addName,nowClass)=>{
   let data = {
     addRole: addRole,

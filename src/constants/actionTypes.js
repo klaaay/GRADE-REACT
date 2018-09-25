@@ -25,6 +25,8 @@ export const CHANGE_PASSWORD_RESULT = 'CHANGE_PASSWORD_RESULT';
 
 //admin page - class control router
 export const START_ADD_ROLE = 'START_ADD_ROLE';
+export const START_GET_CLASSES_LIST = 'START_GET_CLASSES_LIST';
+export const START_GET_NOW_CLASS_INFO = 'START_GET_NOW_CLASS_INFO';
 
 
 //teacher page

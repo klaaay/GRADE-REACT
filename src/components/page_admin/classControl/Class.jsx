@@ -5,24 +5,15 @@ import { browserHistory } from 'react-router';
 import { Select, Button, List, Icon, Modal, Input } from 'antd';
 import $ from 'jquery'
 
-import { startAddRole } from '../../../actions/admin.js'
+import {
+  startAddRole,
+  startGetNowClassInfo
+} from '../../../actions/admin.js'
 
 
 import './Class.less'
 
 const Option = Select.Option;
-
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-];
-
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
 
 class Class extends Component {
 
@@ -49,14 +40,20 @@ class Class extends Component {
   }
 
   render() {
-    const { onStartAddClass, onStartAddTeacher, onStartAddStudent } = this.props
+    const { classes,nowClassTeacherList,nowClassStudentList } = this.props
+    const { onStartAddClass, onStartAddTeacher, onStartAddStudent, onStartGetNowClassInfo } = this.props
     return (
       <div id="">
         <div className="class-selection">
-          <Select defaultValue="lucy" style={{ width: 250, marginRight: 10 }} onChange={handleChange}>
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
-            <Option value="Yiminghe">yiminghe</Option>
+          <Select defaultValue="软工161" style={{ width: 250, marginRight: 10 }}
+            onChange={onStartGetNowClassInfo}>
+            {
+              classes.map((item, index) => (
+                <Option
+                  key={index}
+                  value={item}>{item}</Option>
+              ))
+            }
           </Select>
           <Button
             onClick={
@@ -73,7 +70,7 @@ class Class extends Component {
             header={<div><b>任课教师</b></div>}
             footer={<Button onClick={() => this.setModalTeacherVisible(true)}>添加教师</Button>}
             bordered
-            dataSource={data}
+            dataSource={nowClassTeacherList}
             renderItem={item => (<List.Item>{item}<div className="hidden"></div> <Icon type="minus-square" theme="twoTone" /></List.Item>)}
           />
           <List
@@ -82,7 +79,7 @@ class Class extends Component {
             header={<div><b>班级学生</b></div>}
             footer={<Button onClick={() => this.setModalStudentVisible(true)}>添加学生</Button>}
             bordered
-            dataSource={data}
+            dataSource={nowClassStudentList}
             renderItem={item => (<List.Item>{item}<div className="hidden"></div><Icon type="minus-square" theme="twoTone" /></List.Item>)}
           />
         </div>
@@ -138,7 +135,9 @@ class Class extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+  classes: state.getIn(['admin', 'classes']),
+  nowClassTeacherList:state.getIn(['admin', 'nowClassTeacherList']),
+  nowClassStudentList:state.getIn(['admin', 'nowClassStudentList'])
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -157,6 +156,10 @@ const mapDispatchToProps = (dispatch) => ({
     var addRole = 'student';
     var addName = $('.add_student').val();
     return dispatch(startAddRole(addRole, addName))
+  },
+  onStartGetNowClassInfo: (value) => {
+    console.log(`selected ${value}`);
+    return dispatch(startGetNowClassInfo(value));
   }
 })
 

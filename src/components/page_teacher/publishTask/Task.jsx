@@ -58,7 +58,7 @@ class Task extends Component {
           wrapperCol={{ span: 8 }}
         >
           <RangePicker
-            defaultValue={[moment('2018/09/23', dateFormat), moment('2018/09/30', dateFormat)]}
+            // defaultValue={[moment('2018/09/23', dateFormat), moment('2018/09/30', dateFormat)]}
             format={dateFormat}
             onChange={onTaskTimeChange}
           />
@@ -79,7 +79,8 @@ class Task extends Component {
         >
           <TextArea
             className="task_content"
-            rows={6} />
+            style={{resize:"none"}}
+            rows={8} />
         </FormItem>
         <FormItem
           wrapperCol={{ span: 8, offset: 8 }}

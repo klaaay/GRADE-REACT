@@ -6,7 +6,9 @@ import {
   watchTeacherList,
   watchStudentList,
   watchChangePassword,
-  watchClassControl
+  watchClassControl,
+  watchGetClasses,
+  watchGetNowClassInfo
 } from './admin'
 
 import {
@@ -28,6 +30,8 @@ export default function* root() {
     fork(watchClassControl),
     fork(watchSearchClassList),
     fork(watchPublishTask),
-    fork(watchGetTasks)
+    fork(watchGetTasks),
+    fork(watchGetClasses),
+    fork(watchGetNowClassInfo)
   ])
 }

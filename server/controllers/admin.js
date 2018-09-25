@@ -127,3 +127,31 @@ exports.class_control = (req, res, next) => {
       .exec()
   }
 }
+
+exports.get_classes = (req, res, next) => {
+  console.log('get classes');
+  Class.find({}, { name: 1, _id: 0 }, function (err, doc) {
+    var classes_array = doc.map(item => {
+      return item.name;
+    })
+    console.log(classes_array);
+    res.json({
+      classes: classes_array
+    })
+  })
+}
+
+exports.get_class_info = (req, res, next) => {
+  console.log(req.body);
+  const { nowClass } = req.body;
+  Class.find({ name: nowClass })
+    .exec()
+    .then(doc => {
+      console.log(doc[0].classMates)
+      console.log(doc[0].teachers)
+      res.json({
+        nowClassTeacherList: doc[0].teachers,
+        nowClassStudentList: doc[0].classMates
+      })
+    })
+}

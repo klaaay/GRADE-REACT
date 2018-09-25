@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
 import { Layout, Menu, Icon } from 'antd';
+import $ from 'jquery'
 
 import { classListSearch } from '../../actions/teacher'
 
@@ -24,7 +25,7 @@ const { Header, Sider, Content } = Layout;
   }
 
   componentDidMount = () => {
-    browserHistory.push('/teacher/task')
+    $('.homework_publish').trigger('click');
   }
 
   render() {
@@ -68,7 +69,7 @@ const { Header, Sider, Content } = Layout;
               onClick={this.toggle}
             />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}
           </Content>
         </Layout>

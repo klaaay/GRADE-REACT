@@ -5,7 +5,13 @@ import { connect } from 'react-redux'
 import { Layout, Menu, Icon } from 'antd';
 import $ from 'jquery'
 
-import { changeRoute, teacherListSearch, studentListSearch } from '../../actions/admin.js'
+import {
+  changeRoute,
+  teacherListSearch,
+  studentListSearch,
+  startGetClassList,
+  startGetNowClassInfo
+} from '../../actions/admin.js'
 
 import './PageAdmin.less'
 
@@ -46,7 +52,7 @@ class PageAdmin extends Component {
 
 
   render() {
-    const { onChangeRoute, onTeacherListSearch, onStudentListSearch } = this.props
+    const { onChangeRoute, onTeacherListSearch, onStudentListSearch, onStartGetClassList,onDefaultGetNowClassInfo } = this.props
     return (
       <Layout>
         <Sider
@@ -82,6 +88,8 @@ class PageAdmin extends Component {
             <Menu.Item key="3"
               onClick={(e) => {
                 onChangeRoute()
+                onStartGetClassList()
+                onDefaultGetNowClassInfo()
                 this.changeRouter('class')
               }}
             >
@@ -115,7 +123,7 @@ class PageAdmin extends Component {
               onClick={this.toggle}
             />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}
           </Content>
         </Layout>
@@ -133,6 +141,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onStudentListSearch: (e) => {
     dispatch(studentListSearch())
+  },
+  onStartGetClassList: e => {
+    dispatch(startGetClassList());
+  },
+  onDefaultGetNowClassInfo: (e) => {
+    return dispatch(startGetNowClassInfo('软工161'));
   }
 })
 

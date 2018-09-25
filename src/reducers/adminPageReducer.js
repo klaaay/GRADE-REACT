@@ -61,6 +61,22 @@ const AdminPageReducer = handleActions({
       addRole: payload.addRole,
       addName: payload.addName
     })
+  ),
+  START_GET_NOW_CLASS_INFO: (state, { payload }) => (
+    state.merge({
+      nowClass: payload.nowClass
+    })
+  ),
+  GET_CLASSES_RESULT:(state,{payload})=>(
+    state.merge({
+      classes:payload.classes
+    })
+  ),
+  CLASS_INFO_RESULT:(state,{payload})=>(
+    state.merge({
+      nowClassTeacherList:payload.nowClassTeacherList,
+      nowClassStudentList:payload.nowClassStudentList
+    })
   )
 }, AdminPageState)
 

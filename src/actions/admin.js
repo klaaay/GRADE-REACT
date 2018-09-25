@@ -9,7 +9,9 @@ import {
 
   START_CHANGE_PASSWORD,
 
-  START_ADD_ROLE
+  START_ADD_ROLE,
+  START_GET_CLASSES_LIST,
+  START_GET_NOW_CLASS_INFO
 } from '../constants/actionTypes.js'
 
 export const changeRoute = () => ({ type: CHANGE_ROUTE });
@@ -43,5 +45,14 @@ export const startAddRole = (addRole, addName) => ({
   payload: {
     addRole: addRole,
     addName: addName
+  }
+})
+
+
+export const startGetClassList = () => ({ type: START_GET_CLASSES_LIST })
+export const startGetNowClassInfo = (nowClass) => ({
+  type: START_GET_NOW_CLASS_INFO,
+  payload: {
+    nowClass: nowClass
   }
 })

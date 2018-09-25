@@ -1,6 +1,14 @@
 import { call, takeLatest, select, put } from 'redux-saga/effects'
 
-import { add_user, change_password, search_role_list, class_control } from '../api/admin.js'
+import {
+  add_user,
+  change_password,
+  search_role_list,
+  class_control,
+  get_classes,
+  get_now_class_info
+}
+  from '../api/admin.js'
 
 function* searchTeacherList() {
   try {
@@ -44,7 +52,6 @@ function* changePassword() {
     const newPass = yield select(state => (state.getIn(['admin', 'newPass'])));
     const reNewPass = yield select(state => (state.getIn(['admin', 'reNewPass'])));
     const data = yield call(change_password, userName, relOld, oldPass, newPass, reNewPass);
-    console.log(data)
     yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
   } catch (e) {
     console.log(e)
@@ -57,13 +64,39 @@ function* classControl() {
     const addName = yield select(state => (state.getIn(['admin', 'addName'])));
     const nowClass = yield select(state => (state.getIn(['admin', 'nowClass'])));
     const data = yield call(class_control, addRole, addName, nowClass);
-    console.log(data)
     // yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
   } catch (e) {
     console.log(e)
   }
 }
 
+function* getClasses() {
+  try {
+    const data = yield call(get_classes);
+    yield put({ type: 'GET_CLASSES_RESULT', payload: data })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+function* getNowClassInfo() {
+  try {
+    const nowClass = yield select(state => (state.getIn(['admin', 'nowClass'])));
+    const data = yield call(get_now_class_info, nowClass);
+    console.log(data)
+    yield put({ type: 'CLASS_INFO_RESULT', payload: data })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const watchGetClasses = function* watchGetClasses() {
+  yield takeLatest('START_GET_CLASSES_LIST', getClasses);
+}
+
+export const watchGetNowClassInfo = function* watchGetNowClassInfo() {
+  yield takeLatest('START_GET_NOW_CLASS_INFO', getNowClassInfo);
+}
 
 export const watchTeacherList = function* watchTeacherList() {
   yield takeLatest('TEACHER_LIST_SEARCH', searchTeacherList);
