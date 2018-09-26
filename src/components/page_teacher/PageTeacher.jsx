@@ -77,8 +77,7 @@ class PageTeacher extends Component {
               onClick={(e) => {
                 browserHistory.push('/')
                 onLogOut()
-              }
-              } />
+              }} />
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}

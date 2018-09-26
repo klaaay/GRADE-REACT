@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Select, DatePicker, Button, Form, Input } from 'antd';
 import $ from 'jquery'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -12,10 +13,8 @@ import {
   taskTimeChange,
   startTaskPublish
 } from '../../../actions/teacher'
-
-
 moment.locale('zh-cn');
-
+dayjs.extend(relativeTime)
 
 const { RangePicker } = DatePicker;
 
@@ -79,7 +78,7 @@ class Task extends Component {
         >
           <TextArea
             className="task_content"
-            style={{resize:"none"}}
+            style={{ resize: "none" }}
             rows={8} />
         </FormItem>
         <FormItem
@@ -109,7 +108,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onTaskTimeChange: (dates, dateStrings) => {
     console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-    console.log(dayjs(dateStrings[0]).toObject());
+    console.log(dayjs(dateStrings[1]).fromNow());
+    console.log(dayjs(dateStrings[1]).fromNow().split(" ")[1]);
+    console.log(dayjs(dateStrings[1]).isAfter(dayjs()))
     return dispatch(taskTimeChange(dateStrings[0], dateStrings[1]));
   },
   onStartTaskPublish: (e) => {

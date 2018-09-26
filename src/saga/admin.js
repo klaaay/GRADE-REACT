@@ -64,6 +64,7 @@ function* classControl() {
     const addName = yield select(state => (state.getIn(['admin', 'addName'])));
     const nowClass = yield select(state => (state.getIn(['admin', 'nowClass'])));
     const data = yield call(class_control, addRole, addName, nowClass);
+    console.log(data);
     // yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
   } catch (e) {
     console.log(e)
