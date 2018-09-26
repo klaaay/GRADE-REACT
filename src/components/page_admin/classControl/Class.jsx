@@ -7,7 +7,6 @@ import $ from 'jquery'
 
 import {
   startAddRole,
-  startGetClassList,
   startGetNowClassInfo
 } from '../../../actions/admin.js'
 
@@ -41,7 +40,7 @@ class Class extends Component {
 
   render() {
     const { nowClass, classes, nowClassTeacherList, nowClassStudentList } = this.props
-    const { onStartAddClass, onStartAddTeacher, onStartAddStudent, onStartGetNowClassInfo,refreshClassList, } = this.props
+    const { onStartAddClass, onStartAddTeacher, onStartAddStudent, onStartGetNowClassInfo, } = this.props
     return (
       <div id="">
         <div className="class-selection">
@@ -91,7 +90,7 @@ class Class extends Component {
           visible={this.state.modalClassVisible}
           onOk={() => {
             onStartAddClass()
-            refreshClassList()
+            // refreshClassList()
             this.setModalClassVisible(false)
           }}
           onCancel={() => this.setModalClassVisible(false)}
@@ -167,9 +166,9 @@ const mapDispatchToProps = (dispatch) => ({
     console.log(`selected ${value}`);
     return dispatch(startGetNowClassInfo(value));
   },
-  refreshClassList: () => {
-    return dispatch(startGetClassList());
-  },
+  // refreshClassList: () => {
+  //   return dispatch(startGetClassList());
+  // },
   // refreshClassInfo:(className)=>{
   //   return dispatch(startGetNowClassInfo(className));
   // }

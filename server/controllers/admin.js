@@ -105,6 +105,17 @@ exports.class_control = (req, res, next) => {
       .save()
       .then(result => {
         console.log(result);
+        Class.find({}, { name: 1, _id: 0 }, function (err, doc) {
+          console.log(doc)
+          var classes_array = doc.map(item => {
+            return item.name;
+          })
+          console.log(classes_array);
+          res.json({
+            addRole: 'class',
+            classes: classes_array
+          })
+        })
       })
       .catch(err => {
         console.log(err)
@@ -115,6 +126,18 @@ exports.class_control = (req, res, next) => {
       .then(doc => {
         Class.update({ name: nowClass }, { $push: { teachers: doc[0].name } })
           .exec()
+          .then(() => {
+            console.log(nowClass)
+            Class.find({ name: nowClass })
+              .exec()
+              .then(doc => {
+                console.log(doc)
+                res.json({
+                  addRole: 'teacher',
+                  nowClassTeacherList: doc[0].teachers
+                })
+              })
+          })
       })
   } else if (addRole === 'student') {
     Student.find({ name: addName })
@@ -122,10 +145,22 @@ exports.class_control = (req, res, next) => {
       .then(doc => {
         Class.update({ name: nowClass }, { $push: { classMates: doc[0].name } })
           .exec()
+          .then(() => {
+            Class.find({ name: nowClass })
+              .exec()
+              .then(doc => {
+                console.log(doc)
+                res.json({
+                  addRole: 'student',
+                  nowClassStudentList: doc[0].classMates
+                })
+              })
+          })
       })
     Student.update({ name: addName }, { $set: { class: nowClass } })
       .exec()
   }
+
 }
 
 exports.get_classes = (req, res, next) => {

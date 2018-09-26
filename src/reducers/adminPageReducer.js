@@ -67,17 +67,38 @@ const AdminPageReducer = handleActions({
       nowClass: payload.nowClass
     })
   ),
-  GET_CLASSES_RESULT:(state,{payload})=>(
+  GET_CLASSES_RESULT: (state, { payload }) => (
     state.merge({
-      classes:payload.classes
+      classes: payload.classes
     })
   ),
-  CLASS_INFO_RESULT:(state,{payload})=>(
+  CLASS_INFO_RESULT: (state, { payload }) => (
     state.merge({
-      nowClassTeacherList:payload.nowClassTeacherList,
-      nowClassStudentList:payload.nowClassStudentList
+      nowClassTeacherList: payload.nowClassTeacherList,
+      nowClassStudentList: payload.nowClassStudentList
     })
-  )
+  ),
+  UPDATE_CLASSES_INFO: (state, { payload }) => {
+    if (payload.addRole === 'class') {
+      return (
+        state.merge({
+          classes: payload.classes
+        })
+      )
+    } else if (payload.addRole === 'teacher') {
+      return (
+        state.merge({
+          nowClassTeacherList: payload.nowClassTeacherList
+        })
+      )
+    } else if (payload.addRole === 'student') {
+      return (
+        state.merge({
+          nowClassStudentList: payload.nowClassStudentList
+        })
+      )
+    }
+  }
 }, AdminPageState)
 
 export default AdminPageReducer

@@ -65,7 +65,7 @@ function* classControl() {
     const nowClass = yield select(state => (state.getIn(['admin', 'nowClass'])));
     const data = yield call(class_control, addRole, addName, nowClass);
     console.log(data);
-    // yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
+    yield put({ type: 'UPDATE_CLASSES_INFO', payload: data })
   } catch (e) {
     console.log(e)
   }
