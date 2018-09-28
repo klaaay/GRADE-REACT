@@ -40,3 +40,41 @@ export const publish_task = async (publisherId, classes, title, content, publish
     console.log(e)
   }
 }
+
+export const get_published_taks = async (id) => {
+  let data = {
+    id: id
+  }
+  let data_str = JSON.stringify(data);
+  let fetchOption = {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', },
+    body: data_str
+  }
+  try {
+    const response = await fetch('/teacher/published', fetchOption);
+    const body = await response.json();
+    return body;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const delete_published_task = async (id) => {
+  let data = {
+    id: id
+  }
+  let data_str = JSON.stringify(data);
+  let fetchOption = {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', },
+    body: data_str
+  }
+  try {
+    const response = await fetch('/teacher/delete', fetchOption);
+    const body = await response.json();
+    return body;
+  } catch (e) {
+    console.log(e)
+  }
+}

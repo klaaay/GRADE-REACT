@@ -5,7 +5,10 @@ import { browserHistory } from 'react-router';
 import { Layout, Menu, Icon } from 'antd';
 import $ from 'jquery'
 
-import { classListSearch } from '../../actions/teacher'
+import {
+  classListSearch,
+  startGetPublishedTaks
+} from '../../actions/teacher'
 import {
   logOut
 } from '../../actions/login.js';
@@ -32,7 +35,7 @@ class PageTeacher extends Component {
   }
 
   render() {
-    const { onClassListSearch, onLogOut } = this.props
+    const { onClassListSearch, onLogOut,onStartGetPublishedTaks } = this.props
     return (
       <Layout>
         <Sider
@@ -57,6 +60,8 @@ class PageTeacher extends Component {
             <Menu.Item key="2"
               className="homework_manage"
               onClick={(e) => {
+                this.changeRouter('published')
+                onStartGetPublishedTaks()
               }}
             >
               <Icon type="video-camera" />
@@ -99,6 +104,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onLogOut: () => {
     dispatch(logOut());
+  },
+  onStartGetPublishedTaks: (e) => {
+    dispatch(startGetPublishedTaks());
   }
 })
 

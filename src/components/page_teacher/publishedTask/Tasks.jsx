@@ -1,0 +1,76 @@
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
+import { Table, Divider, Tag, Icon } from 'antd';
+
+import {
+  startDeleteTask
+} from '../../../actions/teacher'
+
+const { Column } = Table;
+
+
+class Tasks extends Component {
+  render() {
+    const { publishedTasks,all,selectId } = this.props
+    const { onStartDeleteTask } = this.props
+    console.log(all.get('publishedTasks').filter(item=>item.get('key') !== selectId).toJS())
+    console.log(all.get('publishedTasks').toJS())
+    // console.log(publishedTasks)
+    return (
+      <Table dataSource={publishedTasks}>
+
+        <Column
+          title="作业标题"
+          dataIndex="title"
+          key="title"
+        />
+        <Column
+          title="发布时间"
+          dataIndex="publishTime"
+          key="publishTime"
+        />
+        <Column
+          title="接受班级"
+          dataIndex="classes"
+          key="classes"
+          render={tags => (
+            <span>
+              {tags.map(tag => <Tag color="blue" key={tag}>{tag}</Tag>)}
+            </span>
+          )}
+        />
+        <Column
+          title=""
+          key="action"
+          render={(text, record) => (
+            <span>
+              <Icon type="profile" theme="outlined" />
+              <Divider type="vertical" />
+              <Icon type="delete" theme="outlined"
+                onClick={(e) => {
+                  onStartDeleteTask(record.key)
+                }}
+              />
+            </span>
+          )}
+        />
+      </Table>
+    )
+  }
+}
+
+const mapStateToProps = (state) => ({
+  publishedTasks: state.getIn(['teacher', 'publishedTasks']).toJS(),
+  all:state.get('teacher'),
+  selectId:state.getIn(['teacher', 'selectId'])
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  onStartDeleteTask: (selectId) => {
+    console.log(selectId);
+    return dispatch(startDeleteTask(selectId))
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks)

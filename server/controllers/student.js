@@ -26,6 +26,7 @@ exports.get_taks = (req, res, next) => {
               return item;
             }
           })
+          console.log(my_tasks);
           var my_true_tasks = my_tasks.filter(item => {
             return !!item;
           })
