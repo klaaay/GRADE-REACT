@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const taskdoneSchema = mongoose.Schema({
   id: { type: mongoose.Schema.Types.ObjectId, ref: 'Task' },
+  studentName:String,
   word: String,
   ppt: String,
   video: String,
-  out_of_time: Boolean,
   committed: Boolean,
-  commit_time: Date
+  commitTime: String
 })
 
 module.exports = mongoose.model('TaskDone',taskdoneSchema)

@@ -6,7 +6,7 @@ import $ from 'jquery'
 
 import { startAddUser, roleChange } from '../../../actions/admin.js'
 
-import Alter from '../public/Alter.jsx'
+// import Alter from '../public/Alter.jsx'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -82,15 +82,14 @@ class Add extends Component {
             onClick={onStartAddUser}
           >添加</Button>
         </FormItem>
-        <FormItem
+        {/* <FormItem
           wrapperCol={{ span: 8, offset: 8 }}
         >
           <Alter
             status={status}
             message={message}
           />
-        </FormItem>
-
+        </FormItem> */}
       </Form>
     );
   }

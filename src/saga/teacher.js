@@ -31,7 +31,12 @@ function* publishTask() {
     const endTime = yield select((state) => (state.getIn(['teacher', 'endTime'])));
     const data = yield call(publish_task, publisherId, classes, title, content, publishTime, endTime);
     console.log(data);
-    message.success(data.message);
+    if(data.type){
+      message.success(data.message);
+    }else{
+      message.warning(data.message);
+    }
+
   } catch (e) {
     console.log(e)
   }

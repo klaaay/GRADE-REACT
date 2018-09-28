@@ -35,13 +35,6 @@ const AdminPageReducer = handleActions({
       status: 'await',
     })
   ),
-  ADD_USER_RESULT: (state, { payload }) => (
-    state.merge({
-      status: payload.status,
-      message: payload.message
-    })
-  ),
-
   START_CHANGE_PASSWORD: (state, { payload }) => (
     state.merge({
       oldPass: payload.oldPass,
@@ -49,13 +42,6 @@ const AdminPageReducer = handleActions({
       reNewPass: payload.reNewPass
     })
   ),
-  CHANGE_PASSWORD_RESULT: (state, { payload }) => (
-    state.merge({
-      status: payload.status,
-      message: payload.message
-    })
-  ),
-
   START_ADD_ROLE: (state, { payload }) => (
     state.merge({
       addRole: payload.addRole,
@@ -79,24 +65,29 @@ const AdminPageReducer = handleActions({
     })
   ),
   UPDATE_CLASSES_INFO: (state, { payload }) => {
-    if (payload.addRole === 'class') {
-      return (
-        state.merge({
-          classes: payload.classes
-        })
-      )
-    } else if (payload.addRole === 'teacher') {
-      return (
-        state.merge({
-          nowClassTeacherList: payload.nowClassTeacherList
-        })
-      )
-    } else if (payload.addRole === 'student') {
-      return (
-        state.merge({
-          nowClassStudentList: payload.nowClassStudentList
-        })
-      )
+    if (payload.type) {
+      if (payload.addRole === 'class') {
+        return (
+          state.merge({
+            classes: payload.classes
+          })
+        )
+      } else if (payload.addRole === 'teacher') {
+        return (
+          state.merge({
+            nowClassTeacherList: payload.nowClassTeacherList
+          })
+        )
+      } else if (payload.addRole === 'student') {
+        return (
+          state.merge({
+            nowClassStudentList: payload.nowClassStudentList
+          })
+        )
+      }
+    }
+    else {
+      return state;
     }
   }
 }, AdminPageState)

@@ -95,10 +95,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onTaskClassesChange: (value) => {
-    let classes = [];
-    classes.push(value);
-    console.log(classes);
-    return dispatch(taskClassesChange(classes));
+    console.log(value)
+    return dispatch(taskClassesChange(value));
   },
   onTaskTimeChange: (dates, dateStrings) => {
     console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);

@@ -1,5 +1,7 @@
 import { call, takeLatest, select, put } from 'redux-saga/effects'
 
+import { message } from 'antd';
+
 import {
   add_user,
   change_password,
@@ -38,7 +40,12 @@ function* addUser() {
     const name = yield select(state => (state.getIn(['admin', 'name'])));
     const role = yield select(state => (state.getIn(['admin', 'role'])));
     const data = yield call(add_user, userName, password, repass, name, role);
-    yield put({ type: 'ADD_USER_RESULT', payload: data })
+    // yield put({ type: 'ADD_USER_RESULT', payload: data })
+    if (data.type) {
+      message.success(data.message);
+    } else {
+      message.warning(data.message);
+    }
   } catch (e) {
     console.log(e)
   }
@@ -52,7 +59,12 @@ function* changePassword() {
     const newPass = yield select(state => (state.getIn(['admin', 'newPass'])));
     const reNewPass = yield select(state => (state.getIn(['admin', 'reNewPass'])));
     const data = yield call(change_password, userName, relOld, oldPass, newPass, reNewPass);
-    yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
+    // yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
+    if (data.type) {
+      message.success(data.message);
+    } else {
+      message.warning(data.message);
+    }
   } catch (e) {
     console.log(e)
   }
@@ -66,6 +78,11 @@ function* classControl() {
     const data = yield call(class_control, addRole, addName, nowClass);
     console.log(data);
     yield put({ type: 'UPDATE_CLASSES_INFO', payload: data })
+    if (data.type) {
+      message.success(data.message);
+    } else {
+      message.warning(data.message);
+    }
   } catch (e) {
     console.log(e)
   }

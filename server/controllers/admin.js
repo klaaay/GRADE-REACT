@@ -17,20 +17,20 @@ exports.add_user = (req, res) => {
   var role = req.body.role;
   if (!userName || !password || !repass || !role) {
     res.send({
-      status: 'failed',
+      type: 0,
       message: '请填写完整信息'
     })
   } else {
     if (password !== repass) {
       res.send({
-        status: 'failed',
+        type: 0,
         message: '密码输入不一致',
       })
     } else {
       User.find({ userName: userName }, function (err, doc) {
         if (doc[0]) {
           res.send({
-            status: 'failed',
+            type: 0,
             message: '该账户名已经存在'
           })
         } else {
@@ -41,32 +41,50 @@ exports.add_user = (req, res) => {
             role: role
           })
           if (role === 'teacher') {
-            user_doc.save(function (err, doc) {
-              console.log(doc);
-              var teacher_doc = new Teacher({
-                id: user_doc._id,
-                name: name
-              })
-              teacher_doc.save(function (err, doc) {
-                console.log(doc);
-              })
+            Teacher.find({ name: name }, (err, doc) => {
+              if (doc[0]) {
+                res.json({
+                  type: 0,
+                  message: '该用户已经存在'
+                })
+              } else {
+                user_doc.save(function (err, doc) {
+                  var teacher_doc = new Teacher({
+                    id: user_doc._id,
+                    name: name
+                  })
+                  teacher_doc.save(function (err, doc) {
+                    res.json({
+                      type: 1,
+                      message: '创建成功'
+                    })
+                  })
+                })
+              }
             })
           } else if (role === 'student') {
-            user_doc.save(function (err, doc) {
-              console.log(doc);
-              var student_doc = new Student({
-                id: user_doc._id,
-                name: name
-              })
-              student_doc.save(function (err, doc) {
-                console.log(doc);
-              })
+            Student.find({ name: name }, (err, doc) => {
+              if (doc[0]) {
+                res.json({
+                  type: 0,
+                  message: '该用户已经存在'
+                })
+              } else {
+                user_doc.save(function (err, doc) {
+                  var student_doc = new Student({
+                    id: user_doc._id,
+                    name: name
+                  })
+                  student_doc.save(function (err, doc) {
+                    res.json({
+                      type: 1,
+                      message: '创建成功'
+                    })
+                  })
+                })
+              }
             })
           }
-          res.send({
-            status: 'success',
-            message: '添加成功',
-          })
         }
       })
     }
@@ -95,72 +113,142 @@ exports.search_user_list = (req, res) => {
 exports.class_control = (req, res, next) => {
   console.log(req.body);
   const { addRole, addName, nowClass } = req.body;
-  console.log(addName)
+  console.log(addRole)
   if (addRole === 'class') {
-    const class_doc = new Class({
-      _id: new mongoose.Types.ObjectId(),
-      name: addName
-    });
-    class_doc
-      .save()
-      .then(result => {
-        console.log(result);
-        Class.find({}, { name: 1, _id: 0 }, function (err, doc) {
-          console.log(doc)
-          var classes_array = doc.map(item => {
-            return item.name;
-          })
-          console.log(classes_array);
-          res.json({
-            addRole: 'class',
-            classes: classes_array
-          })
+    Class.find({ name: addName }, (err, doc) => {
+      if (doc[0]) {
+        res.json({
+          type: 0,
+          message: '该班级已经存在',
+          addRole: 'class',
+          classes: []
         })
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      }
+      else {
+        const class_doc = new Class({
+          _id: new mongoose.Types.ObjectId(),
+          name: addName
+        });
+        class_doc
+          .save()
+          .then(result => {
+            console.log(result);
+            Class.find({}, { name: 1, _id: 0 }, function (err, doc) {
+              console.log(doc)
+              var classes_array = doc.map(item => {
+                return item.name;
+              })
+              console.log(classes_array);
+              res.json({
+                type: 1,
+                message: '添加班级成功',
+                addRole: 'class',
+                classes: classes_array
+              })
+            })
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    })
   } else if (addRole === 'teacher') {
-    Teacher.find({ name: addName })
-      .exec()
-      .then(doc => {
-        Class.update({ name: nowClass }, { $push: { teachers: doc[0].name } })
+    Teacher.find({ name: addName }, (err, doc) => {
+      if (doc[0]) {
+        Teacher.find({ name: addName })
           .exec()
-          .then(() => {
-            console.log(nowClass)
-            Class.find({ name: nowClass })
-              .exec()
-              .then(doc => {
-                console.log(doc)
+          .then(doc => {
+            Class.find({ name: nowClass }, (err, doc_class) => {
+              if (doc_class[0].teachers.indexOf(doc[0].name) !== -1) {
                 res.json({
                   addRole: 'teacher',
-                  nowClassTeacherList: doc[0].teachers
+                  nowClassTeacherList: [],
+                  type: 0,
+                  message: '该老师已经存在'
                 })
-              })
+              } else {
+                Class.update({ name: nowClass }, { $push: { teachers: doc[0].name } })
+                  .exec()
+                  .then(() => {
+                    console.log(nowClass)
+                    Class.find({ name: nowClass })
+                      .exec()
+                      .then(doc => {
+                        console.log(doc)
+                        res.json({
+                          addRole: 'teacher',
+                          nowClassTeacherList: doc[0].teachers,
+                          type: 1,
+                          message: '添加老师成功'
+                        })
+                      })
+                  })
+              }
+            })
           })
-      })
+      } else {
+        res.json({
+          addRole: 'teacher',
+          nowClassTeacherList: [],
+          type: 0,
+          message: '该老师不存在'
+        })
+      }
+    })
   } else if (addRole === 'student') {
-    Student.find({ name: addName })
-      .exec()
-      .then(doc => {
-        Class.update({ name: nowClass }, { $push: { classMates: doc[0].name } })
+    Student.find({ name: addName }, (err, doc) => {
+      if (doc[0]) {
+        Student.find({ name: addName })
           .exec()
-          .then(() => {
-            Class.find({ name: nowClass })
-              .exec()
-              .then(doc => {
-                console.log(doc)
-                res.json({
-                  addRole: 'student',
-                  nowClassStudentList: doc[0].classMates
-                })
+          .then(doc => {
+            if (doc[0].class) {
+              res.json({
+                addRole: 'student',
+                nowClassTeacherList: [],
+                type: 0,
+                message: '该同学已有班级'
               })
+            } else {
+              Class.find({ name: nowClass }, (err, doc_class) => {
+                if (doc_class[0].classMates.indexOf(doc[0].name) !== -1) {
+                  res.json({
+                    addRole: 'student',
+                    nowClassStudentList: [],
+                    type: 0,
+                    message: '该学生已经存在'
+                  })
+                } else {
+                  Class.update({ name: nowClass }, { $push: { classMates: doc[0].name } })
+                    .exec()
+                    .then(() => {
+                      Class.find({ name: nowClass })
+                        .exec()
+                        .then(doc => {
+                          console.log(doc)
+                          res.json({
+                            type: 1,
+                            message: '添加学生成功',
+                            addRole: 'student',
+                            nowClassStudentList: doc[0].classMates
+                          })
+                        })
+                    })
+                  Student.update({ name: addName }, { $set: { class: nowClass } })
+                    .exec()
+                }
+              })
+            }
           })
-      })
-    Student.update({ name: addName }, { $set: { class: nowClass } })
-      .exec()
+      } else {
+        res.json({
+          addRole: 'student',
+          nowClassTeacherList: [],
+          type: 0,
+          message: '该学生不存在'
+        })
+      }
+    })
   }
-
 }
 
 exports.get_classes = (req, res, next) => {

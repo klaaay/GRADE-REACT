@@ -6,7 +6,7 @@ import $ from 'jquery'
 
 import { startChangePassword } from '../../../actions/admin.js'
 
-import Alter from '../public/Alter.jsx'
+// import Alter from '../public/Alter.jsx'
 
 const FormItem = Form.Item;
 
@@ -52,14 +52,14 @@ class Change extends Component {
             onClick={onStartChangePassword}
           >修改</Button>
         </FormItem>
-        <FormItem
+        {/* <FormItem
           wrapperCol={{ span: 8, offset: 8 }}
         >
           <Alter
             status={status}
             message={message}
           />
-        </FormItem>
+        </FormItem> */}
       </Form>
     )
   }

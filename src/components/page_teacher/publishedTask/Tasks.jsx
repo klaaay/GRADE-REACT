@@ -12,11 +12,9 @@ const { Column } = Table;
 
 class Tasks extends Component {
   render() {
-    const { publishedTasks,all,selectId } = this.props
+    const { publishedTasks } = this.props
     const { onStartDeleteTask } = this.props
-    console.log(all.get('publishedTasks').filter(item=>item.get('key') !== selectId).toJS())
-    console.log(all.get('publishedTasks').toJS())
-    // console.log(publishedTasks)
+    console.log(publishedTasks)
     return (
       <Table dataSource={publishedTasks}>
 
@@ -61,9 +59,7 @@ class Tasks extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  publishedTasks: state.getIn(['teacher', 'publishedTasks']).toJS(),
-  all:state.get('teacher'),
-  selectId:state.getIn(['teacher', 'selectId'])
+  publishedTasks: state.getIn(['teacher', 'publishedTasks']).toJS()
 })
 
 const mapDispatchToProps = (dispatch) => ({
