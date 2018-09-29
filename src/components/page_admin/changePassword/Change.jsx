@@ -13,7 +13,7 @@ const FormItem = Form.Item;
 class Change extends Component {
   render() {
     const { onStartChangePassword } = this.props
-    const { status,message } = this.props
+    // const { status,message } = this.props
     return (
       <Form>
         <FormItem

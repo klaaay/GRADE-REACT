@@ -15,6 +15,7 @@ import ClassControl from './components/page_admin/classControl/Class.jsx'
 import PageTeacher from './components/page_teacher/PageTeacher.jsx'
 import TaskTeacher from './components/page_teacher/publishTask/Task.jsx'
 import PublishedTask from './components/page_teacher/publishedTask/Tasks.jsx'
+import Details from './components/page_teacher/publishedDetail/Details.jsx'
 
 import PageStudent from './components/page_student/PageStudent.jsx'
 import TasksStudent from './components/page_student/myTask/Tasks'
@@ -23,7 +24,6 @@ import TasksStudent from './components/page_student/myTask/Tasks'
 import store from './store/configureStore.js';
 
 import './index.less'
-
 
 ReactDOM.render(
   <Provider store={store}>
@@ -42,6 +42,7 @@ ReactDOM.render(
           <IndexRoute component={TaskTeacher} />
           <Route path="/teacher/task" component={TaskTeacher} />
           <Route path="/teacher/published" component={PublishedTask} />
+          <Route path="/teacher/details" component={Details} />
         </Route>
         <Route path="/student" component={PageStudent}>
           <Route path="/student/task" component={TasksStudent} />

@@ -57,7 +57,7 @@ class PageAdmin extends Component {
   render() {
     const { onChangeRoute, onTeacherListSearch, onStudentListSearch, onStartGetClassList,onLogOut } = this.props
     return (
-      <Layout>
+      <Layout style={{height:'92%'}}>
         <Sider
           trigger={null}
           collapsible

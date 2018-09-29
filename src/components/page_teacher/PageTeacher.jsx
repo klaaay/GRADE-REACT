@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
 import { Layout, Menu, Icon } from 'antd';
-import $ from 'jquery'
+// import $ from 'jquery'
 
 import {
   classListSearch,
@@ -31,13 +31,13 @@ class PageTeacher extends Component {
   }
 
   componentDidMount = () => {
-    $('.homework_publish').trigger('click');
+    // $('.homework_publish').trigger('click');
   }
 
   render() {
     const { onClassListSearch, onLogOut,onStartGetPublishedTaks } = this.props
     return (
-      <Layout>
+      <Layout style={{height:'92%'}}>
         <Sider
           trigger={null}
           collapsible

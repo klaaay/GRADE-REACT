@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router';
 
 import { Table, Divider, Tag, Icon } from 'antd';
 
@@ -43,7 +44,17 @@ class Tasks extends Component {
           key="action"
           render={(text, record) => (
             <span>
-              <Icon type="profile" theme="outlined" />
+              <Icon type="profile" theme="outlined" 
+              onClick={(e)=>{
+                console.log(record.key)
+                browserHistory.push({
+                  pathname:'/teacher/details',
+                  query:{
+                    id:record.key
+                  }
+                })
+              }}
+              />
               <Divider type="vertical" />
               <Icon type="delete" theme="outlined"
                 onClick={(e) => {

@@ -4,11 +4,13 @@ import { connect } from 'react-redux'
 import { Select, DatePicker, Button, Form, Input } from 'antd';
 import $ from 'jquery'
 
+
 import {
   taskClassesChange,
   taskTimeChange,
   startTaskPublish
 } from '../../../actions/teacher'
+
 
 const { RangePicker } = DatePicker;
 
@@ -51,7 +53,8 @@ class Task extends Component {
           wrapperCol={{ span: 8 }}
         >
           <RangePicker
-            // defaultValue={[moment('2018/09/23', dateFormat), moment('2018/09/30', dateFormat)]}
+            style={{width:'100%'}}
+            placeholder={['开始时间', '结束时间']}
             format={dateFormat}
             onChange={onTaskTimeChange}
           />

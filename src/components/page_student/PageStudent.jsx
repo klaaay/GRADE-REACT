@@ -34,7 +34,7 @@ class PageStudent extends Component {
   render() {
     const { onStartGetTasks,onLogOut } = this.props
     return (
-      <Layout>
+      <Layout style={{height:'92%'}}>
         <Sider
           trigger={null}
           collapsible

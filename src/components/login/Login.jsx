@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, Layout } from 'antd';
 
 import Alter from './Alter.jsx'
 
@@ -12,6 +12,8 @@ import {
 } from '../../actions/login'
 
 import './login.less'
+
+const { Header, Footer, Content } = Layout;
 
 const FormItem = Form.Item;
 class NormalLoginForm extends React.Component {
@@ -25,60 +27,62 @@ class NormalLoginForm extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
     const { onUserNameChange, onPasswordChange, onHandleSubmit, status, message, userName, password } = this.props
     return (
-      <div id='login-form'>
-        <Alter
-          userName={userName}
-          password={password}
-          status={status}
-          message={message}
-        />
-        <h1>作业评分系统</h1>
-        <div className='login-form-inner'>
-          <Form onSubmit={this.handleSubmit} className="login-form">
-            <FormItem>
-              {getFieldDecorator('userName', {
-                rules: [{ required: true, message: 'Please input your username!' }],
-              })(
-                <Input
-                  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  placeholder="Username"
-                  onChange={onUserNameChange}
-                />
-              )}
-            </FormItem>
-            <FormItem>
-              {getFieldDecorator('password', {
-                rules: [{ required: true, message: 'Please input your Password!' }],
-              })(
-                <Input
-                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  type="password"
-                  placeholder="Password"
-                  onChange={onPasswordChange}
-                />
-              )}
-            </FormItem>
-            <FormItem>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-                onClick={onHandleSubmit}
-              >
-                Log in
-          </Button>
-            </FormItem>
-          </Form>
-        </div>
-      </div>
+        <Layout style={{minHeight:600}}>
+          <Header>Header</Header>
+          <Content style={{background:'white'}} >
+            <div id='login-form'>
+              <Alter
+                userName={userName}
+                password={password}
+                status={status}
+                message={message}
+              />
+              <h1>作业评分系统</h1>
+              <div className='login-form-inner'>
+                <Form onSubmit={this.handleSubmit} className="login-form">
+                  <FormItem>
+                      <Input
+                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                        placeholder="用户名"
+                        onChange={onUserNameChange}
+                      />
+                  </FormItem>
+                  <FormItem>
+                      <Input
+                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                        type="password"
+                        placeholder="密码"
+                        onChange={onPasswordChange}
+                      />
+                  </FormItem>
+                  <FormItem>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className="login-form-button"
+                      onClick={onHandleSubmit}
+                    >
+                      登 陆
+                  </Button>
+                  </FormItem>
+                </Form>
+              </div>
+            </div>
+          </Content>
+          <Footer style={{background:'white'}}>
+            <span
+            style={{
+              position: 'relative',
+              left: '42%',
+              color:'#ccc'}}
+            > © 2018 杭州师范大学 版权所有</span>
+        </Footer>
+        </Layout>
     );
   }
 }
-
-const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
 
 const mapStateToProps = (state) => ({
   userName: state.getIn(['login', 'userName']),
@@ -100,4 +104,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedNormalLoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(NormalLoginForm);

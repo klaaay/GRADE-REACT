@@ -41,7 +41,7 @@ exports.search_class_list = (req, res, next) => {
 exports.publish_task = (req, res, next) => {
   console.log(req.body);
   const { publisherId, classes, title, content, publishTime, endTime } = req.body;
-  if (!!classes || !!title || !!content || !!publishTime || !!endTime) {
+  if (!classes || !title || !content || !publishTime || !endTime) {
     res.json({
       type: 0,
       message: '请填写完整信息'
@@ -62,15 +62,18 @@ exports.publish_task = (req, res, next) => {
         })
         Task_doc.save(function (err, doc) {
           console.log(doc)
-          classes.forEach(item => {
-            console.log(item)
-            Class.find({ name: item }, (err, doc) => {
+          classes.forEach(item_class => {
+            console.log(item_class)
+            Class.find({ name: item_class }, (err, doc) => {
               console.log(doc)
-              doc[0].classMates.forEach(item => {
+              doc[0].classMates.forEach(item_name => {
                 var TaskDone_doc = new TaskDone({
                   id: Task_doc._id,
-                  studentName: item,
-                  committed: false
+                  name: item_name,
+                  class:item_class,
+                  wordCommitted: false,
+                  pptCommitted: false,
+                  videoCommitted: false
                 })
                 TaskDone_doc.save(() => { })
               })
@@ -105,6 +108,7 @@ exports.published_task = (req, res, next) => {
 exports.deleted_task = (req, res, next) => {
   console.log(req.body);
   const { id } = req.body;
+  TaskDone.remove({id:id}).exec();
   Task.remove({ _id: id })
     .exec()
     .then(() => {
@@ -112,4 +116,11 @@ exports.deleted_task = (req, res, next) => {
         message: '删除成功'
       })
     })
+}
+
+exports.task_detail = (req,res,next)=>{
+  console.log(req.body);
+  res.json({
+    test:'test'
+  })
 }

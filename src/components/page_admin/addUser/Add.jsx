@@ -21,7 +21,7 @@ class Add extends Component {
 
   render() {
     const { onStartAddUser, onHandleSelectChange } = this.props
-    const { status, message } = this.props
+    // const { status, message } = this.props
     return (
       <Form>
         <FormItem
