@@ -72,7 +72,7 @@ class PageStudent extends Component {
               }
               } />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520,height:'100%' }}>
             {this.props.children}
           </Content>
         </Layout>

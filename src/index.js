@@ -19,6 +19,7 @@ import Details from './components/page_teacher/publishedDetail/Details.jsx'
 
 import PageStudent from './components/page_student/PageStudent.jsx'
 import TasksStudent from './components/page_student/myTask/Tasks'
+import DoTask from './components/page_student/doTask/DoTask'
 
 
 import store from './store/configureStore.js';
@@ -46,7 +47,7 @@ ReactDOM.render(
         </Route>
         <Route path="/student" component={PageStudent}>
           <Route path="/student/task" component={TasksStudent} />
-
+          <Route path="/student/do" component={DoTask} />
         </Route>
       </Route>
     </Router>

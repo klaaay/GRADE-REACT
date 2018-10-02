@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router';
 
 import { Card } from 'antd';
 
@@ -13,7 +14,20 @@ export default class Task extends Component {
     return (
       <Card
         title={title}
-        extra={outOfDate ? (<span style={{ color: '#F5222D' }}>已过期</span>) : (<a href="#">去完成</a>)}
+        extra={outOfDate ? 
+          (<span style={{ color: '#F5222D' }}>已过期</span>) : 
+          (<span 
+            style={{ color: '#40A9FF',cursor:'pointer' }}
+            onClick={(e)=>{
+              browserHistory.push({
+                pathname:'/student/do',
+                state:{
+                  title:title,
+                  content:content
+                }
+              })
+            }}
+          >去完成</span>)}
       >
         <p><span>发布老师:</span>{publisher}</p>
         <p><span>作业内容:</span>{content}</p>

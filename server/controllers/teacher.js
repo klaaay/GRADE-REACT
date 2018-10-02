@@ -96,8 +96,8 @@ exports.published_task = (req, res, next) => {
       const name = doc[0].name;
       Task.find({ publisher: name }, { title: 1, publishTime: 1, classes: 1 }, (err, docs) => {
         let docs_str = JSON.stringify(docs);
-        var docs_str_key = docs_str.replace(/_id/g, 'key');
-        var docs_key = JSON.parse(docs_str_key);
+        let docs_str_key = docs_str.replace(/_id/g, 'key');
+        let docs_key = JSON.parse(docs_str_key);
         res.json({
           publishedTasks: docs_key
         })
@@ -120,7 +120,20 @@ exports.deleted_task = (req, res, next) => {
 
 exports.task_detail = (req,res,next)=>{
   console.log(req.body);
-  res.json({
-    test:'test'
-  })
+  const {id} = req.body;
+  TaskDone.find({id:id})
+    .exec()
+    .then(docs=>{
+      console.log(docs)
+      let docs_str =  JSON.stringify(docs);
+      let docs_str_key = docs_str.replace(/_id/g, 'key');
+      let docs_key = JSON.parse(docs_str_key);
+      res.json({
+        data:docs_key
+      })
+    })
+  // res.json({
+  //   test:'test'
+  // })
+
 }
