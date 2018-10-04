@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router';
 
 import { Table, Input, Button, Icon, Spin } from 'antd';
 
@@ -127,25 +128,27 @@ export default class Details extends Component {
       title: 'Word',
       dataIndex: 'wordCommitted',
       key: 'wordCommitted',
-      render: (text) => {
+      render: (text,record) => {
         console.log(text)
-        return <Icon type="file-word" theme={text?"twoTone":"outlined"} />
+        console.log(record)
+        // return <Icon type="file-word" theme={text?"twoTone":"outlined"} />
+        return text?<a href={'http://localhost:5000/'+record.word}><Icon type="file-word" theme={"twoTone"} /></a>:<Icon type="file-word" theme={"outlined"} />
       },
     },
     {
       title: 'PPT',
       dataIndex: 'pptCommitted',
       key: 'pptCommitted',
-      render: (text) => {
-        return <Icon type="file-ppt" theme={text?"twoTone":"outlined"} />
+      render: (text,record) => {
+        return text?<a href={'http://localhost:5000/'+record.ppt}><Icon type="file-ppt" theme={"twoTone"} /></a>:<Icon type="file-ppt" theme={"outlined"} />
       },
     },
     {
       title: 'Video',
       dataIndex: 'videoCommitted',
       key: 'videoCommitted',
-      render: (text) => {
-        return <Icon type="video-camera" theme={text?"twoTone":"outlined"}/>
+      render: (text,record) => {
+        return text?<a href={'http://localhost:5000/'+record.video}><Icon type="video-camera" theme={"twoTone"} /></a>:<Icon type="video-camera" theme={"outlined"} />
       },
     },
     {
@@ -154,7 +157,11 @@ export default class Details extends Component {
       key: 'teacherGrade',
       render: (text,record) => {
         if(record.pptCommitted&&record.wordCommitted&&record.videoCommitted){
-          return  !text?<a>去评价</a>:<Icon type="check" theme="outlined" style={{color:'#1890FF'}}/>
+          return  !text?<a
+          onClick={(e)=>{
+            browserHistory.push('/teacher/evaluate')
+          }}
+          >去评价</a>:<Icon type="check" theme="outlined" style={{color:'#1890FF'}}/>
         }else{
           return <span>去评价</span>
         }

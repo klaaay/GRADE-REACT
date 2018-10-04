@@ -12,7 +12,7 @@ const taskdoneSchema = mongoose.Schema({
   videoCommitted: Boolean,
   teacherGrade:Number,
   groupMember:[String],
-  groupGrade:Number,
+  groupGrade:[Number],
   selfGrade:Number
 })
 

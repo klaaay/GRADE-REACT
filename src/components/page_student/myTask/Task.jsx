@@ -5,7 +5,7 @@ import { Card } from 'antd';
 
 export default class Task extends Component {
   render() {
-    const { title, publisher, content, publishTime, endTime, restTime, outOfDate } = this.props
+    const { userId, taskId, title, publisher, content, publishTime, endTime, restTime, outOfDate, committed } = this.props
     console.log(restTime)
     var changeRestTime = restTime;
     if (changeRestTime === 'in a day') {
@@ -14,16 +14,18 @@ export default class Task extends Component {
     return (
       <Card
         title={title}
-        extra={outOfDate ? 
-          (<span style={{ color: '#F5222D' }}>已过期</span>) : 
-          (<span 
-            style={{ color: '#40A9FF',cursor:'pointer' }}
-            onClick={(e)=>{
+        extra={outOfDate ?
+          (<span style={{ color: '#F5222D' }}>已过期</span>) :
+          (<span
+            style={{ color: '#40A9FF', cursor: 'pointer' }}
+            onClick={(e) => {
               browserHistory.push({
-                pathname:'/student/do',
-                state:{
-                  title:title,
-                  content:content
+                pathname: '/student/do',
+                state: {
+                  userId: userId,
+                  taskId: taskId,
+                  title: title,
+                  content: content
                 }
               })
             }}
@@ -41,7 +43,11 @@ export default class Task extends Component {
           >
             {changeRestTime.split(" ")[2] === 'days' ? changeRestTime.split(" ")[1] + " 天" : changeRestTime.split(" ")[1] + " 小时"}
           </span></p>}
-        <p><span>完成状态:</span></p>
+        <p><span>完成状态:</span>{committed ? <a
+        onClick={()=>{
+          browserHistory.push('/student/score')
+        }}
+        >查看成绩</a> : <span style={{ color: '#F5222D' }}>未完成</span>}</p>
       </Card>
     );
   }

@@ -20,7 +20,9 @@ import Details from './components/page_teacher/publishedDetail/Details.jsx'
 import PageStudent from './components/page_student/PageStudent.jsx'
 import TasksStudent from './components/page_student/myTask/Tasks'
 import DoTask from './components/page_student/doTask/DoTask'
+import Score from './components/page_student/score/Score'
 
+import Evaluate from './components/public/evaluate/Evaluate.jsx'
 
 import store from './store/configureStore.js';
 
@@ -44,10 +46,12 @@ ReactDOM.render(
           <Route path="/teacher/task" component={TaskTeacher} />
           <Route path="/teacher/published" component={PublishedTask} />
           <Route path="/teacher/details" component={Details} />
+          <Route path="/teacher/evaluate" component={Evaluate} />
         </Route>
         <Route path="/student" component={PageStudent}>
           <Route path="/student/task" component={TasksStudent} />
           <Route path="/student/do" component={DoTask} />
+          <Route path="/student/score" component={Score} />
         </Route>
       </Route>
     </Router>

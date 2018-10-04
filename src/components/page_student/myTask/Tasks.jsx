@@ -15,7 +15,7 @@ dayjs.extend(relativeTime)
 
 class Tasks extends Component {
   render() {
-    const { taskList } = this.props
+    const { taskList, userId } = this.props
     console.log(taskList);
     return (
       <div className="tasks">
@@ -23,13 +23,16 @@ class Tasks extends Component {
           taskList.map((item, index) => (
             <Task
               key={index}
-              title={item.title}
-              publisher={item.publisher}
-              content={item.content}
-              publishTime={item.publishTime}
-              endTime={item.endTime}
-              restTime={dayjs(item.endTime).fromNow()}
-              outOfDate={!dayjs(item.endTime).isAfter(dayjs())}
+              userId={userId}
+              taskId={item.id._id}
+              title={item.id.title}
+              publisher={item.id.publisher}
+              content={item.id.content}
+              publishTime={item.id.publishTime}
+              endTime={item.id.endTime}
+              restTime={dayjs(item.id.endTime).fromNow()}
+              outOfDate={!dayjs(item.id.endTime).isAfter(dayjs())}
+              committed={(item.wordCommitted && item.pptCommitted && item.videoCommitted) ? true : false}
             >
             </Task>
           ))
@@ -40,7 +43,8 @@ class Tasks extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  taskList: state.getIn(['student', 'taskList']).toJS()
+  taskList: state.getIn(['student', 'taskList']).toJS(),
+  userId: state.getIn(['login', 'id'])
 })
 
 const mapDispatchToProps = (dispatch) => ({

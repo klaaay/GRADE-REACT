@@ -64,6 +64,8 @@ export default class DoTask extends Component {
     fileUploadHandlerWord = () => {
         const fdWord = new FormData();
         fdWord.append('taskWord', this.state.selectedWord)
+        fdWord.append('userId',this.props.location.state.userId)
+        fdWord.append('taskId',this.props.location.state.taskId)
         axios.post('/student/word', fdWord, {
             onUploadProgress: progressEvent => {
                 if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
@@ -81,6 +83,8 @@ export default class DoTask extends Component {
     fileUploadHandlerPPT = () => {
         const fdPPT = new FormData();
         fdPPT.append('taskPPT', this.state.selectedPPT)
+        fdPPT.append('userId',this.props.location.state.userId)
+        fdPPT.append('taskId',this.props.location.state.taskId)
         axios.post('/student/ppt', fdPPT, {
             onUploadProgress: progressEvent => {
                 if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
@@ -98,6 +102,8 @@ export default class DoTask extends Component {
     fileUploadHandlerVideo = () => {
         const fdVideo = new FormData();
         fdVideo.append('taskVideo', this.state.selectedVideo)
+        fdVideo.append('userId',this.props.location.state.userId)
+        fdVideo.append('taskId',this.props.location.state.taskId)
         axios.post('/student/video', fdVideo, {
             onUploadProgress: progressEvent => {
                 if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {

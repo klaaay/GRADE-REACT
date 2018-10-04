@@ -72,7 +72,16 @@ class Class extends Component {
             footer={<Button onClick={() => this.setModalTeacherVisible(true)}>添加教师</Button>}
             bordered
             dataSource={nowClassTeacherList}
-            renderItem={item => (<List.Item>{item}<div className="hidden"></div> <Icon type="minus-square" theme="twoTone" /></List.Item>)}
+            renderItem={item => {
+              console.log(item)
+              return (<List.Item>{item}<div className="hidden"></div> 
+              <Icon type="minus-square" theme="twoTone" 
+              style={{cursor:'pointer'}}
+              onClick={(e)=>{
+                
+              }}
+              /></List.Item>)
+            }}
           />
           <List
             className="manage-student"
