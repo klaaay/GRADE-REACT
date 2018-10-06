@@ -9,6 +9,7 @@ const loginRoutes = require('./routes/login');
 const adminRoutes = require('./routes/admin');
 const teacherRoutes = require('./routes/teacher');
 const studentRoutes = require('./routes/student');
+const publicRoutes = require('./routes/public')
 
 
 mongoose.connect("mongodb://127.0.0.1:27017/grade", function (err) {
@@ -19,7 +20,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/grade", function (err) {
   }
 });
 
-app.use('/public',express.static('public'));
+app.use('/public', express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -27,5 +28,6 @@ app.use('/login', loginRoutes);
 app.use('/admin', adminRoutes);
 app.use('/teacher', teacherRoutes);
 app.use('/student', studentRoutes);
+app.use('/public', publicRoutes)
 
 module.exports = app;

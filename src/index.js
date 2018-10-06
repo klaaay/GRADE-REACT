@@ -21,6 +21,7 @@ import PageStudent from './components/page_student/PageStudent.jsx'
 import TasksStudent from './components/page_student/myTask/Tasks'
 import DoTask from './components/page_student/doTask/DoTask'
 import Score from './components/page_student/score/Score'
+import GroupEvaluate from './components/page_student/groupEvaluate/Group'
 
 import Evaluate from './components/public/evaluate/Evaluate.jsx'
 
@@ -51,7 +52,9 @@ ReactDOM.render(
         <Route path="/student" component={PageStudent}>
           <Route path="/student/task" component={TasksStudent} />
           <Route path="/student/do" component={DoTask} />
+          <Route path="/student/evaluate" component={Evaluate} />
           <Route path="/student/score" component={Score} />
+          <Route path="/student/groupEval" component={GroupEvaluate} />
         </Route>
       </Route>
     </Router>

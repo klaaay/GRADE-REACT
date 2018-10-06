@@ -41,3 +41,4 @@ export const START_DELETE_TASK = 'START_DELETE_TASK';
 
 //student page
 export const START_GET_TASKS = 'START_GET_TASKS';
+export const START_GET_ASKED_TASKS = 'START_GET_ASKED_TASKS';

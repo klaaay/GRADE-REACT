@@ -44,16 +44,16 @@ class Tasks extends Component {
           key="action"
           render={(text, record) => (
             <span>
-              <Icon type="profile" theme="outlined" 
-              onClick={(e)=>{
-                console.log(record.key)
-                browserHistory.push({
-                  pathname:'/teacher/details',
-                  query:{
-                    id:record.key
-                  }
-                })
-              }}
+              <Icon type="profile" theme="outlined"
+                onClick={(e) => {
+                  console.log(record.key)
+                  browserHistory.push({
+                    pathname: '/teacher/details',
+                    query: {
+                      id: record.key
+                    }
+                  })
+                }}
               />
               <Divider type="vertical" />
               <Icon type="delete" theme="outlined"

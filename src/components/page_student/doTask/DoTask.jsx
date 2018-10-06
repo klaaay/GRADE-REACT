@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router';
 
 import axios from 'axios'
 
@@ -64,8 +65,9 @@ export default class DoTask extends Component {
     fileUploadHandlerWord = () => {
         const fdWord = new FormData();
         fdWord.append('taskWord', this.state.selectedWord)
-        fdWord.append('userId',this.props.location.state.userId)
-        fdWord.append('taskId',this.props.location.state.taskId)
+        fdWord.append('userId', this.props.location.state.userId)
+        fdWord.append('taskId', this.props.location.state.taskId)
+        fdWord.append('id', this.props.location.state._id)
         axios.post('/student/word', fdWord, {
             onUploadProgress: progressEvent => {
                 if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
@@ -83,8 +85,9 @@ export default class DoTask extends Component {
     fileUploadHandlerPPT = () => {
         const fdPPT = new FormData();
         fdPPT.append('taskPPT', this.state.selectedPPT)
-        fdPPT.append('userId',this.props.location.state.userId)
-        fdPPT.append('taskId',this.props.location.state.taskId)
+        fdPPT.append('userId', this.props.location.state.userId)
+        fdPPT.append('taskId', this.props.location.state.taskId)
+        fdPPT.append('id', this.props.location.state._id)
         axios.post('/student/ppt', fdPPT, {
             onUploadProgress: progressEvent => {
                 if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
@@ -102,8 +105,9 @@ export default class DoTask extends Component {
     fileUploadHandlerVideo = () => {
         const fdVideo = new FormData();
         fdVideo.append('taskVideo', this.state.selectedVideo)
-        fdVideo.append('userId',this.props.location.state.userId)
-        fdVideo.append('taskId',this.props.location.state.taskId)
+        fdVideo.append('userId', this.props.location.state.userId)
+        fdVideo.append('taskId', this.props.location.state.taskId)
+        fdVideo.append('id', this.props.location.state._id)
         axios.post('/student/video', fdVideo, {
             onUploadProgress: progressEvent => {
                 if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
@@ -205,6 +209,24 @@ export default class DoTask extends Component {
                             </Button>
                             <p>{this.state.VideoFile}</p>
                             <Progress percent={this.state.percentVideo} />
+                        </FormItem>
+                        <FormItem
+                            label=""
+                            labelCol={{ span: 0 }}
+                            wrapperCol={{ span: 24 }}>
+                            <Button
+                                type="primary"
+                                block
+                                onClick={(e) => {
+                                    browserHistory.push({
+                                        pathname: '/student/evaluate',
+                                        query: {
+                                            role: 'self',
+                                            id: this.props.location.state._id
+                                        }
+                                    })
+                                }}
+                            >去自评</Button>
                         </FormItem>
                     </Form>
                 </div>

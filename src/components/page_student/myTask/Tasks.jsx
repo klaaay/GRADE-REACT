@@ -24,6 +24,7 @@ class Tasks extends Component {
             <Task
               key={index}
               userId={userId}
+              _id={item._id}
               taskId={item.id._id}
               title={item.id.title}
               publisher={item.id.publisher}
@@ -33,6 +34,10 @@ class Tasks extends Component {
               restTime={dayjs(item.id.endTime).fromNow()}
               outOfDate={!dayjs(item.id.endTime).isAfter(dayjs())}
               committed={(item.wordCommitted && item.pptCommitted && item.videoCommitted) ? true : false}
+              teacherGrade={item.teacherGrade}
+              selfGrade={item.selfGrade}
+              groupMember={item.groupMember}
+              groupGrade={item.groupGrade}
             >
             </Task>
           ))

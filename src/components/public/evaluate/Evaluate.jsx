@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { Tabs, Table, Input, Button, message } from 'antd';
 import $ from 'jquery'
 
+import axios from 'axios'
+
 import {
   data_instructional_design,
   data_multimedia,
@@ -20,11 +22,20 @@ function callback(key) {
   console.log(key);
 }
 
+function getQueryString(name) {
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+  var r = window.location.search.substr(1).match(reg);
+  if (r != null) {
+    return unescape(r[2]);
+  }
+  return null;
+}
+
 const columns = [{
   title: '评价内容',
   dataIndex: 'eval_content',
   key: 'eval_content',
-  render: text => <a href="javascript:;">{text}</a>,
+  render: text => <a>{text}</a>,
 }, {
   title: '评价标准',
   dataIndex: 'eval_stand',
@@ -62,7 +73,6 @@ export default class Evaluate extends Component {
     speech: [],
     class: []
   }
-
 
   render() {
 
@@ -106,6 +116,26 @@ export default class Evaluate extends Component {
                 onClick={(e) => {
                   var score = calTotalValue(0, values)
                   console.log(score)
+                  if (getQueryString('role') === 'group') {
+                    axios.post('/public/evaluate', {
+                      score: score,
+                      id: getQueryString('id'),
+                      role: getQueryString('role'),
+                      userId: getQueryString('userId')
+                    }).then(res => {
+                      console.log(res)
+                      message.success(res.data.message)
+                    })
+                  } else {
+                    axios.post('/public/evaluate', {
+                      score: score,
+                      id: getQueryString('id'),
+                      role: getQueryString('role')
+                    }).then(res => {
+                      console.log(res)
+                      message.success(res.data.message)
+                    })
+                  }
                 }}
               >评分</Button>}>
             </Table>

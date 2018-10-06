@@ -23,7 +23,6 @@ export default class Details extends Component {
     try {
       const response = await fetch('/teacher/detail', fetchOption);
       const body = await response.json();
-      console.log(body);
       this.setState({
         data: body,
         loading: true
@@ -45,8 +44,7 @@ export default class Details extends Component {
   }
 
   componentDidMount = () => {
-    let data =this.get_task_detail((document.location.search.split('=')[1]))
-    console.log(data)
+    this.get_task_detail((document.location.search.split('=')[1]))
   }
 
   render() {
@@ -128,56 +126,63 @@ export default class Details extends Component {
       title: 'Word',
       dataIndex: 'wordCommitted',
       key: 'wordCommitted',
-      render: (text,record) => {
-        console.log(text)
-        console.log(record)
+      render: (text, record) => {
+
         // return <Icon type="file-word" theme={text?"twoTone":"outlined"} />
-        return text?<a href={'http://localhost:5000/'+record.word}><Icon type="file-word" theme={"twoTone"} /></a>:<Icon type="file-word" theme={"outlined"} />
+        return text ? <a href={'http://localhost:5000/' + record.word}><Icon type="file-word" theme={"twoTone"} /></a> : <Icon type="file-word" theme={"outlined"} />
       },
     },
     {
       title: 'PPT',
       dataIndex: 'pptCommitted',
       key: 'pptCommitted',
-      render: (text,record) => {
-        return text?<a href={'http://localhost:5000/'+record.ppt}><Icon type="file-ppt" theme={"twoTone"} /></a>:<Icon type="file-ppt" theme={"outlined"} />
+      render: (text, record) => {
+        return text ? <a href={'http://localhost:5000/' + record.ppt}><Icon type="file-ppt" theme={"twoTone"} /></a> : <Icon type="file-ppt" theme={"outlined"} />
       },
     },
     {
       title: 'Video',
       dataIndex: 'videoCommitted',
       key: 'videoCommitted',
-      render: (text,record) => {
-        return text?<a href={'http://localhost:5000/'+record.video}><Icon type="video-camera" theme={"twoTone"} /></a>:<Icon type="video-camera" theme={"outlined"} />
+      render: (text, record) => {
+        return text ? <a href={'http://localhost:5000/' + record.video}><Icon type="video-camera" theme={"twoTone"} /></a> : <Icon type="video-camera" theme={"outlined"} />
       },
     },
     {
       title: '老师评价',
       dataIndex: 'teacherGrade',
       key: 'teacherGrade',
-      render: (text,record) => {
-        if(record.pptCommitted&&record.wordCommitted&&record.videoCommitted){
-          return  !text?<a
-          onClick={(e)=>{
-            browserHistory.push('/teacher/evaluate')
-          }}
-          >去评价</a>:<Icon type="check" theme="outlined" style={{color:'#1890FF'}}/>
-        }else{
+      render: (text, record) => {
+        console.log(text)
+        console.log(record)
+        if (record.pptCommitted && record.wordCommitted && record.videoCommitted) {
+          return !text ? <a
+            onClick={(e) => {
+              browserHistory.push({
+                pathname: '/teacher/evaluate',
+                query: {
+                  role: 'teacher',
+                  id:record.key
+                }
+              })
+            }}
+          >去评价</a> : <Icon type="check" theme="outlined" style={{ color: '#1890FF' }} />
+        } else {
           return <span>去评价</span>
         }
       },
     }];
-    if(!this.state.loading){
-    return <Spin
-      style={{
-        position: 'relative',
-        left: '50%'
-      }}
-    />
-    }else{
-    return <Table
-      columns={columns}
-      dataSource={this.state.data.data} />;
+    if (!this.state.loading) {
+      return <Spin
+        style={{
+          position: 'relative',
+          left: '50%'
+        }}
+      />
+    } else {
+      return <Table
+        columns={columns}
+        dataSource={this.state.data.data} />;
     }
   }
 }

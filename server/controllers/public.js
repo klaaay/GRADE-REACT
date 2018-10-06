@@ -6,10 +6,10 @@ const User = require("../models/User");
 const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
 const Class = require("../models/Class");
+const TaskDone = require("../models/TaskDone")
 
 
 exports.change_password = (req, res) => {
-  console.log(req.body);
   var userName = req.body.userName;
   var relOld = req.body.relOld;
   var oldPass = req.body.oldPass;
@@ -39,8 +39,7 @@ exports.change_password = (req, res) => {
             message: '输入两次密码不一致'
           })
         } else {
-          var a = User.update({ userName: userName }, { $set: { password: newPass } }).exec();
-          console.log(a);
+          User.update({ userName: userName }, { $set: { password: newPass } }).exec();
           res.send({
             type: 1,
             message: '密码修改成功'
@@ -48,5 +47,47 @@ exports.change_password = (req, res) => {
         }
       }
     }
+  }
+}
+
+exports.score_evaluate = (req, res, next) => {
+  console.log(req.body);
+  const { id, role, score } = req.body;
+  if (role === 'teacher') {
+    TaskDone.update({ _id: id }, { $set: { teacherGrade: score } })
+      .exec()
+      .then(() => {
+        res.json({
+          type: 1,
+          message: '评价成功(教师)'
+        })
+      })
+  } else if (role === 'self') {
+    TaskDone.update({ _id: id }, { $set: { selfGrade: score } })
+      .exec()
+      .then(() => {
+        res.json({
+          type: 1,
+          message: '评价成功(自评)'
+        })
+      })
+  } else if (role === 'group') {
+    console.log('group')
+    console.log(req.body.userId)
+    const { userId } = req.body;
+    Student.find({ id: userId })
+      .exec()
+      .then(doc => {
+        let name = doc[0].name
+        TaskDone.update({ _id: id }, { $pull: { groupMember: name } }).exec()
+      })
+    TaskDone.update({ _id: id }, { $push: { groupGrade: score } })
+      .exec()
+      .then(() => {
+        res.json({
+          type: 1,
+          message: '评价成功(互评)'
+        })
+      })
   }
 }

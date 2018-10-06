@@ -26,7 +26,7 @@ export const AdminPageState = Immutable.fromJS({
   teacherList: [],
   studentList: [],
   //class control
-  classes:[],
+  classes: [],
   nowClass: '',
   nowClassTeacherList: [],
   nowClassStudentList: [],
@@ -45,13 +45,15 @@ export const TeacherPageState = Immutable.fromJS({
   publishTime: '',
   endTime: '',
   //published
-  publishedTasks:[],
-  selectId:''
+  publishedTasks: [],
+  selectId: ''
 })
 
 export const StudentPageState = Immutable.fromJS({
   message: '',
   status: '',
   //task
-  taskList: []
+  taskList: [],
+  //groupEvaluate
+  askedTaskList: []
 })

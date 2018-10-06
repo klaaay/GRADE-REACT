@@ -10,79 +10,160 @@ const Task = require("../models/Task")
 const TaskDone = require("../models/TaskDone")
 
 exports.get_tasks = (req, res, next) => {
-  console.log(req.body);
   const { id } = req.body;
-  // Student.find({ id: id })
-  //   .exec()
-  //   .then(doc => {
-  //     console.log(doc)
-  //     const my_class = doc[0].class;
-  //     console.log(my_class);
-  //     Task.find()
-  //       .exec()
-  //       .then(docs => {
-  //         console.log(docs)
-  //         var my_tasks = docs.map(item => {
-  //           if (item.classes.indexOf(my_class) !== -1) {
-  //             return item;
-  //           }
-  //         })
-  //         console.log(my_tasks);
-  //         var my_true_tasks = my_tasks.filter(item => {
-  //           return !!item;
-  //         })
-  //         console.log(my_true_tasks);
-  //         res.json({
-  //           taskList: my_true_tasks
-  //         })
-  //       })
-  //   })
-  Student.find({id:id})
+  Student.find({ id: id })
     .exec()
-    .then(doc_stu=>{
-      console.log(doc_stu[0].name);
-      TaskDone.find({name:doc_stu[0].name})
+    .then(doc_stu => {
+      TaskDone.find({ name: doc_stu[0].name })
         .populate('id')
         .exec()
-        .then(docs_task=>{
-          console.log(docs_task)
-           res.json({
+        .then(docs_task => {
+          res.json({
             taskList: docs_task
           })
         })
     })
 }
 
-exports.word_upload = (req,res,next)=>{
+exports.get_asked_tasks = (req, res, next) => {
   console.log(req.body)
-  console.log(req.file);
-  const {userId,taskId} = req.body
-  Student.find({id:userId})
+  const { id } = req.body;
+  Student.find({ id: id })
     .exec()
-    .then(doc=>{
-      TaskDone.update({name:doc[0].name,id:taskId},{$set:{wordCommitted:true}}).exec()
-      TaskDone.update({name:doc[0].name,id:taskId},{$set:{word:req.file.path}}).exec()
+    .then(doc => {
+      let name = doc[0].name
+      console.log(name)
+      TaskDone
+        .where('groupMember')
+        .elemMatch({$eq:name})
+        .exec()
+        .then(docs => {
+          let docs_str = JSON.stringify(docs);
+          let docs_str_key = docs_str.replace(/_id/g, 'key');
+          let docs_key = JSON.parse(docs_str_key);
+          res.json({
+            askedTaskList: docs_key
+          })
+        })
     })
 }
 
-exports.ppt_upload = (req,res,next)=>{
-  console.log(req.file);
-  const {userId,taskId} = req.body
-  Student.find({id:userId})
+exports.word_upload = (req, res, next) => {
+  const { id, userId, taskId } = req.body
+  console.log(id)
+  TaskDone.update({ _id: id }, { $set: { word: req.file.path } }).exec()
+  TaskDone.update({ _id: id }, { $set: { wordCommitted: true } })
     .exec()
-    .then(doc=>{
-      TaskDone.update({name:doc[0].name,id:taskId},{$set:{pptCommitted:true}}).exec()
-      TaskDone.update({name:doc[0].name,id:taskId},{$set:{ppt:req.file.path}}).exec()
+    .then(() => {
+      TaskDone.find({ _id: id })
+        .populate('id')
+        .exec()
+        .then(doc => {
+          if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+            console.log('all committed')
+            var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
+            var groupMember = []
+            console.log(allRecievedStudentGroup)
+            Student.find({ id: userId })
+              .exec()
+              .then(doc => {
+                let now_stu = doc[0].name;
+                while (true) {
+                  if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
+                    groupMember.push(allRecievedStudentGroup.pop());
+                    if (groupMember.length >= 2 || allRecievedStudentGroup.length === 0) {
+                      console.log(allRecievedStudentGroup)
+                      Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
+                      console.log(groupMember)
+                      TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
+                      break;
+                    }
+                  } else {
+                    allRecievedStudentGroup = allRecievedStudentGroup.sort((a, b) => Math.random() > .5 ? -1 : 1)
+                  }
+                }
+              })
+          }
+        })
     })
 }
 
-exports.video_upload = (req,res,next)=>{
-  console.log(req.file);
-  const {userId,taskId} = req.body
-  Student.find({id:userId})
+exports.ppt_upload = (req, res, next) => {
+  const { id, userId, taskId } = req.body
+  console.log(id)
+  TaskDone.update({ _id: id }, { $set: { ppt: req.file.path } }).exec()
+  TaskDone.update({ _id: id }, { $set: { pptCommitted: true } })
     .exec()
-    .then(doc=>{
-      TaskDone.update({name:doc[0].name,id:taskId},{$set:{videoCommitted:true}}).exec()
-      TaskDone.update({name:doc[0].name,id:taskId},{$set:{video:req.file.path}}).exec()
+    .then(() => {
+      TaskDone.find({ _id: id })
+        .populate('id')
+        .exec()
+        .then(doc => {
+          if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+            console.log('all committed')
+            var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
+            var groupMember = []
+            console.log(allRecievedStudentGroup)
+            Student.find({ id: userId })
+              .exec()
+              .then(doc => {
+                let now_stu = doc[0].name;
+                while (true) {
+                  if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
+                    groupMember.push(allRecievedStudentGroup.pop());
+                    if (groupMember.length >= 2 || allRecievedStudentGroup.length === 0) {
+                      console.log(allRecievedStudentGroup)
+                      Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
+                      console.log(groupMember)
+                      TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
+                      break;
+                    }
+                  } else {
+                    allRecievedStudentGroup = allRecievedStudentGroup.sort((a, b) => Math.random() > .5 ? -1 : 1)
+                  }
+                }
+              })
+          }
+        })
+    })
+}
+
+exports.video_upload = (req, res, next) => {
+  const { id, userId, taskId } = req.body
+  console.log(id)
+  TaskDone.update({ _id: id }, { $set: { video: req.file.path } }).exec()
+  TaskDone.update({ _id: id }, { $set: { videoCommitted: true } })
+    .exec()
+    .then(() => {
+      TaskDone.find({ _id: id })
+        .populate('id')
+        .exec()
+        .then(doc => {
+          if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+            console.log('all committed')
+            var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
+            var groupMember = []
+            console.log(allRecievedStudentGroup)
+            Student.find({ id: userId })
+              .exec()
+              .then(doc => {
+                let now_stu = doc[0].name;
+                while (true) {
+                  if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
+                    groupMember.push(allRecievedStudentGroup.pop());
+                    if (groupMember.length >= 2 || allRecievedStudentGroup.length === 0) {
+                      console.log(allRecievedStudentGroup)
+                      Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
+                      console.log(groupMember)
+                      TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
+                      break;
+                    }
+                  } else {
+                    allRecievedStudentGroup = allRecievedStudentGroup.sort((a, b) => Math.random() > .5 ? -1 : 1)
+                  }
+                }
+              })
+          }
+        })
     })
 }

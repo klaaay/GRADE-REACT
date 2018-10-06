@@ -8,8 +8,9 @@ const taskSchema = mongoose.Schema({
   content: String,
   publishTime: String,
   endTime: String,
-  Homework_done: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TaskDone' }],
-  allDone: Boolean,
+  // Homework_done: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TaskDone' }],
+  // allDone: Boolean,
+  allRecievedStudentGroup: [String]
 })
 
-module.exports = mongoose.model('Task',taskSchema)
+module.exports = mongoose.model('Task', taskSchema)

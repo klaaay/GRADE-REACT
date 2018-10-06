@@ -9,7 +9,6 @@ const Class = require("../models/Class");
 
 
 exports.add_user = (req, res) => {
-  console.log(req.body);
   var userName = req.body.userName;
   var password = req.body.password;
   var repass = req.body.repass;
@@ -92,17 +91,14 @@ exports.add_user = (req, res) => {
 }
 
 exports.search_user_list = (req, res) => {
-  console.log(req.body.role);
   if (req.body.role === 'teacher') {
     User.find({ role: 'teacher' }, { userName: 1, password: 1, _id: 0 }, function (err, doc) {
-      console.log(doc)
       res.send({
         teacherList: doc
       })
     })
   } else if (req.body.role === 'student') {
     User.find({ role: 'student' }, { userName: 1, password: 1, _id: 0 }, function (err, doc) {
-      console.log(doc)
       res.send({
         studentList: doc
       })
@@ -111,9 +107,7 @@ exports.search_user_list = (req, res) => {
 }
 
 exports.class_control = (req, res, next) => {
-  console.log(req.body);
   const { addRole, addName, nowClass } = req.body;
-  console.log(addRole)
   if (addRole === 'class') {
     Class.find({ name: addName }, (err, doc) => {
       if (doc[0]) {
@@ -132,13 +126,10 @@ exports.class_control = (req, res, next) => {
         class_doc
           .save()
           .then(result => {
-            console.log(result);
             Class.find({}, { name: 1, _id: 0 }, function (err, doc) {
-              console.log(doc)
               var classes_array = doc.map(item => {
                 return item.name;
               })
-              console.log(classes_array);
               res.json({
                 type: 1,
                 message: '添加班级成功',
@@ -170,11 +161,9 @@ exports.class_control = (req, res, next) => {
                 Class.update({ name: nowClass }, { $push: { teachers: doc[0].name } })
                   .exec()
                   .then(() => {
-                    console.log(nowClass)
                     Class.find({ name: nowClass })
                       .exec()
                       .then(doc => {
-                        console.log(doc)
                         res.json({
                           addRole: 'teacher',
                           nowClassTeacherList: doc[0].teachers,
@@ -224,7 +213,6 @@ exports.class_control = (req, res, next) => {
                       Class.find({ name: nowClass })
                         .exec()
                         .then(doc => {
-                          console.log(doc)
                           res.json({
                             type: 1,
                             message: '添加学生成功',
@@ -252,12 +240,10 @@ exports.class_control = (req, res, next) => {
 }
 
 exports.get_classes = (req, res, next) => {
-  console.log('get classes');
   Class.find({}, { name: 1, _id: 0 }, function (err, doc) {
     var classes_array = doc.map(item => {
       return item.name;
     })
-    console.log(classes_array);
     res.json({
       classes: classes_array
     })
@@ -265,13 +251,10 @@ exports.get_classes = (req, res, next) => {
 }
 
 exports.get_class_info = (req, res, next) => {
-  console.log(req.body);
   const { nowClass } = req.body;
   Class.find({ name: nowClass })
     .exec()
     .then(doc => {
-      console.log(doc[0].classMates)
-      console.log(doc[0].teachers)
       res.json({
         nowClassTeacherList: doc[0].teachers,
         nowClassStudentList: doc[0].classMates

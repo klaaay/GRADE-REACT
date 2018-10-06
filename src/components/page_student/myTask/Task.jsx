@@ -5,7 +5,23 @@ import { Card } from 'antd';
 
 export default class Task extends Component {
   render() {
-    const { userId, taskId, title, publisher, content, publishTime, endTime, restTime, outOfDate, committed } = this.props
+    const {
+      userId,
+      _id,
+      taskId,
+      title,
+      publisher,
+      content,
+      publishTime,
+      endTime,
+      restTime,
+      outOfDate,
+      committed,
+      teacherGrade,
+      selfGrade,
+      groupMember,
+      groupGrade
+    } = this.props
     console.log(restTime)
     var changeRestTime = restTime;
     if (changeRestTime === 'in a day') {
@@ -25,7 +41,8 @@ export default class Task extends Component {
                   userId: userId,
                   taskId: taskId,
                   title: title,
-                  content: content
+                  content: content,
+                  _id: _id
                 }
               })
             }}
@@ -44,9 +61,17 @@ export default class Task extends Component {
             {changeRestTime.split(" ")[2] === 'days' ? changeRestTime.split(" ")[1] + " 天" : changeRestTime.split(" ")[1] + " 小时"}
           </span></p>}
         <p><span>完成状态:</span>{committed ? <a
-        onClick={()=>{
-          browserHistory.push('/student/score')
-        }}
+          onClick={() => {
+            browserHistory.push({
+              pathname: '/student/score',
+              state: {
+                teacherGrade: teacherGrade,
+                selfGrade: selfGrade,
+                groupMember: groupMember,
+                groupGrade: groupGrade
+              }
+            })
+          }}
         >查看成绩</a> : <span style={{ color: '#F5222D' }}>未完成</span>}</p>
       </Card>
     );

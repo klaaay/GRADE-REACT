@@ -5,7 +5,10 @@ import { browserHistory } from 'react-router';
 import { Layout, Menu, Icon } from 'antd';
 import $ from 'jquery'
 
-import { startGetTasks } from '../../actions/student'
+import {
+  startGetTasks,
+  startGetAskedTasks
+} from '../../actions/student'
 import {
   logOut
 } from '../../actions/login.js';
@@ -32,9 +35,9 @@ class PageStudent extends Component {
   }
 
   render() {
-    const { onStartGetTasks,onLogOut } = this.props
+    const { onStartGetTasks, onLogOut, onStartGetAskedTasks } = this.props
     return (
-      <Layout style={{height:'92%'}}>
+      <Layout style={{ height: '92%' }}>
         <Sider
           trigger={null}
           collapsible
@@ -54,6 +57,16 @@ class PageStudent extends Component {
               <Icon type="user" />
               <span>我的作业</span>
             </Menu.Item>
+            <Menu.Item key="2"
+              className="homework_groupEval"
+              onClick={(e) => {
+                onStartGetAskedTasks()
+                this.changeRouter('groupEval')
+              }}
+            >
+              <Icon type="video-camera" />
+              <span>同学互评</span>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout>
@@ -72,7 +85,7 @@ class PageStudent extends Component {
               }
               } />
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520,height:'100%' }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520, height: '100%' }}>
             {this.props.children}
           </Content>
         </Layout>
@@ -89,7 +102,10 @@ const mapDispatchToProps = (dispatch) => ({
   onStartGetTasks: (e) => {
     return dispatch(startGetTasks())
   },
-  onLogOut:()=>{
+  onStartGetAskedTasks: (e) => {
+    return dispatch(startGetAskedTasks())
+  },
+  onLogOut: () => {
     dispatch(logOut());
   }
 })

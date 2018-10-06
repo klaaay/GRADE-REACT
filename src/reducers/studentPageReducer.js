@@ -6,6 +6,11 @@ const StudentPageReducer = handleActions({
     state.merge({
       taskList: payload.taskList
     })
+  ),
+  GROUP_EVALUATE_TASKS: (state, { payload }) => (
+    state.merge({
+      askedTaskList: payload.askedTaskList
+    })
   )
 }, StudentPageState)
 

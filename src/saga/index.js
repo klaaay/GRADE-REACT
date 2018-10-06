@@ -19,7 +19,8 @@ import {
 } from './teacher'
 
 import {
-  watchGetTasks
+  watchGetTasks,
+  watchGetAskedTasks
 } from './student'
 
 export default function* root() {
@@ -36,6 +37,7 @@ export default function* root() {
     fork(watchGetClasses),
     fork(watchGetNowClassInfo),
     fork(watchPublishedTaks),
-    fork(watchDeleteTask)
+    fork(watchDeleteTask),
+    fork(watchGetAskedTasks)
   ])
 }
