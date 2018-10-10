@@ -17,14 +17,29 @@ export const search_class_list = async (id) => {
   }
 }
 
-export const publish_task = async (publisherId, classes, title, content, publishTime, endTime) => {
+export const publish_task = async (
+  publisherId,
+  classes,
+  title,
+  content,
+  publishTime,
+  endTime,
+  teacherProportion,
+  selfProportion,
+  groupProportion,
+  groupNumber
+) => {
   let data = {
     publisherId: publisherId,
     classes: classes,
     title: title,
     content: content,
     publishTime: publishTime,
-    endTime: endTime
+    endTime: endTime,
+    teacherProportion: teacherProportion,
+    selfProportion: selfProportion,
+    groupProportion: groupProportion,
+    groupNumber: groupNumber
   }
   let data_str = JSON.stringify(data)
   let fetchOption = {

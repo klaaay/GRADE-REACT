@@ -18,6 +18,28 @@ const TeacherPageReducer = handleActions({
       endTime: payload.endTime
     })
   ),
+  PROPORTION_CHANGE: (state, { payload }) => {
+    if (payload.role === 'teacher') {
+      return state.merge({
+        teacherProportion: payload.value
+      })
+    }
+    else if (payload.role === 'self') {
+      return state.merge({
+        selfProportion: payload.value
+      })
+    }
+    else if (payload.role === 'group') {
+      return state.merge({
+        groupProportion: payload.value
+      })
+    }
+  },
+  GROUP_NUMBER_CHANGE: (state, { payload }) => (
+    state.merge({
+      groupNumber: payload.value
+    })
+  ),
   START_TASK_PUBLISH: (state, { payload }) => (
     state.merge({
       title: payload.title,
@@ -30,7 +52,7 @@ const TeacherPageReducer = handleActions({
     })
   ),
   START_DELETE_TASK: (state, { payload }) => {
-    let state1 =  state.set('selectId', payload.selectId)
+    let state1 = state.set('selectId', payload.selectId)
     let state2 = state1.set('publishedTasks', state1.get('publishedTasks').filter(item => (item.get('key') !== payload.selectId)))
     return state2;
   },

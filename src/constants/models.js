@@ -44,6 +44,10 @@ export const TeacherPageState = Immutable.fromJS({
   content: '',
   publishTime: '',
   endTime: '',
+  teacherProportion: 50,
+  selfProportion: 20,
+  groupProportion: 30,
+  groupNumber: 3,
   //published
   publishedTasks: [],
   selectId: ''

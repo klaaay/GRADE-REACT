@@ -9,6 +9,15 @@ const Class = require("../models/Class");
 const Task = require("../models/Task");
 const TaskDone = require("../models/TaskDone");
 
+const allReciverWithGroupNumberCreater = (allReciverArray, groupNumber) => {
+  var allReciverArray_withGroup = allReciverArray
+  while (groupNumber !== 1) {
+    allReciverArray_withGroup = allReciverArray_withGroup.concat(allReciverArray);
+    groupNumber = groupNumber - 1;
+  }
+  return allReciverArray_withGroup;
+}
+
 exports.search_class_list = (req, res, next) => {
   const { id } = req.body;
   Teacher.find({ id: id })
@@ -34,7 +43,18 @@ exports.search_class_list = (req, res, next) => {
 }
 
 exports.publish_task = (req, res, next) => {
-  const { publisherId, classes, title, content, publishTime, endTime } = req.body;
+  const {
+    publisherId,
+    classes,
+    title,
+    content,
+    publishTime,
+    endTime,
+    teacherProportion,
+    selfProportion,
+    groupProportion,
+    groupNumber,
+  } = req.body;
   if (!classes || !title || !content || !publishTime || !endTime) {
     res.json({
       type: 0,
@@ -46,16 +66,15 @@ exports.publish_task = (req, res, next) => {
       .then(doc => {
         var teacherName = doc[0].name;
         var allRecievedStudentGroup = [];
-        classes.forEach(async (item, index) => {
-          await Class.find({ name: item })
+        var count = 0;
+        classes.forEach((item, index) => {
+          Class.find({ name: item })
             .exec()
             .then(doc => {
               allRecievedStudentGroup = allRecievedStudentGroup.concat(doc[0].classMates)
-              console.log(index)
-              console.log(classes.length)
-              console.log(allRecievedStudentGroup)
-              if (index === (classes.length - 1)) {
-                allRecievedStudentGroup = allRecievedStudentGroup.concat(allRecievedStudentGroup)
+              count = count + 1;
+              if (count === classes.length) {
+                allRecievedStudentGroup = allReciverWithGroupNumberCreater(allRecievedStudentGroup, groupNumber);
                 var Task_doc = new Task({
                   _id: new mongoose.Types.ObjectId(),
                   publisher: teacherName,
@@ -64,6 +83,10 @@ exports.publish_task = (req, res, next) => {
                   content: content,
                   publishTime: publishTime,
                   endTime: endTime,
+                  teacherProportion: teacherProportion,
+                  selfProportion: selfProportion,
+                  groupProportion: groupProportion,
+                  groupNumber: groupNumber,
                   allRecievedStudentGroup: allRecievedStudentGroup
                 })
                 Task_doc.save(function (err, doc) {
@@ -136,3 +159,4 @@ exports.task_detail = (req, res, next) => {
       })
     })
 }
+

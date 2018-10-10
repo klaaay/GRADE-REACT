@@ -29,11 +29,16 @@ function* publishTask() {
     const content = yield select((state) => (state.getIn(['teacher', 'content'])));
     const publishTime = yield select((state) => (state.getIn(['teacher', 'publishTime'])));
     const endTime = yield select((state) => (state.getIn(['teacher', 'endTime'])));
-    const data = yield call(publish_task, publisherId, classes, title, content, publishTime, endTime);
+    const teacherProportion = yield select((state) => (state.getIn(['teacher', 'teacherProportion'])));
+    console.log(teacherProportion);
+    const selfProportion = yield select((state) => (state.getIn(['teacher', 'selfProportion'])));
+    const groupProportion = yield select((state) => (state.getIn(['teacher', 'groupProportion'])));
+    const groupNumber = yield select((state) => (state.getIn(['teacher', 'groupNumber'])));
+    const data = yield call(publish_task, publisherId, classes, title, content, publishTime, endTime, teacherProportion, selfProportion, groupProportion, groupNumber);
     console.log(data);
-    if(data.type){
+    if (data.type) {
       message.success(data.message);
-    }else{
+    } else {
       message.warning(data.message);
     }
 
@@ -79,6 +84,6 @@ export const watchPublishedTaks = function* watchPublishedTaks() {
   yield takeLatest('START_GET_PUBLISHED_TASKS', getPublishedTaks)
 }
 
-export const watchDeleteTask = function* watchDeleteTask(){
+export const watchDeleteTask = function* watchDeleteTask() {
   yield takeLatest('START_DELETE_TASK', deletePublishedTask)
 }

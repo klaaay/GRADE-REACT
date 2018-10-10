@@ -35,7 +35,7 @@ exports.get_asked_tasks = (req, res, next) => {
       console.log(name)
       TaskDone
         .where('groupMember')
-        .elemMatch({$eq:name})
+        .elemMatch({ $eq: name })
         .exec()
         .then(docs => {
           let docs_str = JSON.stringify(docs);
@@ -142,6 +142,7 @@ exports.video_upload = (req, res, next) => {
           if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
             console.log('all committed')
             var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
+            var groupNumber = doc[0].id.groupNumber
             var groupMember = []
             console.log(allRecievedStudentGroup)
             Student.find({ id: userId })
@@ -151,7 +152,7 @@ exports.video_upload = (req, res, next) => {
                 while (true) {
                   if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
                     groupMember.push(allRecievedStudentGroup.pop());
-                    if (groupMember.length >= 2 || allRecievedStudentGroup.length === 0) {
+                    if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
                       console.log(allRecievedStudentGroup)
                       Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
                       console.log(groupMember)

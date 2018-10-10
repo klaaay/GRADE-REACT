@@ -8,8 +8,10 @@ const taskSchema = mongoose.Schema({
   content: String,
   publishTime: String,
   endTime: String,
-  // Homework_done: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TaskDone' }],
-  // allDone: Boolean,
+  teacherProportion: Number,
+  selfProportion: Number,
+  groupProportion: Number,
+  groupNumber: Number,
   allRecievedStudentGroup: [String]
 })
 
