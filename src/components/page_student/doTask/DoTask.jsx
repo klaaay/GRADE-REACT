@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router';
 
 import axios from 'axios'
 
-import { Card, message, Form, Button, Progress } from 'antd';
+import { Card, message, Form, Button, Progress, Icon } from 'antd';
 
 import './DoTask.less'
 
@@ -16,14 +16,20 @@ export default class DoTask extends Component {
         selectedWord: null,
         percentWord: 0,
         wordFile: '',
+        savedWord: '',
+        wordCommitted: false,
         //PPT
         selectedPPT: null,
         percentPPT: 0,
         PPTFile: '',
+        savedPPT: '',
+        pptCommitted: false,
         //Video
         selectedVideo: null,
         percentVideo: 0,
-        VideoFile: ''
+        VideoFile: '',
+        savedVideo: '',
+        videoCommitted: false
     }
 
     fileSelectedHandlerWord = event => {
@@ -62,70 +68,149 @@ export default class DoTask extends Component {
         }
     }
 
-    fileUploadHandlerWord = () => {
+    fileUploadHandlerWord = (action) => {
         const fdWord = new FormData();
         fdWord.append('taskWord', this.state.selectedWord)
         fdWord.append('userId', this.props.location.state.userId)
         fdWord.append('taskId', this.props.location.state.taskId)
         fdWord.append('id', this.props.location.state._id)
-        axios.post('/student/word', fdWord, {
-            onUploadProgress: progressEvent => {
-                if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
-                    message.success('Word上传成功')
+        fdWord.append('action', action)
+        if (action === 'save') {
+            axios.post('/student/word', fdWord, {
+                onUploadProgress: progressEvent => {
+                    this.setState({
+                        percentWord: Math.round((progressEvent.loaded / progressEvent.total) * 100)
+                    })
                 }
+            }).then((res) => {
                 this.setState({
-                    percentWord: Math.round((progressEvent.loaded / progressEvent.total) * 100)
+                    savedWord: this.state.wordFile
                 })
-            }
-        }).then((res) => {
-            console.log(res)
-        })
+                message.success(res.data.message)
+            })
+        } else if (action === 'commit') {
+            axios.post('/student/word', fdWord)
+                .then((res) => {
+                    this.setState({
+                        percentWord:100,
+                        wordCommitted:true
+                    })
+                    message.success(res.data.message)
+                })
+        }
     }
 
-    fileUploadHandlerPPT = () => {
+    fileUploadHandlerPPT = (action) => {
         const fdPPT = new FormData();
         fdPPT.append('taskPPT', this.state.selectedPPT)
         fdPPT.append('userId', this.props.location.state.userId)
         fdPPT.append('taskId', this.props.location.state.taskId)
         fdPPT.append('id', this.props.location.state._id)
-        axios.post('/student/ppt', fdPPT, {
-            onUploadProgress: progressEvent => {
-                if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
-                    message.success('PPT上传成功')
+        fdPPT.append('action', action)
+        if (action === 'save') {
+            axios.post('/student/ppt', fdPPT, {
+                onUploadProgress: progressEvent => {
+                    this.setState({
+                        percentPPT: Math.round((progressEvent.loaded / progressEvent.total) * 100)
+                    })
                 }
+            }).then((res) => {
+                message.success(res.data.message)
                 this.setState({
-                    percentPPT: Math.round((progressEvent.loaded / progressEvent.total) * 100)
+                    savedPPT: this.state.PPTFile
                 })
-            }
-        }).then((res) => {
-            console.log(res)
-        })
+            })
+        } else if (action === 'commit') {
+            axios.post('/student/ppt', fdPPT)
+                .then((res) => {
+                    this.setState({
+                        percentPPT:100,
+                        pptCommitted:true
+                    })
+                    message.success(res.data.message)
+                })
+        }
+
     }
 
-    fileUploadHandlerVideo = () => {
+    fileUploadHandlerVideo = (action) => {
         const fdVideo = new FormData();
         fdVideo.append('taskVideo', this.state.selectedVideo)
         fdVideo.append('userId', this.props.location.state.userId)
         fdVideo.append('taskId', this.props.location.state.taskId)
         fdVideo.append('id', this.props.location.state._id)
-        axios.post('/student/video', fdVideo, {
-            onUploadProgress: progressEvent => {
-                if (Math.round((progressEvent.loaded / progressEvent.total) * 100) === 100) {
-                    message.success('Video上传成功')
+        fdVideo.append('action', action)
+        if (action === 'save') {
+            axios.post('/student/video', fdVideo, {
+                onUploadProgress: progressEvent => {
+                    this.setState({
+                        percentVideo: Math.round((progressEvent.loaded / progressEvent.total) * 100)
+                    })
                 }
+            }).then((res) => {
+                message.success(res.data.message)
                 this.setState({
-                    percentVideo: Math.round((progressEvent.loaded / progressEvent.total) * 100)
+                    savedVideo: this.state.VideoFile
                 })
-            }
-        }).then((res) => {
-            console.log(res)
-        })
+            })
+        } else if (action === 'commit') {
+            axios.post('/student/video', fdVideo)
+                .then((res) => {
+                    this.setState({
+                        percentVideo:100,
+                        videoCommitted:true
+                    })
+                    message.success(res.data.message)
+                })
+        }
+    }
+
+    componentDidMount = () => {
+        axios.post('/student/initialTaskInfo', { _id: this.props.location.state._id })
+            .then(req => {
+                const { data } = req;
+                const { word, ppt, video, wordCommitted, pptCommitted, videoCommitted } = data.data;
+                this.setState({
+                    wordCommitted: wordCommitted,
+                    pptCommitted: pptCommitted,
+                    videoCommitted: videoCommitted
+                })
+                if (wordCommitted) {
+                    this.setState({
+                        percentWord: 100
+                    })
+                }
+                if (pptCommitted) {
+                    this.setState({
+                        percentPPT: 100
+                    })
+                }
+                if (videoCommitted) {
+                    this.setState({
+                        percentVideo: 100
+                    })
+                }
+                if (word) {
+                    this.setState({
+                        savedWord: word.toString().split('\\')[2]
+                    })
+                }
+                if (ppt) {
+                    this.setState({
+                        savedPPT: ppt.toString().split('\\')[2]
+                    })
+                }
+                if (video) {
+                    this.setState({
+                        savedVideo: video.toString().split('\\')[2]
+                    })
+                }
+            })
     }
 
     render() {
         let data = this.props.location.state;
         let { title, content } = data;
-
         return (
             <div id="doTask">
                 <div className="task_info">
@@ -139,78 +224,125 @@ export default class DoTask extends Component {
                 <div className="task_upload">
                     <Form>
                         <FormItem
-                            label=""
-                            labelCol={{ span: 0 }}
-                            wrapperCol={{ span: 24 }}>
-                            <input
-                                type="file"
-                                onChange={this.fileSelectedHandlerWord}
-                                style={{ display: 'none' }}
-                                ref={fileWord => this.fileWord = fileWord}
-                            />
-                            <Button
-                                onClick={() => this.fileWord.click()}
-                            >选择Word文件
-                            </Button>
-                            <Button
-                                type="primary"
-                                icon="upload"
-                                onClick={this.fileUploadHandlerWord}
-                                style={{ marginLeft: '20px' }}
-                            >上传Word
-                            </Button>
-                            <p>{this.state.wordFile}</p>
+                            label="Word"
+                            labelCol={{ span: 4 }}
+                            wrapperCol={{ span: 20 }}
+                            style={{ marginTop: '20px' }}
+                        >
+                            <Form layout="inline">
+                                <FormItem>
+                                    <input
+                                        type="file"
+                                        onChange={this.fileSelectedHandlerWord}
+                                        style={{ display: 'none' }}
+                                        ref={fileWord => this.fileWord = fileWord}
+                                    />
+                                    <Button
+                                        onClick={() => this.fileWord.click()}
+                                        disabled={this.state.wordCommitted}
+                                    >选择文件</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => { this.fileUploadHandlerWord('save') }}
+                                        disabled={!this.state.wordFile}
+                                    >保存</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => { this.fileUploadHandlerWord('commit') }}
+                                        disabled={(this.state.wordCommitted) || (!this.state.savedWord && !this.state.wordFile) ? true : false}
+                                    >提交</Button>
+                                </FormItem>
+                            </Form>
                             <Progress percent={this.state.percentWord} />
                         </FormItem>
                         <FormItem
-                            label=""
-                            labelCol={{ span: 0 }}
-                            wrapperCol={{ span: 24 }}>
-                            <input
-                                type="file"
-                                onChange={this.fileSelectedHandlerPPT}
-                                style={{ display: 'none' }}
-                                ref={filePPT => this.filePPT = filePPT}
-                            />
-                            <Button
-                                onClick={() => this.filePPT.click()}
-                            >选择PPT文件
-                            </Button>
-                            <Button
-                                type="primary"
-                                icon="upload"
-                                onClick={this.fileUploadHandlerPPT}
-                                style={{ marginLeft: '20px' }}
-                            >上传PPT
-                            </Button>
-                            <p>{this.state.PPTFile}</p>
+                            label="PPT"
+                            labelCol={{ span: 4 }}
+                            wrapperCol={{ span: 20 }}>
+                            <Form layout="inline">
+                                <FormItem>
+                                    <input
+                                        type="file"
+                                        onChange={this.fileSelectedHandlerPPT}
+                                        style={{ display: 'none' }}
+                                        ref={filePPT => this.filePPT = filePPT}
+                                    />
+                                    <Button
+                                        onClick={() => this.filePPT.click()}
+                                        disabled={this.state.pptCommitted}
+                                    >选择文件</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => { this.fileUploadHandlerPPT('save') }}
+                                        disabled={!this.state.PPTFile}
+                                    >保存</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => { this.fileUploadHandlerPPT('commit') }}
+                                        disabled={(this.state.pptCommitted) || (!this.state.savedPPT && !this.state.PPTFile) ? true : false}
+                                    >提交</Button>
+                                </FormItem>
+                            </Form>
                             <Progress percent={this.state.percentPPT} />
                         </FormItem>
                         <FormItem
-                            label=""
-                            labelCol={{ span: 0 }}
-                            wrapperCol={{ span: 24 }}>
-                            <input
-                                type="file"
-                                onChange={this.fileSelectedHandlerVideo}
-                                style={{ display: 'none' }}
-                                ref={fileVideo => this.fileVideo = fileVideo}
-                            />
-                            <Button
-                                onClick={() => this.fileVideo.click()}
-                            >选择Video文件
-                            </Button>
-                            <Button
-                                type="primary"
-                                icon="upload"
-                                onClick={this.fileUploadHandlerVideo}
-                                style={{ marginLeft: '20px' }}
-                            >上传Video
-                            </Button>
-                            <p>{this.state.VideoFile}</p>
+                            label="Video"
+                            labelCol={{ span: 4 }}
+                            wrapperCol={{ span: 20 }}>
+                            <Form layout="inline">
+                                <FormItem>
+                                    <input
+                                        type="file"
+                                        onChange={this.fileSelectedHandlerVideo}
+                                        style={{ display: 'none' }}
+                                        ref={fileVideo => this.fileVideo = fileVideo}
+                                    />
+                                    <Button
+                                        onClick={() => this.fileVideo.click()}
+                                        disabled={this.state.videoCommitted}
+                                    >选择文件</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => { this.fileUploadHandlerVideo('save') }}
+                                        disabled={!this.state.VideoFile}
+                                    >保存</Button>
+                                </FormItem>
+                                <FormItem>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => { this.fileUploadHandlerVideo('commit') }}
+                                        disabled={(this.state.videoCommitted) || (!this.state.savedVideo && !this.state.VideoFile) ? true : false}
+                                    >提交</Button>
+                                </FormItem>
+                            </Form>
                             <Progress percent={this.state.percentVideo} />
                         </FormItem>
-                        <FormItem
+                    </Form>
+                    <div className="info">
+                        <div className="selected">
+                            <p>已选择</p>
+                            <p><Icon type="file-word" theme="twoTone" />:{this.state.wordFile}</p>
+                            <p><Icon type="file-ppt" theme="twoTone" />:{this.state.PPTFile}</p>
+                            <p><Icon type="video-camera" theme="twoTone" />:{this.state.VideoFile}</p>
+                        </div>
+                        <div className="saved">
+                            <p>已保存</p>
+                            <p><Icon type="file-word" theme="twoTone" />:{this.state.savedWord}</p>
+                            <p><Icon type="file-ppt" theme="twoTone" />:{this.state.savedPPT}</p>
+                            <p><Icon type="video-camera" theme="twoTone" />:{this.state.savedVideo}</p>
+                        </div>
+                    </div>
+                    {/* <FormItem
                             label=""
                             labelCol={{ span: 0 }}
                             wrapperCol={{ span: 24 }}>
@@ -227,8 +359,7 @@ export default class DoTask extends Component {
                                     })
                                 }}
                             >去自评</Button>
-                        </FormItem>
-                    </Form>
+                        </FormItem> */}
                 </div>
             </div>
         )

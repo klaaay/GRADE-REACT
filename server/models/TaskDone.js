@@ -10,10 +10,15 @@ const taskdoneSchema = mongoose.Schema({
   pptCommitted: Boolean,
   video: String,
   videoCommitted: Boolean,
+  teacherGradeDetail: [],
   teacherGrade: Number,
+  teacherGradeDone: Boolean,
+  selfGradeDetail: [],
+  selfGrade: Number,
+  selfGradeDone: Boolean,
   groupMember: [String],
-  groupGrade: [Number],
-  selfGrade: Number
+  groupGradeDetail: [{}],
+  groupGrade: Number
 })
 
 module.exports = mongoose.model('TaskDone', taskdoneSchema)
