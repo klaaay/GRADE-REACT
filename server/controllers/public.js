@@ -50,11 +50,52 @@ exports.change_password = (req, res) => {
   }
 }
 
+exports.get_initial_evaluate_state = (req,res,next)=>{
+  console.log(req.body);
+  const {id,role,userId} = req.body;
+  if(role === 'teacher'){
+    TaskDone.find({_id:id})
+      .select('teacherGradeDetail teacherGradeDone')
+      .exec()
+      .then(doc=>{
+        res.json({
+          data:doc[0]
+        })
+      })
+  }
+}
+
+exports.score_evaluate_save = (req, res, next) => {
+  console.log(req.body);
+  const { details, id, role } = req.body;
+  if (role === 'teacher') {
+    TaskDone.update({ _id: id }, { $set: { teacherGradeDetail: details } })
+      .exec()
+      .then(()=>{
+        res.json({
+          type:1,
+          message:'保存成功'
+        })
+      })
+  }else if (role === 'self'){
+    TaskDone.update({ _id: id }, { $set: { selfGradeDetail: details } })
+      .exec()
+      .then(()=>{
+        res.json({
+          type:1,
+          message:'保存成功'
+        })
+      })
+  }
+}
+
 exports.score_evaluate = (req, res, next) => {
   console.log(req.body);
-  const { id, role, score } = req.body;
+  const { id, role, score,details } = req.body;
   if (role === 'teacher') {
-    TaskDone.update({ _id: id }, { $set: { teacherGrade: score } })
+    TaskDone.update({ _id: id }, { $set: { teacherGradeDetail: details } }).exec()
+    TaskDone.update({ _id: id }, { $set: { teacherGrade: score } }).exec()
+    TaskDone.update({ _id: id }, { $set: { teacherGradeDone: true } })
       .exec()
       .then(() => {
         res.json({
@@ -63,7 +104,9 @@ exports.score_evaluate = (req, res, next) => {
         })
       })
   } else if (role === 'self') {
-    TaskDone.update({ _id: id }, { $set: { selfGrade: score } })
+    TaskDone.update({ _id: id }, { $set: { selfGradeDetail: details } }).exec()
+    TaskDone.update({ _id: id }, { $set: { selfGrade: score } }).exec()
+    TaskDone.update({ _id: id }, { $set: { selfGradeDone: true } })
       .exec()
       .then(() => {
         res.json({

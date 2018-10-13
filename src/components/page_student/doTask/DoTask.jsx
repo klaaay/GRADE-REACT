@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { browserHistory } from 'react-router';
+// import { browserHistory } from 'react-router';
 
 import axios from 'axios'
 
@@ -89,14 +89,18 @@ export default class DoTask extends Component {
                 message.success(res.data.message)
             })
         } else if (action === 'commit') {
-            axios.post('/student/word', fdWord)
-                .then((res) => {
-                    this.setState({
-                        percentWord:100,
-                        wordCommitted:true
+            if (!this.state.savedWord) {
+                message.warning('请先所选保存文件');
+            } else {
+                axios.post('/student/word', fdWord)
+                    .then((res) => {
+                        this.setState({
+                            percentWord: 100,
+                            wordCommitted: true
+                        })
+                        message.success(res.data.message)
                     })
-                    message.success(res.data.message)
-                })
+            }
         }
     }
 
@@ -121,16 +125,19 @@ export default class DoTask extends Component {
                 })
             })
         } else if (action === 'commit') {
-            axios.post('/student/ppt', fdPPT)
-                .then((res) => {
-                    this.setState({
-                        percentPPT:100,
-                        pptCommitted:true
+            if (!this.state.savedPPT) {
+                message.warning('请先所选保存文件');
+            } else {
+                axios.post('/student/ppt', fdPPT)
+                    .then((res) => {
+                        this.setState({
+                            percentPPT: 100,
+                            pptCommitted: true
+                        })
+                        message.success(res.data.message)
                     })
-                    message.success(res.data.message)
-                })
+            }
         }
-
     }
 
     fileUploadHandlerVideo = (action) => {
@@ -154,14 +161,18 @@ export default class DoTask extends Component {
                 })
             })
         } else if (action === 'commit') {
-            axios.post('/student/video', fdVideo)
-                .then((res) => {
-                    this.setState({
-                        percentVideo:100,
-                        videoCommitted:true
+            if (!this.state.savedVideo) {
+                message.warning('请先所选保存文件');
+            } else {
+                axios.post('/student/video', fdVideo)
+                    .then((res) => {
+                        this.setState({
+                            percentVideo: 100,
+                            videoCommitted: true
+                        })
+                        message.success(res.data.message)
                     })
-                    message.success(res.data.message)
-                })
+            }
         }
     }
 
@@ -229,8 +240,8 @@ export default class DoTask extends Component {
                             wrapperCol={{ span: 20 }}
                             style={{ marginTop: '20px' }}
                         >
-                            <Form layout="inline">
-                                <FormItem>
+                            <div className="file_buttons">
+                                <div className="file_button">
                                     <input
                                         type="file"
                                         onChange={this.fileSelectedHandlerWord}
@@ -241,30 +252,30 @@ export default class DoTask extends Component {
                                         onClick={() => this.fileWord.click()}
                                         disabled={this.state.wordCommitted}
                                     >选择文件</Button>
-                                </FormItem>
-                                <FormItem>
+                                </div>
+                                <div className="file_button">
                                     <Button
                                         type="primary"
                                         onClick={() => { this.fileUploadHandlerWord('save') }}
-                                        disabled={!this.state.wordFile}
+                                        disabled={this.state.wordCommitted || !this.state.wordFile ? true : false}
                                     >保存</Button>
-                                </FormItem>
-                                <FormItem>
+                                </div>
+                                <div className="file_button">
                                     <Button
                                         type="primary"
                                         onClick={() => { this.fileUploadHandlerWord('commit') }}
                                         disabled={(this.state.wordCommitted) || (!this.state.savedWord && !this.state.wordFile) ? true : false}
                                     >提交</Button>
-                                </FormItem>
-                            </Form>
+                                </div>
+                            </div>
                             <Progress percent={this.state.percentWord} />
                         </FormItem>
                         <FormItem
                             label="PPT"
                             labelCol={{ span: 4 }}
                             wrapperCol={{ span: 20 }}>
-                            <Form layout="inline">
-                                <FormItem>
+                            <div className="file_buttons">
+                                <div className="file_button">
                                     <input
                                         type="file"
                                         onChange={this.fileSelectedHandlerPPT}
@@ -275,30 +286,30 @@ export default class DoTask extends Component {
                                         onClick={() => this.filePPT.click()}
                                         disabled={this.state.pptCommitted}
                                     >选择文件</Button>
-                                </FormItem>
-                                <FormItem>
+                                </div>
+                                <div className="file_button">
                                     <Button
                                         type="primary"
                                         onClick={() => { this.fileUploadHandlerPPT('save') }}
-                                        disabled={!this.state.PPTFile}
+                                        disabled={this.state.pptCommitted || !this.state.PPTFile ? true : false}
                                     >保存</Button>
-                                </FormItem>
-                                <FormItem>
+                                </div>
+                                <div className="file_button">
                                     <Button
                                         type="primary"
                                         onClick={() => { this.fileUploadHandlerPPT('commit') }}
                                         disabled={(this.state.pptCommitted) || (!this.state.savedPPT && !this.state.PPTFile) ? true : false}
                                     >提交</Button>
-                                </FormItem>
-                            </Form>
+                                </div>
+                            </div>
                             <Progress percent={this.state.percentPPT} />
                         </FormItem>
                         <FormItem
                             label="Video"
                             labelCol={{ span: 4 }}
                             wrapperCol={{ span: 20 }}>
-                            <Form layout="inline">
-                                <FormItem>
+                            <div className="file_buttons">
+                                <div className="file_button">
                                     <input
                                         type="file"
                                         onChange={this.fileSelectedHandlerVideo}
@@ -309,22 +320,22 @@ export default class DoTask extends Component {
                                         onClick={() => this.fileVideo.click()}
                                         disabled={this.state.videoCommitted}
                                     >选择文件</Button>
-                                </FormItem>
-                                <FormItem>
+                                </div>
+                                <div className="file_button">
                                     <Button
                                         type="primary"
                                         onClick={() => { this.fileUploadHandlerVideo('save') }}
-                                        disabled={!this.state.VideoFile}
+                                        disabled={this.state.videoCommitted || !this.state.VideoFile ? true : false}
                                     >保存</Button>
-                                </FormItem>
-                                <FormItem>
+                                </div>
+                                <div className="file_button">
                                     <Button
                                         type="primary"
                                         onClick={() => { this.fileUploadHandlerVideo('commit') }}
                                         disabled={(this.state.videoCommitted) || (!this.state.savedVideo && !this.state.VideoFile) ? true : false}
                                     >提交</Button>
-                                </FormItem>
-                            </Form>
+                                </div>
+                            </div>
                             <Progress percent={this.state.percentVideo} />
                         </FormItem>
                     </Form>

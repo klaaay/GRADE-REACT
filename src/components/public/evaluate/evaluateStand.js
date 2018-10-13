@@ -3,73 +3,73 @@ export const data_instructional_design = [{
   eval_content: '目标设计',
   eval_stand: '教学目标清楚、具体，易于理解，便于实施，行为动词使用正确，阐述规范；符合课标要求、学科特点和学生实际；体现对知识、能力与创新思维等方面的要求',
   value_total: 3,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '1',
   eval_content: '内容分析',
   eval_stand: '教学内容前后知识点关系、地位、作用描述准确，重点、难点分析清楚',
   value_total: 2,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '2',
   eval_content: '学情分析',
   eval_stand: '学生认知特点和水平表述恰当，学习习惯和能力分析合理',
   value_total: 2,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '3',
   eval_content: '教学过程设计(1)',
   eval_stand: '教学主线描述清晰，教学内容处理符合课程标准要求，具有较强的系统性和逻辑性',
   value_total: 2,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '4',
   eval_content: '教学过程设计(2)',
   eval_stand: '教学重点突出，点面结合，深浅适度；难点清楚，把握准确；化难为易，处理恰当',
   value_total: 2,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '5',
   eval_content: '教学过程设计(3)',
   eval_stand: '教学方法清晰适当，符合教学对象要求，有利教学内容完成、难点解决和重点突出',
   value_total: 2,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '6',
   eval_content: '教学过程设计(4)',
   eval_stand: '教学辅助手段准备与使用清晰无误，教具及现代化教学手段运用恰当',
   value_total: 1,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '7',
   eval_content: '教学过程设计(5)',
   eval_stand: '内容充实精要，适合学生水平；结构合理，过渡自然，便于操作；理论联系实际，注重教学互动，启发学生思考及问题解决',
   value_total: 3,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '8',
   eval_content: '教学过程设计(6)',
   eval_stand: '注重形成性评价及生成性问题解决和利用',
   value_total: 1,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '9',
   eval_content: '延伸设计',
   eval_stand: '课时分配科学、合理；辅导与答疑设置合理，练习、作业、讨论安排符合教学目标，有助强化学生反思、理解和问题解决',
   value_total: 2,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '10',
   eval_content: '文档规范',
   eval_stand: '文字、符号、单位和公式符合标准规范；语言简洁、明了，字体、图表运用适当；文档结构完整，布局合理，格式美观',
   value_total: 2,
-  value: 'instructional_design'
+  value: 'instructional'
 }, {
   key: '11',
   eval_content: '设计创新',
   eval_stand: '教学方案的整体设计富有创新性，较好体现课程改革的理念和要求；教学方法选择适当，教学过程设计有突出的特色',
   value_total: 3,
-  value: 'instructional_design'
+  value: 'instructional'
 }
 ];
 
@@ -203,7 +203,7 @@ export const data_class = [{
 ];
 
 export const values = {
-  instructional_design: [],
+  instructional: [],
   multimedia: [],
   speech: [],
   class: []

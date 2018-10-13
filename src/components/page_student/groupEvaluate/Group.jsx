@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
-import { Table, Icon, Spin } from 'antd';
+import { Table, Icon } from 'antd';
 
 class Group extends Component {
 

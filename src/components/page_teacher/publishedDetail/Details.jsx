@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
 import { Table, Input, Button, Icon, Spin } from 'antd';
 
-export default class Details extends Component {
+class Details extends Component {
   state = {
     searchText: '',
     data: [],
@@ -48,6 +49,7 @@ export default class Details extends Component {
   }
 
   render() {
+    const { userId } = this.props
     const columns = [{
       title: '姓名',
       dataIndex: 'name',
@@ -153,8 +155,6 @@ export default class Details extends Component {
       dataIndex: 'teacherGrade',
       key: 'teacherGrade',
       render: (text, record) => {
-        console.log(text)
-        console.log(record)
         if (record.pptCommitted && record.wordCommitted && record.videoCommitted) {
           return !text ? <a
             onClick={(e) => {
@@ -162,7 +162,8 @@ export default class Details extends Component {
                 pathname: '/teacher/evaluate',
                 query: {
                   role: 'teacher',
-                  id:record.key
+                  id: record.key,
+                  userId: userId
                 }
               })
             }}
@@ -186,3 +187,9 @@ export default class Details extends Component {
     }
   }
 }
+
+const mapStateToProps = (state) => ({
+  userId: state.getIn(['login', 'id'])
+})
+
+export default connect(mapStateToProps)(Details)

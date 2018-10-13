@@ -38,6 +38,7 @@ class Tasks extends Component {
               selfGrade={item.selfGrade}
               groupMember={item.groupMember}
               groupGrade={item.groupGrade}
+              selfGradeDone={item.selfGradeDone}
             >
             </Task>
           ))

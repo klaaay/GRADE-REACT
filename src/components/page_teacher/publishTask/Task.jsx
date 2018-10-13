@@ -13,6 +13,8 @@ import {
   startTaskPublish,
 } from '../../../actions/teacher'
 
+import './Task.less'
+
 
 const { RangePicker } = DatePicker;
 
@@ -41,6 +43,7 @@ class Task extends Component {
     }
     return (
       <Form
+        id="publish_task"
         style={{
           maxHeight: '480px',
           overflow: 'auto'
@@ -97,14 +100,10 @@ class Task extends Component {
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 16 }}
         >
-          <Form
-            layout="inline"
-          >
-            <FormItem
-              label="师评"
-            // style={{ width: '25%', marginRight: '0px' }}
-            >
-              <InputNumber
+          <div className="evaluate_divides">
+            <div className="evaluate_divide">
+            <span>师评:</span>
+            <InputNumber
                 defaultValue={50}
                 min={0}
                 max={100}
@@ -112,12 +111,10 @@ class Task extends Component {
                 parser={value => value.replace('%', '')}
                 onChange={onTeacherProportionChange}
               />
-            </FormItem>
-            <FormItem
-              label="自评"
-            // style={{ width: '25%', marginRight: '0px' }}
-            >
-              <InputNumber
+            </div>
+            <div className="evaluate_divide">
+            <span>自评:</span>
+            <InputNumber
                 defaultValue={20}
                 min={0}
                 max={100}
@@ -125,12 +122,10 @@ class Task extends Component {
                 parser={value => value.replace('%', '')}
                 onChange={onSelfProportionChange}
               />
-            </FormItem>
-            <FormItem
-              label="互评"
-            // style={{ width: '25%', marginRight: '0px' }}
-            >
-              <InputNumber
+            </div>
+            <div className="evaluate_divide">
+            <span>互评:</span>
+            <InputNumber
                 defaultValue={30}
                 min={0}
                 max={100}
@@ -138,18 +133,16 @@ class Task extends Component {
                 parser={value => value.replace('%', '')}
                 onChange={onGroupProportionChange}
               />
-            </FormItem>
-            <FormItem
-              label="小组人数"
-            // style={{ width: '25%', marginRight: '0px' }}
-            >
-              <InputNumber
+            </div>
+            <div className="evaluate_divide">
+            <span>小组人数:</span>
+            <InputNumber
                 min={2}
                 max={4}
                 defaultValue={3}
                 onChange={onGroupNumberChange} />
-            </FormItem>
-          </Form>
+            </div>
+          </div>
         </FormItem>
         <FormItem
           wrapperCol={{ span: 16, offset: 5 }}

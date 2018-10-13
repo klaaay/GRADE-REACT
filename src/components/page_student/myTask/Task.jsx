@@ -20,7 +20,8 @@ export default class Task extends Component {
       teacherGrade,
       selfGrade,
       groupMember,
-      groupGrade
+      groupGrade,
+      selfGradeDone
     } = this.props
     console.log(restTime)
     var changeRestTime = restTime;
@@ -73,6 +74,18 @@ export default class Task extends Component {
             })
           }}
         >查看成绩</a> : <span style={{ color: '#F5222D' }}>未完成</span>}</p>
+        <p>{(committed && !selfGradeDone) ? <a
+          onClick={(e) => {
+            browserHistory.push({
+              pathname: '/student/evaluate',
+              query: {
+                role: 'self',
+                id: _id,
+                userId: userId
+              }
+            })
+          }}
+        >去自评</a> : ''}</p>
       </Card>
     );
   }
