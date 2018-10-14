@@ -31,6 +31,26 @@ function getQueryString(name) {
   return null;
 }
 
+function find_if_saved(groupGradeDetail) {
+  if (groupGradeDetail) {
+    var flag = 0;
+    var details = {};
+    groupGradeDetail.forEach(item => {
+      if (item.userId.toString() === getQueryString('userId').toString()) {
+        flag++;
+        details = item.details;
+      }
+    })
+    if (flag) {
+      return details;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
 const columns = [{
   title: '评价内容',
   dataIndex: 'eval_content',
@@ -82,20 +102,81 @@ export default class Evaluate extends Component {
       userId: getQueryString('userId')
     })
       .then(res => {
-        let { teacherGradeDetail, teacherGradeDone } = res.data.data;
-        this.setState({
-          committed: teacherGradeDone
-        })
-        if (teacherGradeDetail) {
-          let keys = Object.keys(values);
-          for (let i = 0; i < teacherGradeDetail['instructional'].length; i++) {
-            if (teacherGradeDetail['instructional'][i]) {
-              $($('.eval_detail_box')[i]).val(teacherGradeDetail['instructional'][i])
-            }
-          }
-          keys.forEach((item, index) => {
-            values[item] = teacherGradeDetail[item]
+        let { role } = res.data;
+        if (role === 'teacher') {
+          let { teacherGradeDetail, teacherGradeDone } = res.data.data;
+          this.setState({
+            committed: teacherGradeDone
           })
+          if (teacherGradeDetail) {
+            let keys = Object.keys(values);
+            for (let i = 0; i < teacherGradeDetail['instructional'].length; i++) {
+              if (teacherGradeDetail['instructional'][i]) {
+                $($('.eval_detail_box')[i]).val(teacherGradeDetail['instructional'][i])
+              }
+            }
+            keys.forEach((item, index) => {
+              values[item] = teacherGradeDetail[item]
+            })
+          } else {
+            let keys = Object.keys(values);
+            for (let i = 0; i < $('.eval_detail_box').length; i++) {
+              $($('.eval_detail_box')[i]).val("")
+            }
+            keys.forEach((item, index) => {
+              values[item].length = 0;
+            })
+          }
+        }
+        else if (role === 'self') {
+          let { selfGradeDetail, selfGradeDone } = res.data.data;
+          this.setState({
+            committed: selfGradeDone
+          })
+          if (selfGradeDetail) {
+            let keys = Object.keys(values);
+            for (let i = 0; i < selfGradeDetail['instructional'].length; i++) {
+              if (selfGradeDetail['instructional'][i]) {
+                $($('.eval_detail_box')[i]).val(selfGradeDetail['instructional'][i])
+              }
+            }
+            keys.forEach((item, index) => {
+              values[item] = selfGradeDetail[item]
+            })
+          } else {
+            let keys = Object.keys(values);
+            for (let i = 0; i < $('.eval_detail_box').length; i++) {
+              $($('.eval_detail_box')[i]).val("")
+            }
+            keys.forEach((item, index) => {
+              values[item].length = 0;
+            })
+          }
+        }
+        else if (role === 'group') {
+          let { groupGradeDetail } = res.data.data;
+          console.log(groupGradeDetail)
+          var result = find_if_saved(groupGradeDetail)
+          console.log(result)
+          if(result){
+            let keys = Object.keys(values);
+            for (let i = 0; i < result['instructional'].length; i++) {
+              if (result['instructional'][i]) {
+                $($('.eval_detail_box')[i]).val(result['instructional'][i])
+              }
+            }
+            keys.forEach((item, index) => {
+              values[item] = result[item]
+            })
+          }else{
+            let keys = Object.keys(values);
+            for (let i = 0; i < $('.eval_detail_box').length; i++) {
+              $($('.eval_detail_box')[i]).val("")
+            }
+            keys.forEach((item, index) => {
+              values[item].length = 0;
+            })
+          }
         }
       })
   }
@@ -125,7 +206,8 @@ export default class Evaluate extends Component {
                       axios.post('/public/evaluateSave', {
                         details: values,
                         id: getQueryString('id'),
-                        role: getQueryString('role')
+                        role: getQueryString('role'),
+                        userId: getQueryString('userId')
                       })
                         .then(res => {
                           message.success(res.data.message)
@@ -159,7 +241,8 @@ export default class Evaluate extends Component {
                       axios.post('/public/evaluateSave', {
                         details: values,
                         id: getQueryString('id'),
-                        role: getQueryString('role')
+                        role: getQueryString('role'),
+                        userId: getQueryString('userId')
                       })
                         .then(res => {
                           message.success(res.data.message)
@@ -193,7 +276,8 @@ export default class Evaluate extends Component {
                       axios.post('/public/evaluateSave', {
                         details: values,
                         id: getQueryString('id'),
-                        role: getQueryString('role')
+                        role: getQueryString('role'),
+                        userId: getQueryString('userId')
                       })
                         .then(res => {
                           message.success(res.data.message)
@@ -227,7 +311,8 @@ export default class Evaluate extends Component {
                       axios.post('/public/evaluateSave', {
                         details: values,
                         id: getQueryString('id'),
-                        role: getQueryString('role')
+                        role: getQueryString('role'),
+                        userId: getQueryString('userId')
                       })
                         .then(res => {
                           message.success(res.data.message)

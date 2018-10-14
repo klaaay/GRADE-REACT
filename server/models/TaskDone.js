@@ -5,21 +5,21 @@ const taskdoneSchema = mongoose.Schema({
   name: String,
   class: String,
   word: String,
-  wordCommitted: {type:Boolean,default:false},
+  wordCommitted: { type: Boolean, default: false },
   ppt: String,
-  pptCommitted: {type:Boolean,default:false},
+  pptCommitted: { type: Boolean, default: false },
   video: String,
-  videoCommitted: {type:Boolean,default:false},
+  videoCommitted: { type: Boolean, default: false },
   teacherGradeDetail: {},
   teacherGrade: Number,
-  teacherGradeDone: {type:Boolean,default:false},
+  teacherGradeDone: { type: Boolean, default: false },
   selfGradeDetail: {},
   selfGrade: Number,
-  selfGradeDone: {type:Boolean,default:false},
+  selfGradeDone: { type: Boolean, default: false },
   groupMember: [String],
   groupGradeDetail: [{}],
-  groupGrade: Number,
-  groupGradeDone:{type:Boolean,default:false}
+  groupGrade: [{}],
+  groupGradeDone: { type: Boolean, default: false }
 })
 
 module.exports = mongoose.model('TaskDone', taskdoneSchema)

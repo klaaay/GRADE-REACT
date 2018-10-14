@@ -353,24 +353,6 @@ export default class DoTask extends Component {
                             <p><Icon type="video-camera" theme="twoTone" />:{this.state.savedVideo}</p>
                         </div>
                     </div>
-                    {/* <FormItem
-                            label=""
-                            labelCol={{ span: 0 }}
-                            wrapperCol={{ span: 24 }}>
-                            <Button
-                                type="primary"
-                                block
-                                onClick={(e) => {
-                                    browserHistory.push({
-                                        pathname: '/student/evaluate',
-                                        query: {
-                                            role: 'self',
-                                            id: this.props.location.state._id
-                                        }
-                                    })
-                                }}
-                            >去自评</Button>
-                        </FormItem> */}
                 </div>
             </div>
         )
