@@ -83,9 +83,9 @@ exports.publish_task = (req, res, next) => {
                   content: content,
                   publishTime: publishTime,
                   endTime: endTime,
-                  teacherProportion: teacherProportion,
-                  selfProportion: selfProportion,
-                  groupProportion: groupProportion,
+                  teacherProportion: teacherProportion * 1.0 / 100,
+                  selfProportion: selfProportion * 1.0 / 100,
+                  groupProportion: groupProportion * 1.0 / 100,
                   groupNumber: groupNumber,
                   allRecievedStudentGroup: allRecievedStudentGroup
                 })
@@ -149,6 +149,7 @@ exports.deleted_task = (req, res, next) => {
 exports.task_detail = (req, res, next) => {
   const { id } = req.body;
   TaskDone.find({ id: id })
+    .populate('id')
     .exec()
     .then(docs => {
       let docs_str = JSON.stringify(docs);

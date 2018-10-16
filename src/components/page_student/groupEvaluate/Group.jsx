@@ -52,7 +52,7 @@ class Group extends Component {
         console.log(text)
         console.log(record)
         if (record.pptCommitted && record.wordCommitted && record.videoCommitted) {
-          return text.length < 2 ? <a
+          return <a
             onClick={(e) => {
               browserHistory.push({
                 pathname: '/student/evaluate',
@@ -63,15 +63,15 @@ class Group extends Component {
                 }
               })
             }}
-          >去评价</a> : <Icon type="check" theme="outlined" style={{ color: '#1890FF' }} />
+          >去评价</a>
         } else {
           return <span>去评价</span>
         }
       },
     }];
-    return <Table
+    return askedTaskList.length>0?<Table
       columns={columns}
-      dataSource={askedTaskList} />;
+      dataSource={askedTaskList} />:<span>你暂时没有需要评价的同学</span>;
   }
 }
 

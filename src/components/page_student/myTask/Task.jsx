@@ -21,9 +21,23 @@ export default class Task extends Component {
       selfGrade,
       groupMember,
       groupGrade,
-      selfGradeDone
+      selfGradeDone,
+      score,
+      groupNumber
     } = this.props
     console.log(restTime)
+    const myAction = (committed && !selfGradeDone) ? <a
+      onClick={(e) => {
+        browserHistory.push({
+          pathname: '/student/evaluate',
+          query: {
+            role: 'self',
+            id: _id,
+            userId: userId
+          }
+        })
+      }}
+    >去自评</a> : <span>去自评</span>;
     var changeRestTime = restTime;
     if (changeRestTime === 'in a day') {
       changeRestTime = 'in 1 days'
@@ -48,6 +62,7 @@ export default class Task extends Component {
               })
             }}
           >去完成</span>)}
+        actions={[myAction]}
       >
         <p><span>发布老师:</span>{publisher}</p>
         <p><span>作业内容:</span>{content}</p>
@@ -69,23 +84,13 @@ export default class Task extends Component {
                 teacherGrade: teacherGrade,
                 selfGrade: selfGrade,
                 groupMember: groupMember,
-                groupGrade: groupGrade
+                groupGrade: groupGrade,
+                score: score,
+                groupNumber: groupNumber
               }
             })
           }}
         >查看成绩</a> : <span style={{ color: '#F5222D' }}>未完成</span>}</p>
-        <p>{(committed && !selfGradeDone) ? <a
-          onClick={(e) => {
-            browserHistory.push({
-              pathname: '/student/evaluate',
-              query: {
-                role: 'self',
-                id: _id,
-                userId: userId
-              }
-            })
-          }}
-        >去自评</a> : ''}</p>
       </Card>
     );
   }

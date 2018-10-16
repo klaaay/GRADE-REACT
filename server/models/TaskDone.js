@@ -19,7 +19,8 @@ const taskdoneSchema = mongoose.Schema({
   groupMember: [String],
   groupGradeDetail: [{}],
   groupGrade: [{}],
-  groupGradeDone: { type: Boolean, default: false }
+  groupGradeDone: { type: Boolean, default: false },
+  score:Number
 })
 
 module.exports = mongoose.model('TaskDone', taskdoneSchema)

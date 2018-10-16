@@ -2,13 +2,24 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
-import { Table, Input, Button, Icon, Spin } from 'antd';
+import { Table, Input, Button, Icon, Spin, Tabs } from 'antd';
+
+import ScoreCard from './scoreCard.jsx'
+
+import './Details.less'
+
+const TabPane = Tabs.TabPane;
+
+function callback(key) {
+  console.log(key);
+}
 
 class Details extends Component {
   state = {
     searchText: '',
     data: [],
     loading: false,
+    GradeDoneTasks: []
   };
 
   get_task_detail = async (id) => {
@@ -24,9 +35,12 @@ class Details extends Component {
     try {
       const response = await fetch('/teacher/detail', fetchOption);
       const body = await response.json();
+      let GradeDoneTasks = body.data.filter(item => (item.teacherGradeDone && item.selfGradeDone && item.groupGradeDone));
+      console.log(GradeDoneTasks)
       this.setState({
         data: body,
-        loading: true
+        loading: true,
+        GradeDoneTasks: GradeDoneTasks
       })
       return body;
     } catch (e) {
@@ -50,6 +64,8 @@ class Details extends Component {
 
   render() {
     const { userId } = this.props
+    console.log(this.state.data.data);
+    console.log(this.state.GradeDoneTasks)
     const columns = [{
       title: '姓名',
       dataIndex: 'name',
@@ -172,7 +188,16 @@ class Details extends Component {
           return <span>去评价</span>
         }
       },
-    }];
+    },
+    {
+      title: '得分',
+      dataIndex: 'score',
+      key: 'score',
+      render: (text, record) => {
+        return text ? text : '未出分'
+      },
+    },
+    ];
     if (!this.state.loading) {
       return <Spin
         style={{
@@ -181,9 +206,35 @@ class Details extends Component {
         }}
       />
     } else {
-      return <Table
-        columns={columns}
-        dataSource={this.state.data.data} />;
+      return <Tabs onChange={callback} type="card" className="details_tabs">
+        <TabPane tab="作业总览" key="1">
+          <Table
+            columns={columns}
+            dataSource={this.state.data.data} />
+        </TabPane>
+        <TabPane tab="成绩详情" key="2">
+          <div className="score_cards">
+            {
+              this.state.GradeDoneTasks.map((item, index) => {
+                return <ScoreCard
+                  key={index}
+                  title={item.id.title}
+                  teacherName={item.id.publisher}
+                  teacherGrade={item.teacherGrade}
+                  selfName={item.name}
+                  selfGrade={item.selfGrade}
+                  groupGrade={item.groupGrade}
+                  score={item.score}
+                />
+              })
+            }
+          </div>
+        </TabPane>
+        <TabPane tab="评价分析" key="3">
+
+        </TabPane>
+      </Tabs>;
+
     }
   }
 }

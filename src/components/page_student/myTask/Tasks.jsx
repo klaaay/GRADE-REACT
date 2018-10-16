@@ -39,6 +39,8 @@ class Tasks extends Component {
               groupMember={item.groupMember}
               groupGrade={item.groupGrade}
               selfGradeDone={item.selfGradeDone}
+              score={item.score}
+              groupNumber = {item.id.groupNumber}
             >
             </Task>
           ))

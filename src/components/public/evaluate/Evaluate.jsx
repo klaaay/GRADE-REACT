@@ -69,7 +69,6 @@ const columns = [{
   key: 'value',
   dataIndex: 'value',
   render: (text, record) => {
-    console.log(values)
     return <Input
       className="eval_detail_box"
       placeholder="请打分"
@@ -108,6 +107,7 @@ export default class Evaluate extends Component {
           this.setState({
             committed: teacherGradeDone
           })
+          console.log(teacherGradeDetail)
           if (teacherGradeDetail) {
             let keys = Object.keys(values);
             for (let i = 0; i < teacherGradeDetail['instructional'].length; i++) {
@@ -155,10 +155,8 @@ export default class Evaluate extends Component {
         }
         else if (role === 'group') {
           let { groupGradeDetail } = res.data.data;
-          console.log(groupGradeDetail)
           var result = find_if_saved(groupGradeDetail)
-          console.log(result)
-          if(result){
+          if (result) {
             let keys = Object.keys(values);
             for (let i = 0; i < result['instructional'].length; i++) {
               if (result['instructional'][i]) {
@@ -168,7 +166,7 @@ export default class Evaluate extends Component {
             keys.forEach((item, index) => {
               values[item] = result[item]
             })
-          }else{
+          } else {
             let keys = Object.keys(values);
             for (let i = 0; i < $('.eval_detail_box').length; i++) {
               $($('.eval_detail_box')[i]).val("")
@@ -334,6 +332,9 @@ export default class Evaluate extends Component {
                           role: getQueryString('role'),
                           userId: getQueryString('userId')
                         }).then(res => {
+                          this.setState({
+                            committed: true
+                          })
                           message.success(res.data.message)
                         })
                       } else {
