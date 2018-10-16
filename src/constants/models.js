@@ -59,5 +59,6 @@ export const StudentPageState = Immutable.fromJS({
   //task
   taskList: [],
   //groupEvaluate
-  askedTaskList: []
+  askedTaskList: [],
+  evalRecords:[]
 })

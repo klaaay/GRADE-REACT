@@ -12,7 +12,9 @@ const taskSchema = mongoose.Schema({
   selfProportion: Number,
   groupProportion: Number,
   groupNumber: Number,
-  allRecievedStudentGroup: [String]
+  allRecievedStudentGroup: [String],
+  DontDoneNumber: Number,
+  DoneNumber: Number
 })
 
 module.exports = mongoose.model('Task', taskSchema)

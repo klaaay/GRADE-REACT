@@ -7,7 +7,8 @@ import $ from 'jquery'
 
 import {
   startGetTasks,
-  startGetAskedTasks
+  startGetAskedTasks,
+  startGetEvalRecords
 } from '../../actions/student'
 import {
   logOut
@@ -35,7 +36,7 @@ class PageStudent extends Component {
   }
 
   render() {
-    const { onStartGetTasks, onLogOut, onStartGetAskedTasks } = this.props
+    const { onStartGetTasks, onLogOut, onStartGetAskedTasks, onStartGetEvalRecords } = this.props
     return (
       <Layout style={{ height: '92%' }}>
         <Sider
@@ -61,6 +62,7 @@ class PageStudent extends Component {
               className="homework_groupEval"
               onClick={(e) => {
                 onStartGetAskedTasks()
+                onStartGetEvalRecords()
                 this.changeRouter('groupEval')
               }}
             >
@@ -104,6 +106,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onStartGetAskedTasks: (e) => {
     return dispatch(startGetAskedTasks())
+  },
+  onStartGetEvalRecords: (e) => {
+    return dispatch(startGetEvalRecords())
   },
   onLogOut: () => {
     dispatch(logOut());

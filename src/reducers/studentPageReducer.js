@@ -11,6 +11,11 @@ const StudentPageReducer = handleActions({
     state.merge({
       askedTaskList: payload.askedTaskList
     })
+  ),
+  EVAL_RECORDS: (state, { payload }) => (
+    state.merge({
+      evalRecords: payload.evalRecords
+    })
   )
 }, StudentPageState)
 

@@ -67,12 +67,14 @@ exports.publish_task = (req, res, next) => {
         var teacherName = doc[0].name;
         var allRecievedStudentGroup = [];
         var count = 0;
+        var DontDoneNumber = 0;
         classes.forEach((item, index) => {
           Class.find({ name: item })
             .exec()
             .then(doc => {
               allRecievedStudentGroup = allRecievedStudentGroup.concat(doc[0].classMates)
               count = count + 1;
+              DontDoneNumber += doc[0].classMates.length;
               if (count === classes.length) {
                 allRecievedStudentGroup = allReciverWithGroupNumberCreater(allRecievedStudentGroup, groupNumber);
                 var Task_doc = new Task({
@@ -87,7 +89,9 @@ exports.publish_task = (req, res, next) => {
                   selfProportion: selfProportion * 1.0 / 100,
                   groupProportion: groupProportion * 1.0 / 100,
                   groupNumber: groupNumber,
-                  allRecievedStudentGroup: allRecievedStudentGroup
+                  allRecievedStudentGroup: allRecievedStudentGroup,
+                  DontDoneNumber: DontDoneNumber,
+                  DoneNumber: 0
                 })
                 Task_doc.save(function (err, doc) {
                   classes.forEach(item_class => {
@@ -123,7 +127,7 @@ exports.published_task = (req, res, next) => {
     .exec()
     .then(doc => {
       const name = doc[0].name;
-      Task.find({ publisher: name }, { title: 1, publishTime: 1, classes: 1 }, (err, docs) => {
+      Task.find({ publisher: name }, { title: 1, publishTime: 1, classes: 1, DontDoneNumber: 1, DoneNumber: 1 }, (err, docs) => {
         let docs_str = JSON.stringify(docs);
         let docs_str_key = docs_str.replace(/_id/g, 'key');
         let docs_key = JSON.parse(docs_str_key);

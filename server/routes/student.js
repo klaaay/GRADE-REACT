@@ -48,7 +48,9 @@ router.post('/task', studentController.get_tasks);
 
 router.post('/askedTasks', studentController.get_asked_tasks);
 
-router.post('/initialTaskInfo',studentController.get_initial_task_info);
+router.post('/evalRecords', studentController.get_eval_records);
+
+router.post('/initialTaskInfo', studentController.get_initial_task_info);
 
 router.post('/word', uploadWord.single('taskWord'), studentController.word_upload)
 

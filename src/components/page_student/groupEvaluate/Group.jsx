@@ -2,15 +2,47 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
-import { Table, Icon } from 'antd';
+import { Table, Icon, Tabs } from 'antd';
+
+const TabPane = Tabs.TabPane;
 
 class Group extends Component {
 
-
   render() {
-    const { askedTaskList, userId } = this.props
-    console.log(askedTaskList)
-    const columns = [{
+    const { askedTaskList, userId, evalRecords } = this.props
+    console.log(evalRecords)
+    const columnsEvalRecords = [
+      {
+        title: '发布老师',
+        dataIndex: 'publisher',
+        key: 'publisher',
+        render: (text) => text
+      },
+      {
+        title: '作业标题',
+        dataIndex: 'title',
+        key: 'title',
+        render: (text) => text
+      },
+      {
+        title: '被评人',
+        dataIndex: 'evaluatorTo',
+        key: 'evaluatorTo',
+        render: (text) => text
+      }, {
+        title: '我的评分',
+        dataIndex: 'score',
+        key: 'score',
+        render: (text) => text
+      }, {
+        title: '评价日期',
+        dataIndex: 'time',
+        key: 'time',
+        render: (text) => text
+      }
+    ]
+
+    const columnsAskedTaskList = [{
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
@@ -69,14 +101,31 @@ class Group extends Component {
         }
       },
     }];
-    return askedTaskList.length>0?<Table
-      columns={columns}
-      dataSource={askedTaskList} />:<span>你暂时没有需要评价的同学</span>;
+    return <Tabs defaultActiveKey="1" >
+      <TabPane tab="评价通知" key="1">
+        {
+          askedTaskList.length > 0 ? <Table
+            columns={columnsAskedTaskList}
+            dataSource={askedTaskList} /> : <span>你暂时没有需要评价的同学</span>
+        }
+
+      </TabPane>
+      <TabPane tab="评价记录" key="2">
+        {
+          evalRecords.length > 0 ? <Table
+            columns={columnsEvalRecords}
+            dataSource={evalRecords} /> : <span>你暂时没有评价记录</span>
+        }
+      </TabPane>
+    </Tabs>
+
+
   }
 }
 
 const mapStateToProps = (state) => ({
   askedTaskList: state.getIn(['student', 'askedTaskList']).toJS(),
+  evalRecords: state.getIn(['student', 'evalRecords']).toJS(),
   userId: state.getIn(['login', 'id'])
 })
 

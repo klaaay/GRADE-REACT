@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const dayjs = require("dayjs")
 
 
 const User = require("../models/User");
@@ -6,6 +7,7 @@ const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
 const Class = require("../models/Class");
 const TaskDone = require("../models/TaskDone")
+const EvalRecord = require("../models/EvalRecord")
 
 
 const calcuScore = (
@@ -164,7 +166,7 @@ exports.score_evaluate = (req, res, next) => {
             doc[0].groupGrade,
             doc[0].id.groupNumber
           )
-          TaskDone.update({ _id: id }, { $set: { score: score } }).exec()
+          TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
         }
       })
   } else if (role === 'self') {
@@ -192,11 +194,12 @@ exports.score_evaluate = (req, res, next) => {
             doc[0].groupGrade,
             doc[0].id.groupNumber
           )
-          TaskDone.update({ _id: id }, { $set: { score: score } }).exec()
+          TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
         }
       })
   } else if (role === 'group') {
     const { userId } = req.body;
+
     Student.find({ id: userId })
       .exec()
       .then(doc => {
@@ -214,8 +217,18 @@ exports.score_evaluate = (req, res, next) => {
               message: '评价成功(互评)'
             })
             TaskDone.find({ _id: id })
+              .populate('id')
               .exec()
               .then(doc => {
+                var EvalRecord_doc = new EvalRecord({
+                  publisher: doc[0].id.publisher,
+                  title: doc[0].id.title,
+                  evaluator: userId,
+                  evaluatorTo: doc[0].name,
+                  score: score,
+                  time: dayjs().format("YYYY-MM-DD")
+                })
+                EvalRecord_doc.save()
                 if (doc[0].groupMember.length === 0) {
                   TaskDone.update({ _id: id }, { $set: { groupGradeDone: true } }).exec()
                     .then(() => {
@@ -233,7 +246,8 @@ exports.score_evaluate = (req, res, next) => {
                               doc[0].groupGrade,
                               doc[0].id.groupNumber
                             )
-                            TaskDone.update({ _id: id }, { $set: { score: score } }).exec()
+                            console.log(score)
+                            TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
                           }
                         })
                     })

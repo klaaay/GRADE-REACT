@@ -34,12 +34,12 @@ export default class Score extends Component {
         >
           <p>小组人数:{groupNumber}</p>
           <p>剩余评价人数:{groupMember.length}</p>
-          <p>已评价组员分数:{groupGrade.reduce((a, b) => {
-            return a.score + '分 ' + b.score + '分 '
-          })}</p>
-          <p>小组成绩:{groupMember.length === 0 ? ((groupGrade.reduce((a, b) => {
-            return a.score + b.score
-          })) * 1.0 / groupNumber) + '分' : '还有组员未评价'}</p>
+          {/* <p>已评价组员分数:{groupGrade.length !== 0 ?
+            (groupGrade.reduce((a, b) => {
+              return a.score + '分 ' + b.score + '分 '
+            }), ' ') : '没有组员评价'
+          }</p> */}
+          <p>小组成绩:{groupMember.length === 0 ? ((groupGrade.map(item=>item.score).reduce((a,b)=>a+b)) * 1.0 / groupNumber).toFixed(2) + '分' : '还有组员未评价'}</p>
         </Card>
         <Card
           style={{ marginTop: 16 }}

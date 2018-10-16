@@ -40,6 +40,18 @@ class Tasks extends Component {
           )}
         />
         <Column
+          title="未完成人数"
+          dataIndex="DontDoneNumber"
+          key="DontDoneNumber"
+          render={text => (text)}
+        />
+        <Column
+          title="完成人数"
+          dataIndex="DoneNumber"
+          key="DoneNumber"
+          render={text => (text)}
+        />
+        <Column
           title=""
           key="action"
           render={(text, record) => (

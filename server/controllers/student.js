@@ -8,6 +8,7 @@ const Student = require("../models/Student");
 const Class = require("../models/Class");
 const Task = require("../models/Task")
 const TaskDone = require("../models/TaskDone")
+const EvalRecord = require("../models/EvalRecord")
 
 exports.get_tasks = (req, res, next) => {
   const { id } = req.body;
@@ -48,6 +49,22 @@ exports.get_asked_tasks = (req, res, next) => {
     })
 }
 
+exports.get_eval_records = (req, res, next) => {
+  const { userId } = req.body;
+  console.log(userId);
+  EvalRecord.find({ evaluator: userId })
+    .exec()
+    .then((docs) => {
+      let docs_str = JSON.stringify(docs);
+      let docs_str_key = docs_str.replace(/_id/g, 'key');
+      let docs_key = JSON.parse(docs_str_key);
+      console.log(docs_key)
+      res.json({
+        evalRecords: docs_key
+      })
+    })
+}
+
 exports.get_initial_task_info = (req, res, next) => {
   const { _id } = req.body;
   console.log(_id);
@@ -83,9 +100,9 @@ exports.word_upload = (req, res, next) => {
           .exec()
           .then(doc => {
             if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+              Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
               var groupMember = []
-              console.log(allRecievedStudentGroup)
               Student.find({ id: userId })
                 .exec()
                 .then(doc => {
@@ -134,9 +151,9 @@ exports.ppt_upload = (req, res, next) => {
           .exec()
           .then(doc => {
             if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+              Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
               var groupMember = []
-              console.log(allRecievedStudentGroup)
               Student.find({ id: userId })
                 .exec()
                 .then(doc => {
@@ -184,10 +201,10 @@ exports.video_upload = (req, res, next) => {
           .exec()
           .then(doc => {
             if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+              Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
               var groupNumber = doc[0].id.groupNumber
               var groupMember = []
-              console.log(allRecievedStudentGroup)
               Student.find({ id: userId })
                 .exec()
                 .then(doc => {
