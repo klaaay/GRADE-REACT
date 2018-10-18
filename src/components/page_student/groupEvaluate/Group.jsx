@@ -9,7 +9,8 @@ const TabPane = Tabs.TabPane;
 class Group extends Component {
 
   render() {
-    const { askedTaskList, userId, evalRecords } = this.props
+    const { askedTaskList, evalRecords } = this.props
+    const userId = localStorage.getItem("id");
     console.log(evalRecords)
     const columnsEvalRecords = [
       {
@@ -101,7 +102,8 @@ class Group extends Component {
         }
       },
     }];
-    return <Tabs defaultActiveKey="1" >
+    return <Tabs defaultActiveKey="1" 
+    >
       <TabPane tab="评价通知" key="1">
         {
           askedTaskList.length > 0 ? <Table

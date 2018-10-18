@@ -10,14 +10,14 @@ import {
 
 const { Column } = Table;
 
-
 class Tasks extends Component {
   render() {
     const { publishedTasks } = this.props
     const { onStartDeleteTask } = this.props
     console.log(publishedTasks)
     return (
-      <Table dataSource={publishedTasks}>
+      <Table
+        dataSource={publishedTasks}>
 
         <Column
           title="作业标题"

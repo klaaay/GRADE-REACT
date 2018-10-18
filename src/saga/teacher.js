@@ -11,7 +11,8 @@ import {
 
 function* searchClassList() {
   try {
-    const id = yield select((state) => (state.getIn(['login', 'id'])));
+    // const id = yield select((state) => (state.getIn(['login', 'id'])));
+    const id = localStorage.getItem("id");
     console.log(id);
     const data = yield call(search_class_list, id);
     console.log(data);
@@ -23,7 +24,8 @@ function* searchClassList() {
 
 function* publishTask() {
   try {
-    const publisherId = yield select((state) => (state.getIn(['login', 'id'])));
+    // const publisherId = yield select((state) => (state.getIn(['login', 'id'])));
+    const publisherId = localStorage.getItem("id");
     const classes = yield select((state) => (state.getIn(['teacher', 'classes'])));
     const title = yield select((state) => (state.getIn(['teacher', 'title'])));
     const content = yield select((state) => (state.getIn(['teacher', 'content'])));
@@ -49,8 +51,9 @@ function* publishTask() {
 
 function* getPublishedTaks() {
   try {
-    const id = yield select((state) => (state.getIn(['login', 'id'])));
-    console.log(id);
+    // const id = yield select((state) => (state.getIn(['login', 'id'])));
+    const id = localStorage.getItem("id");
+    // console.log(id);
     const data = yield call(get_published_taks, id);
     console.log(data);
     yield put({ type: 'PUBLISHED_TASKS_RESULT', payload: data });
@@ -62,7 +65,7 @@ function* getPublishedTaks() {
 function* deletePublishedTask() {
   try {
     const id = yield select((state) => (state.getIn(['teacher', 'selectId'])));
-    console.log(id);
+    // console.log(id);
     const data = yield call(delete_published_task, id);
     console.log(data);
     message.success(data.message);

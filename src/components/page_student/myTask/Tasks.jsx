@@ -15,10 +15,15 @@ dayjs.extend(relativeTime)
 
 class Tasks extends Component {
   render() {
-    const { taskList, userId } = this.props
-    console.log(taskList);
+    const { taskList } = this.props
+    const userId = localStorage.getItem("id");
     return (
-      <div className="tasks">
+      <div className="tasks"
+        style={{
+          maxHeight: '480px',
+          overflow: 'auto'
+        }}
+      >
         {
           taskList.map((item, index) => (
             <Task
@@ -40,7 +45,7 @@ class Tasks extends Component {
               groupGrade={item.groupGrade}
               selfGradeDone={item.selfGradeDone}
               score={item.score}
-              groupNumber = {item.id.groupNumber}
+              groupNumber={item.id.groupNumber}
             >
             </Task>
           ))

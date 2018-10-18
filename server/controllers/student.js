@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-var console = require('tracer').colorConsole();
-
 const User = require("../models/User");
 const Teacher = require("../models/Teacher");
 const Student = require("../models/Student");
@@ -27,13 +25,11 @@ exports.get_tasks = (req, res, next) => {
 }
 
 exports.get_asked_tasks = (req, res, next) => {
-  console.log(req.body)
   const { id } = req.body;
   Student.find({ id: id })
     .exec()
     .then(doc => {
       let name = doc[0].name
-      console.log(name)
       TaskDone
         .where('groupMember')
         .elemMatch({ $eq: name })
@@ -51,14 +47,12 @@ exports.get_asked_tasks = (req, res, next) => {
 
 exports.get_eval_records = (req, res, next) => {
   const { userId } = req.body;
-  console.log(userId);
   EvalRecord.find({ evaluator: userId })
     .exec()
     .then((docs) => {
       let docs_str = JSON.stringify(docs);
       let docs_str_key = docs_str.replace(/_id/g, 'key');
       let docs_key = JSON.parse(docs_str_key);
-      console.log(docs_key)
       res.json({
         evalRecords: docs_key
       })
@@ -67,7 +61,6 @@ exports.get_eval_records = (req, res, next) => {
 
 exports.get_initial_task_info = (req, res, next) => {
   const { _id } = req.body;
-  console.log(_id);
   TaskDone.find({ _id: _id })
     .exec()
     .then((doc) => {
@@ -78,7 +71,6 @@ exports.get_initial_task_info = (req, res, next) => {
 }
 
 exports.word_upload = (req, res, next) => {
-  console.log(req.body)
   const { id, userId, taskId, action } = req.body
   if (action === 'save') {
     TaskDone.update({ _id: id }, { $set: { word: req.file.path } }).exec()
@@ -101,6 +93,7 @@ exports.word_upload = (req, res, next) => {
           .then(doc => {
             if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
               Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
+              var groupNumber = doc[0].id.groupNumber
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
               var groupMember = []
               Student.find({ id: userId })
@@ -110,11 +103,10 @@ exports.word_upload = (req, res, next) => {
                   while (true) {
                     if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
                       groupMember.push(allRecievedStudentGroup.pop());
-                      if (groupMember.length >= 2 || allRecievedStudentGroup.length === 0) {
-                        console.log(allRecievedStudentGroup)
+                      if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
                         Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
-                        console.log(groupMember)
                         TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
+                        TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
                         break;
                       }
                     } else {
@@ -152,6 +144,7 @@ exports.ppt_upload = (req, res, next) => {
           .then(doc => {
             if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
               Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
+              var groupNumber = doc[0].id.groupNumber
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
               var groupMember = []
               Student.find({ id: userId })
@@ -161,11 +154,10 @@ exports.ppt_upload = (req, res, next) => {
                   while (true) {
                     if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
                       groupMember.push(allRecievedStudentGroup.pop());
-                      if (groupMember.length >= 2 || allRecievedStudentGroup.length === 0) {
-                        console.log(allRecievedStudentGroup)
+                      if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
                         Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
-                        console.log(groupMember)
                         TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
+                        TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
                         break;
                       }
                     } else {
@@ -213,10 +205,9 @@ exports.video_upload = (req, res, next) => {
                     if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
                       groupMember.push(allRecievedStudentGroup.pop());
                       if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
-                        console.log(allRecievedStudentGroup)
                         Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
-                        console.log(groupMember)
                         TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
+                        TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
                         break;
                       }
                     } else {

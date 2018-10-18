@@ -15,7 +15,6 @@ import {
 function* searchTeacherList() {
   try {
     const data = yield call(search_role_list, 'teacher');
-    console.log(data);
     yield put({ type: 'TEACHER_LIST_SEARCH_RESULT', payload: data })
   } catch (e) {
     console.log(e)
@@ -25,7 +24,6 @@ function* searchTeacherList() {
 function* searchStudentList() {
   try {
     const data = yield call(search_role_list, 'student');
-    console.log(data);
     yield put({ type: 'STUDENT_LIST_SEARCH_RESULT', payload: data })
   } catch (e) {
     console.log(e)
@@ -53,8 +51,10 @@ function* addUser() {
 
 function* changePassword() {
   try {
-    const userName = yield select(state => (state.getIn(['login', 'userName'])));
-    const relOld = yield select(state => (state.getIn(['login', 'password'])));
+    // const userName = yield select(state => (state.getIn(['login', 'userName'])));
+    const userName = localStorage.getItem("userName");
+    // const relOld = yield select(state => (state.getIn(['login', 'password'])));
+    const relOld = localStorage.getItem("password");
     const oldPass = yield select(state => (state.getIn(['admin', 'oldPass'])));
     const newPass = yield select(state => (state.getIn(['admin', 'newPass'])));
     const reNewPass = yield select(state => (state.getIn(['admin', 'reNewPass'])));

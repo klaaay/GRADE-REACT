@@ -1,5 +1,6 @@
 
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 exports.user_login = (req, res, next) => {
   var userName = req.body.userName;
@@ -10,11 +11,20 @@ exports.user_login = (req, res, next) => {
         if (doc[0].password === password) {
           const role = doc[0].role;
           const id = doc[0]._id;
+          const token = jwt.sign({
+            role: role,
+            id: id
+          },
+            'secrect',
+            {
+              expiresIn: '1h'
+            })
           res.send({
             status: 'success',
             message: '登陆成功',
             role: role,
-            id: id
+            id: id,
+            token: token
           })
         } else {
           res.send({

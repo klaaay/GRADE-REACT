@@ -16,6 +16,7 @@ const taskdoneSchema = mongoose.Schema({
   selfGradeDetail: {},
   selfGrade: Number,
   selfGradeDone: { type: Boolean, default: false },
+  groupMemberOrigin:[String],
   groupMember: [String],
   groupGradeDetail: [{}],
   groupGrade: [{}],

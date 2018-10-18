@@ -29,6 +29,13 @@ const gridStyleGroup = {
   background: '#FFFBE6'
 };
 
+const gridStyleGroupTips = {
+  width: '100%',
+  textAlign: 'center',
+  height: '30px',
+  background: 'white'
+};
+
 export default class scoreCard extends Component {
   render() {
     const {
@@ -38,20 +45,22 @@ export default class scoreCard extends Component {
       selfName,
       selfGrade,
       groupGrade,
+      groupMemberOrigin,
       score
     } = this.props
     return (
       <Card
         title={title}
         style={{
-          width: '200px',
+          width: '280px',
           margin: '10px'
         }}
       >
+
         <Card.Grid style={gridStyleTeacher}>{teacherName}</Card.Grid>
-        <Card.Grid style={gridStyleTeacher}>{teacherGrade}</Card.Grid>
+        <Card.Grid style={gridStyleTeacher}>{teacherGrade ? teacherGrade : '未评价'}</Card.Grid>
         <Card.Grid style={gridStyleSelf}>{selfName}</Card.Grid>
-        <Card.Grid style={gridStyleSelf}>{selfGrade}</Card.Grid>
+        <Card.Grid style={gridStyleSelf}>{selfGrade ? selfGrade : '未评价'}</Card.Grid>
         {
           groupGrade.map((item, index) => {
             return <div key={index}>
@@ -62,6 +71,14 @@ export default class scoreCard extends Component {
         }
         <Card.Grid style={gridStyle}>总分</Card.Grid>
         <Card.Grid style={gridStyle}>{score}</Card.Grid>
+        {/* <Card.Grid style={gridStyleGroupTips}>
+          <span style={{ color: '#E6F7FF' }}>教师评分</span>
+          <span style={{ color: '#F6FFED' }}>自评分数</span>
+          <span style={{ color: '#FFFBE6' }}>互评分数</span>
+        </Card.Grid> */}
+        {/* <Card.Grid style={gridStyleGroupTips}>
+          互评小组:{groupMemberOrigin.toString()}
+        </Card.Grid> */}
       </Card>
     )
   }

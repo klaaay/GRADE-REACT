@@ -13,7 +13,12 @@ function* loginConfirm() {
     yield put({ type: 'LOGIN_RESULT', payload: data })
     const status = yield select(state => (state.getIn(['login', 'status'])));
     if (status === 'success') {
-      const role = yield select(state => (state.getIn(['login', 'role'])));
+      const role = data.role;
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("id", data.id);
+      localStorage.setItem("userName", userName);
+      localStorage.setItem("password", password);
       if (role === 'admin') {
         browserHistory.push('/admin');
       } else if (role === 'teacher') {
@@ -27,6 +32,6 @@ function* loginConfirm() {
   }
 }
 
-export const watchLoginConfirm =  function* watchLoginConfirm() {
+export const watchLoginConfirm = function* watchLoginConfirm() {
   yield takeLatest('VALIDATE_USER', loginConfirm);
 }

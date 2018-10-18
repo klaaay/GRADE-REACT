@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router';
 
-import { Card } from 'antd';
+import { Card, message } from 'antd';
 
 export default class Task extends Component {
   render() {
@@ -26,7 +26,7 @@ export default class Task extends Component {
       groupNumber
     } = this.props
     console.log(restTime)
-    const myAction = (committed && !selfGradeDone) ? <a
+    const myAction = (committed) ? <a
       onClick={(e) => {
         browserHistory.push({
           pathname: '/student/evaluate',
@@ -37,7 +37,11 @@ export default class Task extends Component {
           }
         })
       }}
-    >去自评</a> : <span>去自评</span>;
+    >去自评</a> : <span
+      onClick={() => {
+        message.warning('你尚未提交作业')
+      }}
+    >去自评</span>;
     var changeRestTime = restTime;
     if (changeRestTime === 'in a day') {
       changeRestTime = 'in 1 days'

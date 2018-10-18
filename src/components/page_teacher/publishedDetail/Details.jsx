@@ -17,9 +17,9 @@ function callback(key) {
 class Details extends Component {
   state = {
     searchText: '',
-    data: [],
     loading: false,
-    GradeDoneTasks: []
+    GradeDoneTasks: [],
+    GradeTasks: []
   };
 
   get_task_detail = async (id) => {
@@ -38,9 +38,9 @@ class Details extends Component {
       let GradeDoneTasks = body.data.filter(item => (item.teacherGradeDone && item.selfGradeDone && item.groupGradeDone));
       console.log(GradeDoneTasks)
       this.setState({
-        data: body,
         loading: true,
-        GradeDoneTasks: GradeDoneTasks
+        GradeDoneTasks: GradeDoneTasks,
+        GradeTasks: body.data
       })
       return body;
     } catch (e) {
@@ -63,9 +63,7 @@ class Details extends Component {
   }
 
   render() {
-    const { userId } = this.props
-    console.log(this.state.data.data);
-    console.log(this.state.GradeDoneTasks)
+    const userId = localStorage.getItem('id')
     const columns = [{
       title: '姓名',
       dataIndex: 'name',
@@ -206,16 +204,21 @@ class Details extends Component {
         }}
       />
     } else {
-      return <Tabs onChange={callback} type="card" className="details_tabs">
+      return <Tabs onChange={callback} type="card" className="details_tabs"
+        style={{
+          maxHeight: '480px',
+          overflow: 'auto'
+        }}
+      >
         <TabPane tab="作业总览" key="1">
           <Table
             columns={columns}
-            dataSource={this.state.data.data} />
+            dataSource={this.state.GradeTasks} />
         </TabPane>
         <TabPane tab="成绩详情" key="2">
           <div className="score_cards">
             {
-              this.state.GradeDoneTasks.map((item, index) => {
+              this.state.GradeTasks.map((item, index) => {
                 return <ScoreCard
                   key={index}
                   title={item.id.title}
@@ -224,6 +227,7 @@ class Details extends Component {
                   selfName={item.name}
                   selfGrade={item.selfGrade}
                   groupGrade={item.groupGrade}
+                  groupMemberOrigin={item.groupMemberOrigin}
                   score={item.score}
                 />
               })
