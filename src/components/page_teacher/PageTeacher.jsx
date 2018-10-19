@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Dropdown,message } from 'antd';
 import $ from 'jquery'
 
 import {
@@ -13,7 +13,7 @@ import {
   logOut
 } from '../../actions/login.js';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content, Footer } = Layout;
 
 class PageTeacher extends Component {
   state = {
@@ -35,9 +35,9 @@ class PageTeacher extends Component {
   }
 
   render() {
-    const { onClassListSearch, onLogOut,onStartGetPublishedTaks } = this.props
+    const { onClassListSearch, onLogOut, onStartGetPublishedTaks } = this.props
     return (
-      <Layout style={{height:'92%'}}>
+      <Layout style={{ height: '100%', overflow: 'hidden' }}>
         <Sider
           trigger={null}
           collapsible
@@ -46,7 +46,7 @@ class PageTeacher extends Component {
           <div className="logo">
             <img src="/logo.png" alt="" />
           </div>
-          <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1"
               className="homework_publish"
               onClick={(e) => {
@@ -54,7 +54,7 @@ class PageTeacher extends Component {
                 this.changeRouter('task')
               }}
             >
-              <Icon type="user" />
+              <Icon type="file-text" />
               <span>发布作业</span>
             </Menu.Item>
             <Menu.Item key="2"
@@ -64,7 +64,7 @@ class PageTeacher extends Component {
                 onStartGetPublishedTaks()
               }}
             >
-              <Icon type="video-camera" />
+              <Icon type="database" />
               <span>作业管理</span>
             </Menu.Item>
           </Menu>
@@ -77,16 +77,43 @@ class PageTeacher extends Component {
               onClick={this.toggle}
             />
             <div className="hidden"></div>
-            <Icon type="logout" theme="outlined"
-              style={{ color: '#1890FF' }}
-              onClick={(e) => {
-                browserHistory.push('/')
-                onLogOut()
-              }} />
+            <Dropdown
+              overlay={
+                <Menu>
+                  <Menu.Item>
+                    <a style={{ color: '#1890FF' }}>
+                      <Icon type="user" theme="outlined"
+                        style={{ color: '#1890FF', marginRight: '8px' }}
+                      />个人信息
+                    </a>
+                  </Menu.Item>
+                  <Menu.Item
+                    onClick={(e) => {
+                      browserHistory.push('/')
+                      message.success("登出成功")
+                      onLogOut()
+                    }}
+                  >
+                    <a style={{ color: '#1890FF' }}>
+                      <Icon type="logout" theme="outlined"
+                        style={{ color: '#1890FF', marginRight: '5px' }}
+                      /> 退出登陆
+                    </a>
+                  </Menu.Item>
+                </Menu>
+              }
+            >
+              <a className="ant-dropdown-link" style={{ marginRight: '20px' }}>
+                {localStorage.getItem("name")}<Icon type="down" />
+              </a>
+            </Dropdown>
           </Header>
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
             {this.props.children}
           </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            © 2018 杭州师范大学 版权所有
+          </Footer>
         </Layout>
       </Layout>
     );

@@ -15,31 +15,31 @@ const BarChart = ReactChart.Bar;
 
 let PieChartData = [
   {
-    value: 300,
+    value: 0,
     color: "#A8B3C5",
     highlight: "#A8B3C5",
     label: "未评价"
   },
   {
-    value: 50,
+    value: 0,
     color: "#F7464A",
     highlight: "#F7464A",
     label: "不及格"
   },
   {
-    value: 50,
+    value: 0,
     color: "#FDB45C",
     highlight: "#FDB45C",
     label: "及格"
   },
   {
-    value: 100,
+    value: 0,
     color: "#317EF3",
     highlight: "#317EF3",
     label: "良好"
   },
   {
-    value: 100,
+    value: 0,
     color: "#46BFBD",
     highlight: "#46BFBD",
     label: "优秀"
@@ -74,7 +74,7 @@ let BarChartData = {
       strokeColor: "rgba(220,220,220,0.8)",
       highlightFill: "rgba(220,220,220,0.75)",
       highlightStroke: "rgba(220,220,220,1)",
-      data: [65, 30, 59, 80, 81]
+      data: [0, 0, 0, 0, 0]
     }
   ]
 };
@@ -351,7 +351,6 @@ class Details extends Component {
           </div>
         </TabPane>
       </Tabs>;
-
     }
   }
 }

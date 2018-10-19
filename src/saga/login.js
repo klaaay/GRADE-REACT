@@ -19,6 +19,7 @@ function* loginConfirm() {
       localStorage.setItem("id", data.id);
       localStorage.setItem("userName", userName);
       localStorage.setItem("password", password);
+      localStorage.setItem("name",data.name);
       if (role === 'admin') {
         browserHistory.push('/admin');
       } else if (role === 'teacher') {
