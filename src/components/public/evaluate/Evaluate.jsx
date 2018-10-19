@@ -5,18 +5,30 @@ import $ from 'jquery'
 
 import axios from 'axios'
 
-import {
-  data_instructional_design,
-  data_multimedia,
-  data_speech,
-  data_class,
-  values,
-  calTotalValue
-} from './evaluateStand.js'
-
 import './Evaluate.less'
 
 const TabPane = Tabs.TabPane;
+
+let valuesTemp = {
+
+}
+
+const calTotalValue = (total_init, values) => {
+  let keys = Object.keys(values);
+  let total = total_init;
+  keys.forEach((item, index) => {
+    total += values[item].reduce((a, b) => (a + b), 0)
+  })
+  return total;
+}
+
+function fillInitialValue(GradeDetail) {
+  for (let i = 0; i < GradeDetail['instructional'].length; i++) {
+    if (GradeDetail['instructional'][i]) {
+      $($('.eval_detail_box')[i]).val(GradeDetail['instructional'][i])
+    }
+  }
+}
 
 function callback(key) {
   console.log(key);
@@ -72,13 +84,13 @@ const columns = [{
     return <Input
       className="eval_detail_box"
       placeholder="请打分"
-      defaultValue={values[record.value][record.key]}
+      defaultValue={valuesTemp[record.value][record.key]}
       onChange={(e) => {
         if (e.target.value > record.value_total) {
           message.error('超过总分值,请重新打分')
           e.target.value = ''
         } else {
-          values[text][record.key] = parseFloat(e.target.value)
+          valuesTemp[text][record.key] = parseFloat(e.target.value)
         }
       }}
     />
@@ -87,98 +99,64 @@ const columns = [{
 
 export default class Evaluate extends Component {
   state = {
-    instructional_design: [],
-    multimedia: [],
-    speech: [],
-    class: [],
+    data_instructional_design: [],
+    data_multimedia: [],
+    data_speech: [],
+    data_class: [],
     committed: false,
   }
 
   componentWillMount = () => {
-    axios.post('/public/evaluateInitial', {
-      id: getQueryString('id'),
-      role: getQueryString('role'),
-      userId: getQueryString('userId')
-    })
+    axios.post('/public/evaluateStandInitial')
       .then(res => {
-        let { role } = res.data;
-        if (role === 'teacher') {
-          let { teacherGradeDetail, teacherGradeDone } = res.data.data;
-          this.setState({
-            committed: teacherGradeDone
+        console.log(res.data)
+        const { evalStand } = res.data;
+        valuesTemp = evalStand.initial_values
+        this.setState({
+          data_instructional_design: evalStand.data_instructional_design,
+          data_multimedia: evalStand.data_multimedia,
+          data_speech: evalStand.data_speech,
+          data_class: evalStand.data_class,
+        })
+        axios.post('/public/evaluateInitial', {
+          id: getQueryString('id'),
+          role: getQueryString('role'),
+          userId: getQueryString('userId')
+        })
+          .then(res => {
+            let { role } = res.data;
+            if (role === 'teacher') {
+              let { teacherGradeDetail, teacherGradeDone } = res.data.data;
+              this.setState({
+                committed: teacherGradeDone
+              })
+              console.log(teacherGradeDetail)
+              if (teacherGradeDetail) {
+                valuesTemp = teacherGradeDetail;
+                fillInitialValue(teacherGradeDetail);
+              }
+            }
+            else if (role === 'self') {
+              let { selfGradeDetail, selfGradeDone } = res.data.data;
+              this.setState({
+                committed: selfGradeDone
+              })
+              if (selfGradeDetail) {
+                valuesTemp = selfGradeDetail;
+                fillInitialValue(selfGradeDetail);
+              }
+            }
+            else if (role === 'group') {
+              let { groupGradeDetail } = res.data.data;
+              var result = find_if_saved(groupGradeDetail)
+              if (result) {
+                valuesTemp = result;
+                fillInitialValue(result);
+              }
+            }
           })
-          console.log(teacherGradeDetail)
-          if (teacherGradeDetail) {
-            let keys = Object.keys(values);
-            for (let i = 0; i < teacherGradeDetail['instructional'].length; i++) {
-              if (teacherGradeDetail['instructional'][i]) {
-                $($('.eval_detail_box')[i]).val(teacherGradeDetail['instructional'][i])
-              }
-            }
-            keys.forEach((item, index) => {
-              values[item] = teacherGradeDetail[item]
-            })
-          } else {
-            let keys = Object.keys(values);
-            for (let i = 0; i < $('.eval_detail_box').length; i++) {
-              $($('.eval_detail_box')[i]).val("")
-            }
-            keys.forEach((item, index) => {
-              values[item].length = 0;
-            })
-          }
-        }
-        else if (role === 'self') {
-          let { selfGradeDetail, selfGradeDone } = res.data.data;
-          this.setState({
-            committed: selfGradeDone
-          })
-          if (selfGradeDetail) {
-            let keys = Object.keys(values);
-            for (let i = 0; i < selfGradeDetail['instructional'].length; i++) {
-              if (selfGradeDetail['instructional'][i]) {
-                $($('.eval_detail_box')[i]).val(selfGradeDetail['instructional'][i])
-              }
-            }
-            keys.forEach((item, index) => {
-              values[item] = selfGradeDetail[item]
-            })
-          } else {
-            let keys = Object.keys(values);
-            for (let i = 0; i < $('.eval_detail_box').length; i++) {
-              $($('.eval_detail_box')[i]).val("")
-            }
-            keys.forEach((item, index) => {
-              values[item].length = 0;
-            })
-          }
-        }
-        else if (role === 'group') {
-          let { groupGradeDetail } = res.data.data;
-          var result = find_if_saved(groupGradeDetail)
-          if (result) {
-            let keys = Object.keys(values);
-            for (let i = 0; i < result['instructional'].length; i++) {
-              if (result['instructional'][i]) {
-                $($('.eval_detail_box')[i]).val(result['instructional'][i])
-              }
-            }
-            keys.forEach((item, index) => {
-              values[item] = result[item]
-            })
-          } else {
-            let keys = Object.keys(values);
-            for (let i = 0; i < $('.eval_detail_box').length; i++) {
-              $($('.eval_detail_box')[i]).val("")
-            }
-            keys.forEach((item, index) => {
-              values[item].length = 0;
-            })
-          }
-        }
       })
   }
-
 
   componentDidMount = () => {
 
@@ -191,7 +169,7 @@ export default class Evaluate extends Component {
       <div className="card-container">
         <Tabs type="card" onChange={callback} className="evaluate_tabs">
           <TabPane tab="教学设计(单项25分)" key="instructional" id="instructional" >
-            <Table columns={columns} dataSource={data_instructional_design} className="evaluate_table" bordered={true} pagination={false}
+            <Table columns={columns} dataSource={this.state.data_instructional_design} className="evaluate_table" bordered={true} pagination={false}
               footer={() =>
                 <div>
                   <Button
@@ -202,7 +180,7 @@ export default class Evaluate extends Component {
                     }}
                     onClick={() => {
                       axios.post('/public/evaluateSave', {
-                        details: values,
+                        details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
                         userId: getQueryString('userId')
@@ -226,7 +204,7 @@ export default class Evaluate extends Component {
             </Table>
           </TabPane>
           <TabPane tab="多媒体课件制作(单项15分)" key="multimedia" id="multimedia">
-            <Table columns={columns} dataSource={data_multimedia} className="evaluate_table" bordered={true} pagination={false}
+            <Table columns={columns} dataSource={this.state.data_multimedia} className="evaluate_table" bordered={true} pagination={false}
               footer={() =>
                 <div>
                   <Button
@@ -237,7 +215,7 @@ export default class Evaluate extends Component {
                     }}
                     onClick={() => {
                       axios.post('/public/evaluateSave', {
-                        details: values,
+                        details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
                         userId: getQueryString('userId')
@@ -261,7 +239,7 @@ export default class Evaluate extends Component {
             </Table>
           </TabPane>
           <TabPane tab="即席讲演(单项15分)" key="speech" id="speech">
-            <Table columns={columns} dataSource={data_speech} className="evaluate_table" bordered={true} pagination={false}
+            <Table columns={columns} dataSource={this.state.data_speech} className="evaluate_table" bordered={true} pagination={false}
               footer={() =>
                 <div>
                   <Button
@@ -272,7 +250,7 @@ export default class Evaluate extends Component {
                     }}
                     onClick={() => {
                       axios.post('/public/evaluateSave', {
-                        details: values,
+                        details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
                         userId: getQueryString('userId')
@@ -296,7 +274,7 @@ export default class Evaluate extends Component {
             </Table>
           </TabPane>
           <TabPane tab="模拟上课·板书(单项45分)" key="class" id="class">
-            <Table columns={columns} dataSource={data_class} className="evaluate_table" bordered={true} pagination={false}
+            <Table columns={columns} dataSource={this.state.data_class} className="evaluate_table" bordered={true} pagination={false}
               footer={() =>
                 <div>
                   <Button
@@ -307,7 +285,7 @@ export default class Evaluate extends Component {
                     }}
                     onClick={() => {
                       axios.post('/public/evaluateSave', {
-                        details: values,
+                        details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
                         userId: getQueryString('userId')
@@ -324,7 +302,7 @@ export default class Evaluate extends Component {
                       display: display
                     }}
                     onClick={(e) => {
-                      var score = calTotalValue(0, values)
+                      var score = calTotalValue(0, valuesTemp)
                       if (getQueryString('role') === 'group') {
                         axios.post('/public/evaluate', {
                           score: score,
@@ -339,7 +317,7 @@ export default class Evaluate extends Component {
                         })
                       } else {
                         axios.post('/public/evaluate', {
-                          details: values,
+                          details: valuesTemp,
                           score: score,
                           id: getQueryString('id'),
                           role: getQueryString('role')

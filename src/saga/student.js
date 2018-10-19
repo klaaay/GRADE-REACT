@@ -1,4 +1,4 @@
-import { call, takeLatest, select, put } from 'redux-saga/effects'
+import { call, takeLatest, put } from 'redux-saga/effects'
 
 import {
   get_tasks,

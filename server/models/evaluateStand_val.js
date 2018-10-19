@@ -1,4 +1,4 @@
-export const data_instructional_design = [{
+exports.data_instructional_design = [{
   key: '0',
   eval_content: '目标设计',
   eval_stand: '教学目标清楚、具体，易于理解，便于实施，行为动词使用正确，阐述规范；符合课标要求、学科特点和学生实际；体现对知识、能力与创新思维等方面的要求',
@@ -73,7 +73,7 @@ export const data_instructional_design = [{
 }
 ];
 
-export const data_multimedia = [{
+exports.data_multimedia = [{
   key: '0',
   eval_content: '科学性',
   eval_stand: '课件取材适宜，内容科学、正确、规范课件演示符合现代教育理念',
@@ -106,7 +106,7 @@ export const data_multimedia = [{
 }
 ];
 
-export const data_speech = [{
+exports.data_speech = [{
   key: '0',
   eval_content: '讲演内容',
   eval_stand: '主题鲜明切题，内容充实、针对性强;问题分析到位，解决策略得当、新颖，说服力强;论据贴切，符合实际，阐释充分;内容构架结构严谨、层次分明、条理清晰',
@@ -139,7 +139,7 @@ export const data_speech = [{
 }
 ];
 
-export const data_class = [{
+exports.data_class = [{
   key: '0',
   eval_content: '教学目标',
   eval_stand: '目标设置明确，符合课标要求和学生实际',
@@ -202,14 +202,14 @@ export const data_class = [{
 }
 ];
 
-export const values = {
+exports.inital_values = {
   instructional: [],
   multimedia: [],
   speech: [],
   class: []
 }
 
-export const calTotalValue = (total_init, values) => {
+exports.calTotalValue = (total_init, values) => {
   let keys = Object.keys(values);
   let total = total_init;
   keys.forEach((item, index) => {

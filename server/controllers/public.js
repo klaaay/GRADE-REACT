@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const dayjs = require("dayjs")
 
+var console = require('tracer').colorConsole();
 
 const User = require("../models/User");
 const Teacher = require("../models/Teacher");
@@ -8,6 +9,9 @@ const Student = require("../models/Student");
 const Class = require("../models/Class");
 const TaskDone = require("../models/TaskDone")
 const EvalRecord = require("../models/EvalRecord")
+const EvaluateStand = require("../models/EvaluateStand")
+
+const evaluateStand_val = require("../models/evaluateStand_val")
 
 
 const calcuScore = (
@@ -18,7 +22,6 @@ const calcuScore = (
   groupProportion,
   groupGrade,
   groupNumber) => {
-
   var toal_group_score = 0;
   for (let i = 0; i < groupGrade.length; i++) {
     toal_group_score += groupGrade[i].score
@@ -69,10 +72,31 @@ exports.change_password = (req, res) => {
   }
 }
 
+exports.get_initial_evaluate_stand = (req, res, next) => {
+  // var EvaluateStand_doc = new EvaluateStand({
+  //   data_instructional_design: evaluateStand_val.data_instructional_design,
+  //   data_multimedia: evaluateStand_val.data_multimedia,
+  //   data_speech: evaluateStand_val.data_speech,
+  //   data_class: evaluateStand_val.data_class,
+  //   initial_values: evaluateStand_val.inital_values
+  // })
+  // EvaluateStand_doc.save()
+  EvaluateStand
+    .find()
+    .exec()
+    .then(doc => {
+      console.log(doc)
+      res.json({
+        evalStand: doc[0]
+      })
+    })
+}
+
 exports.get_initial_evaluate_state = (req, res, next) => {
   const { id, role, userId } = req.body;
   if (role === 'teacher') {
-    TaskDone.find({ _id: id })
+    TaskDone
+      .find({ _id: id })
       .select('teacherGradeDetail teacherGradeDone')
       .exec()
       .then(doc => {
@@ -82,7 +106,8 @@ exports.get_initial_evaluate_state = (req, res, next) => {
         })
       })
   } else if (role === 'self') {
-    TaskDone.find({ _id: id })
+    TaskDone
+      .find({ _id: id })
       .select('selfGradeDetail selfGradeDone')
       .exec()
       .then(doc => {
@@ -92,7 +117,8 @@ exports.get_initial_evaluate_state = (req, res, next) => {
         })
       })
   } else if (role === 'group') {
-    TaskDone.find({ _id: id })
+    TaskDone
+      .find({ _id: id })
       .select('groupGradeDetail')
       .exec()
       .then(doc => {
@@ -108,7 +134,8 @@ exports.get_initial_evaluate_state = (req, res, next) => {
 exports.score_evaluate_save = (req, res, next) => {
   const { details, id, role, userId } = req.body;
   if (role === 'teacher') {
-    TaskDone.update({ _id: id }, { $set: { teacherGradeDetail: details } })
+    TaskDone
+      .update({ _id: id }, { $set: { teacherGradeDetail: details } })
       .exec()
       .then(() => {
         res.json({
@@ -117,7 +144,8 @@ exports.score_evaluate_save = (req, res, next) => {
         })
       })
   } else if (role === 'self') {
-    TaskDone.update({ _id: id }, { $set: { selfGradeDetail: details } })
+    TaskDone
+      .update({ _id: id }, { $set: { selfGradeDetail: details } })
       .exec()
       .then(() => {
         res.json({
@@ -129,7 +157,9 @@ exports.score_evaluate_save = (req, res, next) => {
     let groupDetails = {};
     groupDetails['userId'] = userId;
     groupDetails['details'] = details;
-    TaskDone.update({ _id: id }, { $push: { groupGradeDetail: groupDetails } }).exec()
+    TaskDone
+      .update({ _id: id }, { $push: { groupGradeDetail: groupDetails } })
+      .exec()
       .then(() => {
         res.json({
           type: 1,
@@ -144,7 +174,8 @@ exports.score_evaluate = (req, res, next) => {
   if (role === 'teacher') {
     TaskDone.update({ _id: id }, { $set: { teacherGradeDetail: details } }).exec()
     TaskDone.update({ _id: id }, { $set: { teacherGrade: score } }).exec()
-    TaskDone.update({ _id: id }, { $set: { teacherGradeDone: true } })
+    TaskDone
+      .update({ _id: id }, { $set: { teacherGradeDone: true } })
       .exec()
       .then(() => {
         res.json({
@@ -152,7 +183,8 @@ exports.score_evaluate = (req, res, next) => {
           message: '评价成功(教师)'
         })
       })
-    TaskDone.find({ _id: id })
+    TaskDone
+      .find({ _id: id })
       .populate('id')
       .exec()
       .then(doc => {
@@ -180,7 +212,8 @@ exports.score_evaluate = (req, res, next) => {
           message: '评价成功(自评)'
         })
       })
-    TaskDone.find({ _id: id })
+    TaskDone
+      .find({ _id: id })
       .populate('id')
       .exec()
       .then(doc => {
@@ -200,7 +233,8 @@ exports.score_evaluate = (req, res, next) => {
   } else if (role === 'group') {
     const { userId } = req.body;
 
-    Student.find({ id: userId })
+    Student
+      .find({ id: userId })
       .exec()
       .then(doc => {
         let name = doc[0].name
@@ -216,7 +250,8 @@ exports.score_evaluate = (req, res, next) => {
               type: 1,
               message: '评价成功(互评)'
             })
-            TaskDone.find({ _id: id })
+            TaskDone
+              .find({ _id: id })
               .populate('id')
               .exec()
               .then(doc => {
@@ -232,7 +267,8 @@ exports.score_evaluate = (req, res, next) => {
                 if (doc[0].groupMember.length === 0) {
                   TaskDone.update({ _id: id }, { $set: { groupGradeDone: true } }).exec()
                     .then(() => {
-                      TaskDone.find({ _id: id })
+                      TaskDone
+                        .find({ _id: id })
                         .populate('id')
                         .exec()
                         .then(doc => {
@@ -246,7 +282,6 @@ exports.score_evaluate = (req, res, next) => {
                               doc[0].groupGrade,
                               doc[0].id.groupNumber
                             )
-                            console.log(score)
                             TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
                           }
                         })

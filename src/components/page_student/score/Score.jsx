@@ -39,7 +39,7 @@ export default class Score extends Component {
               return a.score + '分 ' + b.score + '分 '
             }), ' ') : '没有组员评价'
           }</p> */}
-          <p>小组成绩:{groupMember.length === 0 ? ((groupGrade.map(item=>item.score).reduce((a,b)=>a+b)) * 1.0 / groupNumber).toFixed(2) + '分' : '还有组员未评价'}</p>
+          <p>小组成绩:{groupMember.length === 0 ? ((groupGrade.map(item => item.score).reduce((a, b) => a + b)) * 1.0 / groupNumber).toFixed(2) + '分' : '还有组员未评价'}</p>
         </Card>
         <Card
           style={{ marginTop: 16 }}

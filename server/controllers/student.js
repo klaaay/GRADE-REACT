@@ -146,6 +146,7 @@ exports.ppt_upload = (req, res, next) => {
               Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
               var groupNumber = doc[0].id.groupNumber
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
+              
               var groupMember = []
               Student.find({ id: userId })
                 .exec()
@@ -195,7 +196,9 @@ exports.video_upload = (req, res, next) => {
             if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
               Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
+              console.log(allRecievedStudentGroup)
               var groupNumber = doc[0].id.groupNumber
+              console.log(groupNumber)
               var groupMember = []
               Student.find({ id: userId })
                 .exec()
@@ -205,6 +208,8 @@ exports.video_upload = (req, res, next) => {
                     if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
                       groupMember.push(allRecievedStudentGroup.pop());
                       if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
+                        console.log(allRecievedStudentGroup);
+                        console.log(groupMember);
                         Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
                         TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
                         TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
