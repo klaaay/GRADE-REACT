@@ -8,6 +8,109 @@ import ScoreCard from './scoreCard.jsx'
 
 import './Details.less'
 
+import ReactChart from 'react-chartjs'
+
+const PieChart = ReactChart.Pie;
+const BarChart = ReactChart.Bar;
+
+let PieChartData = [
+  {
+    value: 300,
+    color: "#A8B3C5",
+    highlight: "#A8B3C5",
+    label: "未评价"
+  },
+  {
+    value: 50,
+    color: "#F7464A",
+    highlight: "#F7464A",
+    label: "不及格"
+  },
+  {
+    value: 50,
+    color: "#FDB45C",
+    highlight: "#FDB45C",
+    label: "及格"
+  },
+  {
+    value: 100,
+    color: "#317EF3",
+    highlight: "#317EF3",
+    label: "良好"
+  },
+  {
+    value: 100,
+    color: "#46BFBD",
+    highlight: "#46BFBD",
+    label: "优秀"
+  }
+]
+
+let PieChartOptions = {
+  //Boolean - Whether we should show a stroke on each segment
+  segmentShowStroke: true,
+  //String - The colour of each segment stroke
+  segmentStrokeColor: "#fff",
+  //Number - The width of each segment stroke
+  segmentStrokeWidth: 2,
+  //Number - The percentage of the chart that we cut out of the middle
+  percentageInnerCutout: 50, // This is 0 for Pie charts
+  //Number - Amount of animation steps
+  animationSteps: 100,
+  //String - Animation easing effect
+  animationEasing: "easeOutBounce",
+  //Boolean - Whether we animate the rotation of the Doughnut
+  animateRotate: true,
+  //Boolean - Whether we animate scaling the Doughnut from the centre
+  animateScale: false
+}
+
+let BarChartData = {
+  labels: ["未评价", "不及格", "及格", "良好", "优秀"],
+  datasets: [
+    {
+      label: "My First dataset",
+      fillColor: "rgba(220,220,220,0.5)",
+      strokeColor: "rgba(220,220,220,0.8)",
+      highlightFill: "rgba(220,220,220,0.75)",
+      highlightStroke: "rgba(220,220,220,1)",
+      data: [65, 30, 59, 80, 81]
+    }
+  ]
+};
+
+let BarChartOptions = {
+  //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+  scaleBeginAtZero: true,
+
+  //Boolean - Whether grid lines are shown across the chart
+  scaleShowGridLines: true,
+
+  //String - Colour of the grid lines
+  scaleGridLineColor: "rgba(0,0,0,.05)",
+
+  //Number - Width of the grid lines
+  scaleGridLineWidth: 1,
+
+  //Boolean - Whether to show horizontal lines (except X axis)
+  scaleShowHorizontalLines: true,
+
+  //Boolean - Whether to show vertical lines (except Y axis)
+  scaleShowVerticalLines: true,
+
+  //Boolean - If there is a stroke on each bar
+  barShowStroke: true,
+
+  //Number - Pixel width of the bar stroke
+  barStrokeWidth: 2,
+
+  //Number - Spacing between each of the X value sets
+  barValueSpacing: 5,
+
+  //Number - Spacing between data sets within X values
+  barDatasetSpacing: 1,
+}
+
 const TabPane = Tabs.TabPane;
 
 function callback(key) {
@@ -19,7 +122,8 @@ class Details extends Component {
     searchText: '',
     loading: false,
     GradeDoneTasks: [],
-    GradeTasks: []
+    GradeTasks: [],
+    ChartData: []
   };
 
   get_task_detail = async (id) => {
@@ -35,8 +139,12 @@ class Details extends Component {
     try {
       const response = await fetch('/teacher/detail', fetchOption);
       const body = await response.json();
+      let ChartData = body.ChartData;
+      BarChartData.datasets[0].data = ChartData;
+      PieChartData.forEach((item, index) => {
+        item.value = ChartData[index]
+      })
       let GradeDoneTasks = body.data.filter(item => (item.teacherGradeDone && item.selfGradeDone && item.groupGradeDone));
-      console.log(GradeDoneTasks)
       this.setState({
         loading: true,
         GradeDoneTasks: GradeDoneTasks,
@@ -143,8 +251,6 @@ class Details extends Component {
       dataIndex: 'wordCommitted',
       key: 'wordCommitted',
       render: (text, record) => {
-
-        // return <Icon type="file-word" theme={text?"twoTone":"outlined"} />
         return text ? <a href={'http://localhost:5000/' + record.word}><Icon type="file-word" theme={"twoTone"} /></a> : <Icon type="file-word" theme={"outlined"} />
       },
     },
@@ -235,7 +341,14 @@ class Details extends Component {
           </div>
         </TabPane>
         <TabPane tab="评价分析" key="3">
-
+          <div className="statistics_result">
+            <div className="chartPie">
+              <PieChart data={PieChartData} options={PieChartOptions} width="400" height="400" />
+            </div>
+            <div className="chartBar">
+              <BarChart data={BarChartData} options={BarChartOptions} width="400" height="400" />
+            </div>
+          </div>
         </TabPane>
       </Tabs>;
 

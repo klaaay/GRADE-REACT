@@ -8,6 +8,31 @@ const Task = require("../models/Task")
 const TaskDone = require("../models/TaskDone")
 const EvalRecord = require("../models/EvalRecord")
 
+const checkAllCommitted = (wordCommitted, pptCommitted, videoCommitted) => {
+  return wordCommitted && pptCommitted && videoCommitted
+}
+
+const EvaluateGroupCreator = (userId, taskId, id, allRecievedStudentGroup, groupNumber, groupMember) => {
+  Student.find({ id: userId })
+    .exec()
+    .then(doc => {
+      let now_stu = doc[0].name;
+      while (true) {
+        if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
+          groupMember.push(allRecievedStudentGroup.pop());
+          if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
+            Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
+            TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
+            TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
+            break;
+          }
+        } else {
+          allRecievedStudentGroup = allRecievedStudentGroup.sort((a, b) => Math.random() > .5 ? -1 : 1)
+        }
+      }
+    })
+}
+
 exports.get_tasks = (req, res, next) => {
   const { id } = req.body;
   Student.find({ id: id })
@@ -70,6 +95,7 @@ exports.get_initial_task_info = (req, res, next) => {
     })
 }
 
+
 exports.word_upload = (req, res, next) => {
   const { id, userId, taskId, action } = req.body
   if (action === 'save') {
@@ -91,29 +117,19 @@ exports.word_upload = (req, res, next) => {
           .populate('id')
           .exec()
           .then(doc => {
-            if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+            if (checkAllCommitted(doc[0].wordCommitted, doc[0].pptCommitted, doc[0].videoCommitted)) {
               Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
               var groupNumber = doc[0].id.groupNumber
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
               var groupMember = []
-              Student.find({ id: userId })
-                .exec()
-                .then(doc => {
-                  let now_stu = doc[0].name;
-                  while (true) {
-                    if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
-                      groupMember.push(allRecievedStudentGroup.pop());
-                      if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
-                        Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
-                        TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
-                        TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
-                        break;
-                      }
-                    } else {
-                      allRecievedStudentGroup = allRecievedStudentGroup.sort((a, b) => Math.random() > .5 ? -1 : 1)
-                    }
-                  }
-                })
+              EvaluateGroupCreator(
+                userId,
+                taskId,
+                id,
+                allRecievedStudentGroup,
+                groupNumber,
+                groupMember
+              )
             }
           })
       })
@@ -142,30 +158,19 @@ exports.ppt_upload = (req, res, next) => {
           .populate('id')
           .exec()
           .then(doc => {
-            if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+            if (checkAllCommitted(doc[0].wordCommitted, doc[0].pptCommitted, doc[0].videoCommitted)) {
               Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
               var groupNumber = doc[0].id.groupNumber
               var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
-              
               var groupMember = []
-              Student.find({ id: userId })
-                .exec()
-                .then(doc => {
-                  let now_stu = doc[0].name;
-                  while (true) {
-                    if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
-                      groupMember.push(allRecievedStudentGroup.pop());
-                      if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
-                        Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
-                        TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
-                        TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
-                        break;
-                      }
-                    } else {
-                      allRecievedStudentGroup = allRecievedStudentGroup.sort((a, b) => Math.random() > .5 ? -1 : 1)
-                    }
-                  }
-                })
+              EvaluateGroupCreator(
+                userId,
+                taskId,
+                id,
+                allRecievedStudentGroup,
+                groupNumber,
+                groupMember
+              )
             }
           })
       })
@@ -193,33 +198,19 @@ exports.video_upload = (req, res, next) => {
           .populate('id')
           .exec()
           .then(doc => {
-            if (doc[0].wordCommitted && doc[0].pptCommitted && doc[0].videoCommitted) {
+            if (checkAllCommitted(doc[0].wordCommitted, doc[0].pptCommitted, doc[0].videoCommitted)) {
               Task.update({ _id: taskId }, { $inc: { DontDoneNumber: -1, DoneNumber: 1 } }).exec()
-              var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
-              console.log(allRecievedStudentGroup)
               var groupNumber = doc[0].id.groupNumber
-              console.log(groupNumber)
+              var allRecievedStudentGroup = doc[0].id.allRecievedStudentGroup
               var groupMember = []
-              Student.find({ id: userId })
-                .exec()
-                .then(doc => {
-                  let now_stu = doc[0].name;
-                  while (true) {
-                    if (allRecievedStudentGroup[allRecievedStudentGroup.length - 1] !== now_stu && !(groupMember.includes(allRecievedStudentGroup[allRecievedStudentGroup.length - 1]))) {
-                      groupMember.push(allRecievedStudentGroup.pop());
-                      if (groupMember.length >= groupNumber || allRecievedStudentGroup.length === 0) {
-                        console.log(allRecievedStudentGroup);
-                        console.log(groupMember);
-                        Task.update({ _id: taskId }, { $set: { allRecievedStudentGroup: allRecievedStudentGroup } }).exec()
-                        TaskDone.update({ _id: id }, { $set: { groupMember: groupMember } }).exec()
-                        TaskDone.update({ _id: id }, { $set: { groupMemberOrigin: groupMember } }).exec()
-                        break;
-                      }
-                    } else {
-                      allRecievedStudentGroup = allRecievedStudentGroup.sort((a, b) => Math.random() > .5 ? -1 : 1)
-                    }
-                  }
-                })
+              EvaluateGroupCreator(
+                userId,
+                taskId,
+                id,
+                allRecievedStudentGroup,
+                groupNumber,
+                groupMember
+              )
             }
           })
       })

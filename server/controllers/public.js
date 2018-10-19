@@ -11,7 +11,6 @@ const TaskDone = require("../models/TaskDone")
 const EvalRecord = require("../models/EvalRecord")
 const EvaluateStand = require("../models/EvaluateStand")
 
-const evaluateStand_val = require("../models/evaluateStand_val")
 
 
 const calcuScore = (
@@ -73,19 +72,10 @@ exports.change_password = (req, res) => {
 }
 
 exports.get_initial_evaluate_stand = (req, res, next) => {
-  // var EvaluateStand_doc = new EvaluateStand({
-  //   data_instructional_design: evaluateStand_val.data_instructional_design,
-  //   data_multimedia: evaluateStand_val.data_multimedia,
-  //   data_speech: evaluateStand_val.data_speech,
-  //   data_class: evaluateStand_val.data_class,
-  //   initial_values: evaluateStand_val.inital_values
-  // })
-  // EvaluateStand_doc.save()
   EvaluateStand
     .find()
     .exec()
     .then(doc => {
-      console.log(doc)
       res.json({
         evalStand: doc[0]
       })
@@ -265,7 +255,9 @@ exports.score_evaluate = (req, res, next) => {
                 })
                 EvalRecord_doc.save()
                 if (doc[0].groupMember.length === 0) {
-                  TaskDone.update({ _id: id }, { $set: { groupGradeDone: true } }).exec()
+                  TaskDone
+                    .update({ _id: id }, { $set: { groupGradeDone: true } })
+                    .exec()
                     .then(() => {
                       TaskDone
                         .find({ _id: id })

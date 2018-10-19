@@ -152,16 +152,56 @@ exports.deleted_task = (req, res, next) => {
 
 exports.task_detail = (req, res, next) => {
   const { id } = req.body;
-  TaskDone.find({ id: id })
+  TaskDone
+    .find({ id: id })
     .populate('id')
     .exec()
     .then(docs => {
-      let docs_str = JSON.stringify(docs);
-      let docs_str_key = docs_str.replace(/_id/g, 'key');
-      let docs_key = JSON.parse(docs_str_key);
-      res.json({
-        data: docs_key
-      })
+      var docs_str = JSON.stringify(docs);
+      var docs_str_key = docs_str.replace(/_id/g, 'key');
+      var docs_key = JSON.parse(docs_str_key);
+      var ChartData = [];
+      TaskDone
+        .find({ id: id })
+        .where('score')
+        .exists(false)
+        .then(doc_notEval => {
+          ChartData.push(doc_notEval.length)
+          TaskDone
+            .find({ id: id })
+            .where('score')
+            .lt(60)
+            .then(doc => {
+              ChartData.push(doc.length)
+              TaskDone
+                .find({ id: id })
+                .where('score')
+                .gte(60)
+                .lt(70)
+                .then(doc => {
+                  ChartData.push(doc.length)
+                  TaskDone
+                    .find({ id: id })
+                    .where('score')
+                    .gte(70)
+                    .lt(90)
+                    .then(doc => {
+                      ChartData.push(doc.length)
+                      TaskDone
+                        .find({ id: id })
+                        .where('score')
+                        .gte(90)
+                        .then(doc => {
+                          ChartData.push(doc.length)
+                          res.json({
+                            data: docs_key,
+                            ChartData: ChartData
+                          })
+                        })
+                    })
+                })
+            })
+        })
     })
 }
 

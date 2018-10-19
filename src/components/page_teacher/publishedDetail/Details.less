@@ -1,12 +1,29 @@
-.details_tabs{
-  .ant-tabs-bar{
-    margin:0;
+.details_tabs {
+  .ant-tabs-bar {
+    margin: 0;
   }
 }
 
-.score_cards{
+.score_cards {
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
   max-height: 520px;
+}
+
+.statistics_result {
+  display: flex;
+  flex-wrap: nowrap;
+  // overflow: auto;
+  // max-height: 520px;
+  justify-content: flex-start;
+  .chartPie,
+  .chartBar {
+    flex-basis: 50%;
+    display: flex;
+    justify-content: center;
+    canvas {
+      margin-top: 10px;
+    }
+  }
 }

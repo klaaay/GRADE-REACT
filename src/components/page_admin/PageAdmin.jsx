@@ -155,9 +155,6 @@ const mapDispatchToProps = (dispatch) => ({
   onStartGetClassList: e => {
     dispatch(startGetClassList());
   },
-  // onDefaultGetNowClassInfo: (e) => {
-  //   return dispatch(startGetNowClassInfo('软工161'));
-  // }
   onLogOut:()=>{
     dispatch(logOut());
   }

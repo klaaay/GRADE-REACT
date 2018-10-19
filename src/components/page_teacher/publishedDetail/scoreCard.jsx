@@ -29,12 +29,12 @@ const gridStyleGroup = {
   background: '#FFFBE6'
 };
 
-const gridStyleGroupTips = {
-  width: '100%',
-  textAlign: 'center',
-  height: '30px',
-  background: 'white'
-};
+// const gridStyleGroupTips = {
+//   width: '100%',
+//   textAlign: 'center',
+//   height: '30px',
+//   background: 'white'
+// };
 
 export default class scoreCard extends Component {
   render() {
@@ -45,7 +45,7 @@ export default class scoreCard extends Component {
       selfName,
       selfGrade,
       groupGrade,
-      groupMemberOrigin,
+      // groupMemberOrigin,
       score
     } = this.props
     return (

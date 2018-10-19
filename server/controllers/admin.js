@@ -187,7 +187,8 @@ exports.class_control = (req, res, next) => {
   } else if (addRole === 'student') {
     Student.find({ name: addName }, (err, doc) => {
       if (doc[0]) {
-        Student.find({ name: addName })
+        Student
+          .find({ name: addName })
           .exec()
           .then(doc => {
             if (doc[0].class) {
@@ -207,7 +208,8 @@ exports.class_control = (req, res, next) => {
                     message: '该学生已经存在'
                   })
                 } else {
-                  Class.update({ name: nowClass }, { $push: { classMates: doc[0].name } })
+                  Class
+                    .update({ name: nowClass }, { $push: { classMates: doc[0].name } })
                     .exec()
                     .then(() => {
                       Class.find({ name: nowClass })
@@ -221,7 +223,8 @@ exports.class_control = (req, res, next) => {
                           })
                         })
                     })
-                  Student.update({ name: addName }, { $set: { class: nowClass } })
+                  Student
+                    .update({ name: addName }, { $set: { class: nowClass } })
                     .exec()
                 }
               })
@@ -252,7 +255,8 @@ exports.get_classes = (req, res, next) => {
 
 exports.get_class_info = (req, res, next) => {
   const { nowClass } = req.body;
-  Class.find({ name: nowClass })
+  Class
+    .find({ name: nowClass })
     .exec()
     .then(doc => {
       res.json({

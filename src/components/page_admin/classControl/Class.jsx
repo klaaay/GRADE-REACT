@@ -99,7 +99,6 @@ class Class extends Component {
           visible={this.state.modalClassVisible}
           onOk={() => {
             onStartAddClass()
-            // refreshClassList()
             this.setModalClassVisible(false)
           }}
           onCancel={() => this.setModalClassVisible(false)}
@@ -116,7 +115,6 @@ class Class extends Component {
           visible={this.state.modalTeacherVisible}
           onOk={() => {
             onStartAddTeacher()
-            // refreshClassInfo(nowClass)
             this.setModalTeacherVisible(false)
           }}
           onCancel={() => this.setModalTeacherVisible(false)}
@@ -132,7 +130,6 @@ class Class extends Component {
           visible={this.state.modalStudentVisible}
           onOk={() => {
             onStartAddStudent()
-            // refreshClassInfo(nowClass)
             this.setModalStudentVisible(false)
           }}
           onCancel={() => this.setModalStudentVisible(false)}
@@ -174,13 +171,7 @@ const mapDispatchToProps = (dispatch) => ({
   onStartGetNowClassInfo: (value) => {
     console.log(`selected ${value}`);
     return dispatch(startGetNowClassInfo(value));
-  },
-  // refreshClassList: () => {
-  //   return dispatch(startGetClassList());
-  // },
-  // refreshClassInfo:(className)=>{
-  //   return dispatch(startGetNowClassInfo(className));
-  // }
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Class);

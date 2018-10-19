@@ -6,14 +6,11 @@ import $ from 'jquery'
 
 import { startChangePassword } from '../../../actions/admin.js'
 
-// import Alter from '../public/Alter.jsx'
-
 const FormItem = Form.Item;
 
 class Change extends Component {
   render() {
     const { onStartChangePassword } = this.props
-    // const { status,message } = this.props
     return (
       <Form>
         <FormItem
@@ -52,14 +49,6 @@ class Change extends Component {
             onClick={onStartChangePassword}
           >修改</Button>
         </FormItem>
-        {/* <FormItem
-          wrapperCol={{ span: 8, offset: 8 }}
-        >
-          <Alter
-            status={status}
-            message={message}
-          />
-        </FormItem> */}
       </Form>
     )
   }
