@@ -172,25 +172,27 @@ exports.score_evaluate = (req, res, next) => {
           type: 1,
           message: '评价成功(教师)'
         })
+        TaskDone
+          .find({ _id: id })
+          .populate('id')
+          .exec()
+          .then(doc => {
+            if (doc[0].teacherGradeDone && doc[0].selfGradeDone && doc[0].groupGradeDone) {
+              let score = calcuScore(
+                doc[0].id.teacherProportion,
+                doc[0].teacherGrade,
+                doc[0].id.selfProportion,
+                doc[0].selfGrade,
+                doc[0].id.groupProportion,
+                doc[0].groupGrade,
+                doc[0].id.groupNumber
+              )
+              console.log(score)
+              TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
+            }
+          })
       })
-    TaskDone
-      .find({ _id: id })
-      .populate('id')
-      .exec()
-      .then(doc => {
-        if (doc[0].teacherGradeDone && doc[0].selfGradeDone && doc[0].groupGradeDone) {
-          let score = calcuScore(
-            doc[0].id.teacherProportion,
-            doc[0].teacherGrade,
-            doc[0].id.selfProportion,
-            doc[0].selfGrade,
-            doc[0].id.groupProportion,
-            doc[0].groupGrade,
-            doc[0].id.groupNumber
-          )
-          TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
-        }
-      })
+
   } else if (role === 'self') {
     TaskDone.update({ _id: id }, { $set: { selfGradeDetail: details } }).exec()
     TaskDone.update({ _id: id }, { $set: { selfGrade: score } }).exec()
@@ -201,24 +203,24 @@ exports.score_evaluate = (req, res, next) => {
           type: 1,
           message: '评价成功(自评)'
         })
-      })
-    TaskDone
-      .find({ _id: id })
-      .populate('id')
-      .exec()
-      .then(doc => {
-        if (doc[0].teacherGradeDone && doc[0].selfGradeDone && doc[0].groupGradeDone) {
-          let score = calcuScore(
-            doc[0].id.teacherProportion,
-            doc[0].teacherGrade,
-            doc[0].id.selfProportion,
-            doc[0].selfGrade,
-            doc[0].id.groupProportion,
-            doc[0].groupGrade,
-            doc[0].id.groupNumber
-          )
-          TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
-        }
+        TaskDone
+          .find({ _id: id })
+          .populate('id')
+          .exec()
+          .then(doc => {
+            if (doc[0].teacherGradeDone && doc[0].selfGradeDone && doc[0].groupGradeDone) {
+              let score = calcuScore(
+                doc[0].id.teacherProportion,
+                doc[0].teacherGrade,
+                doc[0].id.selfProportion,
+                doc[0].selfGrade,
+                doc[0].id.groupProportion,
+                doc[0].groupGrade,
+                doc[0].id.groupNumber
+              )
+              TaskDone.update({ _id: id }, { $set: { score: score.toFixed(2) } }).exec()
+            }
+          })
       })
   } else if (role === 'group') {
     const { userId } = req.body;

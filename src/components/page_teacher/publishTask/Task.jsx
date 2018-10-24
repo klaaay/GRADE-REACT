@@ -102,8 +102,8 @@ class Task extends Component {
         >
           <div className="evaluate_divides">
             <div className="evaluate_divide">
-            <span>师评:</span>
-            <InputNumber
+              <span>师评:</span>
+              <InputNumber
                 defaultValue={50}
                 min={0}
                 max={100}
@@ -113,8 +113,8 @@ class Task extends Component {
               />
             </div>
             <div className="evaluate_divide">
-            <span>自评:</span>
-            <InputNumber
+              <span>自评:</span>
+              <InputNumber
                 defaultValue={20}
                 min={0}
                 max={100}
@@ -124,8 +124,8 @@ class Task extends Component {
               />
             </div>
             <div className="evaluate_divide">
-            <span>互评:</span>
-            <InputNumber
+              <span>互评:</span>
+              <InputNumber
                 defaultValue={30}
                 min={0}
                 max={100}
@@ -135,8 +135,8 @@ class Task extends Component {
               />
             </div>
             <div className="evaluate_divide">
-            <span>小组人数:</span>
-            <InputNumber
+              <span>小组人数:</span>
+              <InputNumber
                 min={2}
                 max={4}
                 defaultValue={3}
@@ -144,6 +144,57 @@ class Task extends Component {
             </div>
           </div>
         </FormItem>
+
+        {/* <FormItem
+          label="评分模块配比"
+          labelCol={{ span: 5 }}
+          wrapperCol={{ span: 16 }}
+        >
+          <div className="evaluate_divides">
+            <div className="evaluate_divide">
+              <span>师评:</span>
+              <InputNumber
+                defaultValue={50}
+                min={0}
+                max={100}
+                formatter={value => `${value}%`}
+                parser={value => value.replace('%', '')}
+                onChange={onTeacherProportionChange}
+              />
+            </div>
+            <div className="evaluate_divide">
+              <span>自评:</span>
+              <InputNumber
+                defaultValue={20}
+                min={0}
+                max={100}
+                formatter={value => `${value}%`}
+                parser={value => value.replace('%', '')}
+                onChange={onSelfProportionChange}
+              />
+            </div>
+            <div className="evaluate_divide">
+              <span>互评:</span>
+              <InputNumber
+                defaultValue={30}
+                min={0}
+                max={100}
+                formatter={value => `${value}%`}
+                parser={value => value.replace('%', '')}
+                onChange={onGroupProportionChange}
+              />
+            </div>
+            <div className="evaluate_divide">
+              <span>小组人数:</span>
+              <InputNumber
+                min={2}
+                max={4}
+                defaultValue={3}
+                onChange={onGroupNumberChange} />
+            </div>
+          </div>
+        </FormItem> */}
+
         <FormItem
           wrapperCol={{ span: 16, offset: 5 }}
         >

@@ -6,24 +6,30 @@
 
 .score_cards {
   display: flex;
-  flex-wrap: wrap;
-  // overflow: auto;
+  flex-wrap: wrap; // overflow: auto;
   // max-height: 520px;
 }
 
 .statistics_result {
   display: flex;
-  flex-wrap: nowrap;
-  // overflow: auto;
+  flex-wrap: wrap; // overflow: auto;
   // max-height: 520px;
   justify-content: flex-start;
   .chartPie,
   .chartBar {
     flex-basis: 50%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     canvas {
+      margin-top: 10px; // flex-basis: 100%
+    }
+    .instruction {
+      display: flex;
       margin-top: 10px;
+    }
+    .instruction>span {
+      padding-left: 10px;
     }
   }
 }

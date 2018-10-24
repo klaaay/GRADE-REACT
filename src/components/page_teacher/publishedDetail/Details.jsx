@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
-import { Table, Input, Button, Icon, Spin, Tabs } from 'antd';
+import { Table, Input, Button, Icon, Spin, Tabs, Badge } from 'antd';
 
 import ScoreCard from './scoreCard.jsx'
 
@@ -344,11 +344,19 @@ class Details extends Component {
           <div className="statistics_result">
             <div className="chartPie">
               <PieChart data={PieChartData} options={PieChartOptions} width="400" height="400" />
+              <div className="instruction">
+                <Badge status="success" text="优秀(90-100分)" />
+                <Badge status="processing" text="良好(70-90分)" />
+                <Badge status="warning" text="及格(60-70分)" />
+                <Badge status="error" text="不及格(0-60分)" />
+                <Badge status="default" text="未评价" />
+              </div>
             </div>
             <div className="chartBar">
               <BarChart data={BarChartData} options={BarChartOptions} width="400" height="400" />
             </div>
           </div>
+
         </TabPane>
       </Tabs>;
     }
