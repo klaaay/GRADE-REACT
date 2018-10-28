@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
-import { Layout, Menu, Icon, Dropdown,message } from 'antd';
+import { Layout, Menu, Icon, Dropdown, message } from 'antd';
 import $ from 'jquery'
 
 import {
@@ -66,6 +66,23 @@ class PageTeacher extends Component {
             >
               <Icon type="database" />
               <span>作业管理</span>
+            </Menu.Item>
+            <Menu.Item key="3"
+              className="class_control"
+              onClick={(e) => {
+                this.changeRouter('classControl')
+              }}
+            >
+              <Icon type="database" />
+              <span>班级管理</span>
+            </Menu.Item>
+            <Menu.Item key="4"
+              onClick={(e) => {
+                this.changeRouter('change')
+              }}
+            >
+              <Icon type="key" />
+              <span>密码修改</span>
             </Menu.Item>
           </Menu>
         </Sider>

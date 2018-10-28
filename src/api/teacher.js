@@ -9,7 +9,7 @@ export const search_class_list = async (id) => {
     body: data_str
   }
   try {
-    const response = await fetch('/teacher/class', fetchOption);
+    const response = await fetch('http://localhost:5001/teacher/class', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {
@@ -48,7 +48,7 @@ export const publish_task = async (
     body: data_str
   }
   try {
-    const response = await fetch('/teacher/publish', fetchOption);
+    const response = await fetch('http://localhost:5001/teacher/publish', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {
@@ -67,7 +67,7 @@ export const get_published_taks = async (id) => {
     body: data_str
   }
   try {
-    const response = await fetch('/teacher/published', fetchOption);
+    const response = await fetch('http://localhost:5001/teacher/published', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {
@@ -86,7 +86,7 @@ export const delete_published_task = async (id) => {
     body: data_str
   }
   try {
-    const response = await fetch('/teacher/delete', fetchOption);
+    const response = await fetch('http://localhost:5001/teacher/delete', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {

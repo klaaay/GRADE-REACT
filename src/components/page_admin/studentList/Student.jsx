@@ -44,7 +44,7 @@ class Student extends Component {
       });
     }
     return (
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} bordered={true}/>
     );
   }
 }

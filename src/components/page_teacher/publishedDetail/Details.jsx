@@ -137,7 +137,7 @@ class Details extends Component {
       body: data_str
     }
     try {
-      const response = await fetch('/teacher/detail', fetchOption);
+      const response = await fetch('http://localhost:5001/teacher/detail', fetchOption);
       const body = await response.json();
       let ChartData = body.ChartData;
       BarChartData.datasets[0].data = ChartData;
@@ -251,7 +251,7 @@ class Details extends Component {
       dataIndex: 'wordCommitted',
       key: 'wordCommitted',
       render: (text, record) => {
-        return text ? <a href={'http://localhost:5000/' + record.word}><Icon type="file-word" theme={"twoTone"} /></a> : <Icon type="file-word" theme={"outlined"} />
+        return text ? <a href={'http://localhost:5001/' + record.word}><Icon type="file-word" theme={"twoTone"} /></a> : <Icon type="file-word" theme={"outlined"} />
       },
     },
     {
@@ -259,7 +259,7 @@ class Details extends Component {
       dataIndex: 'pptCommitted',
       key: 'pptCommitted',
       render: (text, record) => {
-        return text ? <a href={'http://localhost:5000/' + record.ppt}><Icon type="file-ppt" theme={"twoTone"} /></a> : <Icon type="file-ppt" theme={"outlined"} />
+        return text ? <a href={'http://localhost:5001/' + record.ppt}><Icon type="file-ppt" theme={"twoTone"} /></a> : <Icon type="file-ppt" theme={"outlined"} />
       },
     },
     {
@@ -267,7 +267,7 @@ class Details extends Component {
       dataIndex: 'videoCommitted',
       key: 'videoCommitted',
       render: (text, record) => {
-        return text ? <a href={'http://localhost:5000/' + record.video}><Icon type="video-camera" theme={"twoTone"} /></a> : <Icon type="video-camera" theme={"outlined"} />
+        return text ? <a href={'http://localhost:5001/' + record.video}><Icon type="video-camera" theme={"twoTone"} /></a> : <Icon type="video-camera" theme={"outlined"} />
       },
     },
     {
@@ -318,6 +318,7 @@ class Details extends Component {
       >
         <TabPane tab="作业总览" key="1">
           <Table
+            bordered={true}
             columns={columns}
             dataSource={this.state.GradeTasks} />
         </TabPane>

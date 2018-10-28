@@ -107,7 +107,7 @@ export default class Evaluate extends Component {
   }
 
   componentWillMount = () => {
-    axios.post('/public/evaluateStandInitial')
+    axios.post('http://localhost:5001/public/evaluateStandInitial')
       .then(res => {
         console.log(res.data)
         const { evalStand } = res.data;
@@ -118,7 +118,7 @@ export default class Evaluate extends Component {
           data_speech: evalStand.data_speech,
           data_class: evalStand.data_class,
         })
-        axios.post('/public/evaluateInitial', {
+        axios.post('http://localhost:5001/public/evaluateInitial', {
           id: getQueryString('id'),
           role: getQueryString('role'),
           userId: getQueryString('userId')
@@ -179,7 +179,7 @@ export default class Evaluate extends Component {
                       display: display
                     }}
                     onClick={() => {
-                      axios.post('/public/evaluateSave', {
+                      axios.post('http://localhost:5001/public/evaluateSave', {
                         details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
@@ -214,7 +214,7 @@ export default class Evaluate extends Component {
                       display: display
                     }}
                     onClick={() => {
-                      axios.post('/public/evaluateSave', {
+                      axios.post('http://localhost:5001/public/evaluateSave', {
                         details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
@@ -249,7 +249,7 @@ export default class Evaluate extends Component {
                       display: display
                     }}
                     onClick={() => {
-                      axios.post('/public/evaluateSave', {
+                      axios.post('http://localhost:5001/public/evaluateSave', {
                         details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
@@ -284,7 +284,7 @@ export default class Evaluate extends Component {
                       display: display
                     }}
                     onClick={() => {
-                      axios.post('/public/evaluateSave', {
+                      axios.post('http://localhost:5001/public/evaluateSave', {
                         details: valuesTemp,
                         id: getQueryString('id'),
                         role: getQueryString('role'),
@@ -304,7 +304,7 @@ export default class Evaluate extends Component {
                     onClick={(e) => {
                       var score = calTotalValue(0, valuesTemp)
                       if (getQueryString('role') === 'group') {
-                        axios.post('/public/evaluate', {
+                        axios.post('http://localhost:5001/public/evaluate', {
                           score: score,
                           id: getQueryString('id'),
                           role: getQueryString('role'),
@@ -316,7 +316,7 @@ export default class Evaluate extends Component {
                           message.success(res.data.message)
                         })
                       } else {
-                        axios.post('/public/evaluate', {
+                        axios.post('http://localhost:5001/public/evaluate', {
                           details: valuesTemp,
                           score: score,
                           id: getQueryString('id'),

@@ -9,7 +9,7 @@ export const search_role_list = async (role) => {
     body: data_str
   }
   try {
-    const response = await fetch('/admin/search_list', fetchOption);
+    const response = await fetch('http://localhost:5001/admin/search_list', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {
@@ -33,7 +33,7 @@ export const add_user = async (userName, password, repass,name, role) => {
     body: user_str
   }
   try {
-    const response = await fetch('/admin/add', fetchOption);
+    const response = await fetch('http://localhost:5001/admin/add', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {
@@ -56,7 +56,7 @@ export const change_password = async (userName, relOld, oldPass, newPass, reNewP
     body: data_str
   }
   try {
-    const response = await fetch('/admin/change', fetchOption);
+    const response = await fetch('http://localhost:5001/public/change', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {
@@ -69,7 +69,7 @@ export const get_classes = async()=>{
     method: 'GET'
   }
   try {
-    const response = await fetch('/admin/getClasses', fetchOption);
+    const response = await fetch('http://localhost:5001/admin/getClasses', fetchOption);
     const body = await response.json();
     console.log(body)
     return body;
@@ -89,7 +89,7 @@ export const get_now_class_info = async(nowClass)=>{
     body: data_str
   }
   try {
-    const response = await fetch('/admin/getClassInfo', fetchOption);
+    const response = await fetch('http://localhost:5001/admin/getClassInfo', fetchOption);
     const body = await response.json();
     console.log(body)
     return body;
@@ -112,7 +112,7 @@ export const class_control = async(addRole,addName,nowClass)=>{
     body: data_str
   }
   try {
-    const response = await fetch('/admin/class_control', fetchOption);
+    const response = await fetch('http://localhost:5001/admin/class_control', fetchOption);
     const body = await response.json();
     console.log(body)
     return body;

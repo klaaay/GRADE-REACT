@@ -76,7 +76,7 @@ export default class Task extends Component {
         ><span>作业内容:</span>{content}</p>
         <p><span>开始时间:</span>{publishTime}</p>
         <p><span>截至时间:</span>{endTime}</p>
-        {outOfDate ? <p></p> : <p><span>剩余时间:</span>
+        {outOfDate ? <p><span>剩余时间:</span><span style={{ color: '#F5222D' }}>已过期</span></p> : <p><span>剩余时间:</span>
           <span
             style={
               (changeRestTime.split(" ")[2] === 'days' && changeRestTime.split(" ")[1]) > 3 ? { color: '#40A9FF' } : { color: '#F5222D' }

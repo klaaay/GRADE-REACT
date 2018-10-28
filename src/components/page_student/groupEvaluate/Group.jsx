@@ -107,6 +107,7 @@ class Group extends Component {
       <TabPane tab="评价通知" key="1">
         {
           askedTaskList.length > 0 ? <Table
+          bordered={true}
             columns={columnsAskedTaskList}
             dataSource={askedTaskList} /> : <span>你暂时没有需要评价的同学</span>
         }
@@ -115,6 +116,7 @@ class Group extends Component {
       <TabPane tab="评价记录" key="2">
         {
           evalRecords.length > 0 ? <Table
+          bordered={true}
             columns={columnsEvalRecords}
             dataSource={evalRecords} /> : <span>你暂时没有评价记录</span>
         }

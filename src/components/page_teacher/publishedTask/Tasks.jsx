@@ -17,7 +17,9 @@ class Tasks extends Component {
     console.log(publishedTasks)
     return (
       <Table
+        bordered={true}
         dataSource={publishedTasks}>
+
 
         <Column
           title="作业标题"

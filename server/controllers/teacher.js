@@ -205,3 +205,72 @@ exports.task_detail = (req, res, next) => {
     })
 }
 
+exports.class_control = (req, res, next) => {
+  console.log(req.body)
+  const { selectClass, addUsers } = req.body;
+  if (!selectClass || !addUsers) {
+    res.send({
+      type: 0,
+      message: '请填写完整信息'
+    })
+  } else {
+    var flag = 0;
+    addUsers.forEach((item, index) => {
+      flag = flag + 1;
+      var user_doc = new User({
+        _id: new mongoose.Types.ObjectId(),
+        userName: item.userName,
+        password: item.password,
+        role: 'student'
+      })
+      User
+        .find({ userName: item.userName })
+        .exec()
+        .then(docs => {
+          if (docs[0]) {
+            console.log('该用户已经存在')
+          } else {
+            user_doc
+              .save(function (err, doc) {
+                var student_doc = new Student({
+                  id: user_doc._id,
+                  name: item.name,
+                  class: selectClass
+                })
+                student_doc
+                  .save(function (err, doc) {
+                    console.log(1)
+                    console.log(item.name)
+                    console.log(selectClass)
+                    Class
+                      .update({ name: selectClass }, { $push: { classMates: item.name } })
+                      .exec()
+                      .then(doc => {
+                        console.log(doc)
+                      })
+                  })
+              })
+          }
+        })
+      if (flag === addUsers.length) {
+        res.json({
+          type: 1,
+          message: '名单添加成功'
+        })
+      }
+    })
+  }
+}
+
+exports.get_class_list = (req, res, next) => {
+  console.log(req.body)
+  const {selectClass} = req.body;
+  Class
+  .find({name:selectClass})
+  .exec()
+  .then(doc=>{
+    res.json({
+      classMates:doc[0].classMates
+    })
+  })
+}

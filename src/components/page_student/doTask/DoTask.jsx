@@ -75,7 +75,7 @@ export default class DoTask extends Component {
         fdWord.append('id', this.props.location.state._id)
         fdWord.append('action', action)
         if (action === 'save') {
-            axios.post('/student/word', fdWord, {
+            axios.post('http://localhost:5001/student/word', fdWord, {
                 onUploadProgress: progressEvent => {
                     this.setState({
                         percentWord: Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -91,7 +91,7 @@ export default class DoTask extends Component {
             if (!this.state.savedWord) {
                 message.warning('请先所选保存文件');
             } else {
-                axios.post('/student/word', fdWord)
+                axios.post('http://localhost:5001/student/word', fdWord)
                     .then((res) => {
                         this.setState({
                             percentWord: 100,
@@ -111,7 +111,7 @@ export default class DoTask extends Component {
         fdPPT.append('id', this.props.location.state._id)
         fdPPT.append('action', action)
         if (action === 'save') {
-            axios.post('/student/ppt', fdPPT, {
+            axios.post('http://localhost:5001/student/ppt', fdPPT, {
                 onUploadProgress: progressEvent => {
                     this.setState({
                         percentPPT: Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -127,7 +127,7 @@ export default class DoTask extends Component {
             if (!this.state.savedPPT) {
                 message.warning('请先所选保存文件');
             } else {
-                axios.post('/student/ppt', fdPPT)
+                axios.post('http://localhost:5001/student/ppt', fdPPT)
                     .then((res) => {
                         this.setState({
                             percentPPT: 100,
@@ -147,7 +147,7 @@ export default class DoTask extends Component {
         fdVideo.append('id', this.props.location.state._id)
         fdVideo.append('action', action)
         if (action === 'save') {
-            axios.post('/student/video', fdVideo, {
+            axios.post('http://localhost:5001/student/video', fdVideo, {
                 onUploadProgress: progressEvent => {
                     this.setState({
                         percentVideo: Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -163,7 +163,7 @@ export default class DoTask extends Component {
             if (!this.state.savedVideo) {
                 message.warning('请先所选保存文件');
             } else {
-                axios.post('/student/video', fdVideo)
+                axios.post('http://localhost:5001/student/video', fdVideo)
                     .then((res) => {
                         this.setState({
                             percentVideo: 100,
@@ -176,7 +176,7 @@ export default class DoTask extends Component {
     }
 
     componentDidMount = () => {
-        axios.post('/student/initialTaskInfo', { _id: this.props.location.state._id })
+        axios.post('http://localhost:5001/student/initialTaskInfo', { _id: this.props.location.state._id })
             .then(req => {
                 const { data } = req;
                 const { word, ppt, video, wordCommitted, pptCommitted, videoCommitted } = data.data;
