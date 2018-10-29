@@ -283,7 +283,8 @@ class Details extends Component {
                 query: {
                   role: 'teacher',
                   id: record.key,
-                  userId: userId
+                  userId: userId,
+                  publisher:record.id.publisherId
                 }
               })
             }}

@@ -11,6 +11,7 @@ export default class Task extends Component {
       taskId,
       title,
       publisher,
+      publisherId,
       content,
       publishTime,
       endTime,
@@ -32,7 +33,8 @@ export default class Task extends Component {
           query: {
             role: 'self',
             id: _id,
-            userId: userId
+            userId: userId,
+            publisher:publisherId
           }
         })
       }}

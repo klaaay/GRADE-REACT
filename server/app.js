@@ -26,18 +26,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/grade", function (err) {
 
 app.use(cors());
 
-// app.all('*', function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   // header("Access-Control-Allow-Credentials: true");
-//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Access-Control-Allow-Headers, X-Requested-With');
-//   // res.header("Access-Control-Allow-Headers", "Content-Type,XFILENAME,XFILECATEGORY,XFILESIZE");
-//   res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-//   res.header("X-Powered-By",' 3.2.1')
-//   res.header("Content-Type", "application/json;charset=utf-8");
-//   next();
-// });
-
-
 app.use('/public', express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -31,7 +31,7 @@ class Teacher extends Component {
         key: i,
         userName: teacherList.toJS()[i].userName,
         password: teacherList.toJS()[i].password,
-        name:teacherList.toJS()[i].name,
+        name: teacherList.toJS()[i].name,
         modify: <Icon
           type="edit"
           theme="outlined"
@@ -47,7 +47,7 @@ class Teacher extends Component {
       });
     }
     return (
-      <Table columns={columns} dataSource={data} bordered={true}/>
+      <Table columns={columns} dataSource={data} bordered={true} pagination={{ pageSize: 7 }} />
     );
   }
 }

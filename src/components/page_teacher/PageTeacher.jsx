@@ -78,6 +78,14 @@ class PageTeacher extends Component {
             </Menu.Item>
             <Menu.Item key="4"
               onClick={(e) => {
+                this.changeRouter('standSet')
+              }}
+            >
+              <Icon type="key" />
+              <span>标准设置</span>
+            </Menu.Item>
+            <Menu.Item key="5"
+              onClick={(e) => {
                 this.changeRouter('change')
               }}
             >

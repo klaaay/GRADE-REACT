@@ -11,5 +11,6 @@ router.post('/detail', teacherController.task_detail)
 
 router.post('/classControl', teacherController.class_control)
 router.post('/classList', teacherController.get_class_list)
+router.post('/evalStandModify', teacherController.modify_stand)
 
 module.exports = router;

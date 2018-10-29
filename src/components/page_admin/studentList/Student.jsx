@@ -44,7 +44,7 @@ class Student extends Component {
       });
     }
     return (
-      <Table columns={columns} dataSource={data} bordered={true}/>
+      <Table columns={columns} dataSource={data} bordered={true} pagination={{ pageSize: 7 }}/>
     );
   }
 }

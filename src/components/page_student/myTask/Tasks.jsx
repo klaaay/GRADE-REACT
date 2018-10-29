@@ -32,6 +32,7 @@ class Tasks extends Component {
               _id={item._id}
               taskId={item.id._id}
               title={item.id.title}
+              publisherId={item.id.publisherId}
               publisher={item.id.publisher}
               content={item.id.content}
               publishTime={item.id.publishTime}

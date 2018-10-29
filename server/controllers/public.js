@@ -72,13 +72,17 @@ exports.change_password = (req, res) => {
 }
 
 exports.get_initial_evaluate_stand = (req, res, next) => {
+  const { publisher } = req.body
+  // console.log(publisher)
   EvaluateStand
-    .find()
+    .find({ owner: publisher })
     .exec()
     .then(doc => {
-      res.json({
-        evalStand: doc[0]
-      })
+      if (doc[0]) {
+        res.json({
+          evalStand: doc[0].stand
+        })
+      }
     })
 }
 

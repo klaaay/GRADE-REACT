@@ -58,6 +58,7 @@ exports.get_asked_tasks = (req, res, next) => {
       TaskDone
         .where('groupMember')
         .elemMatch({ $eq: name })
+        .populate('id')
         .exec()
         .then(docs => {
           let docs_str = JSON.stringify(docs);

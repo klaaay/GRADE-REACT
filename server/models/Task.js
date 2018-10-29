@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const taskSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
+  publisherId: mongoose.Schema.Types.ObjectId,
   publisher: String,
   classes: [String],
   title: String,

@@ -11,7 +11,6 @@ class Group extends Component {
   render() {
     const { askedTaskList, evalRecords } = this.props
     const userId = localStorage.getItem("id");
-    console.log(evalRecords)
     const columnsEvalRecords = [
       {
         title: '发布老师',
@@ -92,7 +91,8 @@ class Group extends Component {
                 query: {
                   role: 'group',
                   id: record.key,
-                  userId: userId
+                  userId: userId,
+                  publisher:record.id.publisherId
                 }
               })
             }}

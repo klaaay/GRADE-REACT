@@ -7,14 +7,17 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
-  .manage-teacher,.manage-student {
+  .manage-teacher,
+  .manage-student {
     flex-basis: 50%;
     margin: 5px;
     margin-top: 20px;
+    max-height: 450px;
+    overflow: auto;
     .ant-list-item-content {
       display: flex;
       justify-content: flex-start;
-      .hidden{
+      .hidden {
         flex-grow: 1;
       }
     }

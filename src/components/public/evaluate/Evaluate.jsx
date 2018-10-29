@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Tabs, Table, Input, Button, message } from 'antd';
+import { Tabs, Table, Input, Button, message, Row, Col, Divider } from 'antd';
 import $ from 'jquery'
 
 import axios from 'axios'
@@ -84,13 +84,13 @@ const columns = [{
     return <Input
       className="eval_detail_box"
       placeholder="请打分"
-      defaultValue={valuesTemp[record.value][record.key]}
+      defaultValue={valuesTemp[record.value][record.index]}
       onChange={(e) => {
         if (e.target.value > record.value_total) {
           message.error('超过总分值,请重新打分')
           e.target.value = ''
         } else {
-          valuesTemp[text][record.key] = parseFloat(e.target.value)
+          valuesTemp[text][record.index] = parseFloat(e.target.value)
         }
       }}
     />
@@ -99,24 +99,22 @@ const columns = [{
 
 export default class Evaluate extends Component {
   state = {
-    data_instructional_design: [],
-    data_multimedia: [],
-    data_speech: [],
-    data_class: [],
+    evalStand: {},
+    evalStandKeys: [],
     committed: false,
   }
 
   componentWillMount = () => {
-    axios.post('http://localhost:5001/public/evaluateStandInitial')
+    axios.post('http://localhost:5001/public/evaluateStandInitial', {
+      publisher: getQueryString('publisher')
+    })
       .then(res => {
         console.log(res.data)
         const { evalStand } = res.data;
         valuesTemp = evalStand.initial_values
         this.setState({
-          data_instructional_design: evalStand.data_instructional_design,
-          data_multimedia: evalStand.data_multimedia,
-          data_speech: evalStand.data_speech,
-          data_class: evalStand.data_class,
+          evalStand: evalStand,
+          evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values'))
         })
         axios.post('http://localhost:5001/public/evaluateInitial', {
           id: getQueryString('id'),
@@ -130,7 +128,6 @@ export default class Evaluate extends Component {
               this.setState({
                 committed: teacherGradeDone
               })
-              console.log(teacherGradeDetail)
               if (teacherGradeDetail) {
                 valuesTemp = teacherGradeDetail;
                 fillInitialValue(teacherGradeDetail);
@@ -167,173 +164,86 @@ export default class Evaluate extends Component {
     const display = this.state.committed ? 'none' : 'inline-block'
     return (
       <div className="card-container">
+        <Row>
+          <Col span={16} >
+            <span
+              style={{
+                // color: '#1890FF',
+                marginRight: '20px',
+                marginLeft: '10px',
+                fontWeight: 'bold'
+              }}
+            >当前评价状态:</span>
+            {this.state.committed ? <Button type="primary">已评价</Button> : <Button type="danger">未评价</Button>}
+          </Col>
+          <Col span={4} >
+            <Button
+              style={{
+                width: '80%',
+                marginRight: '20px',
+                display: display
+              }}
+              onClick={() => {
+                axios.post('http://localhost:5001/public/evaluateSave', {
+                  details: valuesTemp,
+                  id: getQueryString('id'),
+                  role: getQueryString('role'),
+                  userId: getQueryString('userId')
+                })
+                  .then(res => {
+                    message.success(res.data.message)
+                  })
+              }}
+            >保存</Button>
+          </Col>
+          <Col span={4} >
+            <Button
+              style={{
+                width: '80%',
+                marginLeft: '20px',
+                display: display
+              }}
+              onClick={(e) => {
+                var score = calTotalValue(0, valuesTemp)
+                if (getQueryString('role') === 'group') {
+                  axios.post('http://localhost:5001/public/evaluate', {
+                    score: score,
+                    id: getQueryString('id'),
+                    role: getQueryString('role'),
+                    userId: getQueryString('userId')
+                  }).then(res => {
+                    this.setState({
+                      committed: true
+                    })
+                    message.success(res.data.message)
+                  })
+                } else {
+                  axios.post('http://localhost:5001/public/evaluate', {
+                    details: valuesTemp,
+                    score: score,
+                    id: getQueryString('id'),
+                    role: getQueryString('role')
+                  }).then(res => {
+                    this.setState({
+                      committed: true
+                    })
+                    message.success(res.data.message);
+                  })
+                }
+              }}
+            >评分</Button>
+          </Col>
+        </Row>
+        <Divider />
         <Tabs type="card" onChange={callback} className="evaluate_tabs">
-          <TabPane tab="教学设计(单项25分)" key="instructional" id="instructional" >
-            <Table columns={columns} dataSource={this.state.data_instructional_design} className="evaluate_table" bordered={true} pagination={false}
-              footer={() =>
-                <div>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginRight: '20px',
-                      display: display
-                    }}
-                    onClick={() => {
-                      axios.post('http://localhost:5001/public/evaluateSave', {
-                        details: valuesTemp,
-                        id: getQueryString('id'),
-                        role: getQueryString('role'),
-                        userId: getQueryString('userId')
-                      })
-                        .then(res => {
-                          message.success(res.data.message)
-                        })
-                    }}
-                  >保存</Button>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginLeft: '20px'
-                    }}
-                    onClick={(e) => {
-                      $($('.evaluate_tabs .ant-tabs-tab')[1]).trigger('click')
-                    }}
-                  >下一项</Button>
-                </div>
-              }>
-            </Table>
-          </TabPane>
-          <TabPane tab="多媒体课件制作(单项15分)" key="multimedia" id="multimedia">
-            <Table columns={columns} dataSource={this.state.data_multimedia} className="evaluate_table" bordered={true} pagination={false}
-              footer={() =>
-                <div>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginRight: '20px',
-                      display: display
-                    }}
-                    onClick={() => {
-                      axios.post('http://localhost:5001/public/evaluateSave', {
-                        details: valuesTemp,
-                        id: getQueryString('id'),
-                        role: getQueryString('role'),
-                        userId: getQueryString('userId')
-                      })
-                        .then(res => {
-                          message.success(res.data.message)
-                        })
-                    }}
-                  >保存</Button>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginLeft: '20px'
-                    }}
-                    onClick={(e) => {
-                      $($('.evaluate_tabs .ant-tabs-tab')[2]).trigger('click')
-                    }}
-                  >下一项</Button>
-                </div>
-              }>
-            </Table>
-          </TabPane>
-          <TabPane tab="即席讲演(单项15分)" key="speech" id="speech">
-            <Table columns={columns} dataSource={this.state.data_speech} className="evaluate_table" bordered={true} pagination={false}
-              footer={() =>
-                <div>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginRight: '20px',
-                      display: display
-                    }}
-                    onClick={() => {
-                      axios.post('http://localhost:5001/public/evaluateSave', {
-                        details: valuesTemp,
-                        id: getQueryString('id'),
-                        role: getQueryString('role'),
-                        userId: getQueryString('userId')
-                      })
-                        .then(res => {
-                          message.success(res.data.message)
-                        })
-                    }}
-                  >保存</Button>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginLeft: '20px'
-                    }}
-                    onClick={(e) => {
-                      $($('.evaluate_tabs .ant-tabs-tab')[3]).trigger('click')
-                    }}
-                  >下一项</Button>
-                </div>
-              }>
-            </Table>
-          </TabPane>
-          <TabPane tab="模拟上课·板书(单项45分)" key="class" id="class">
-            <Table columns={columns} dataSource={this.state.data_class} className="evaluate_table" bordered={true} pagination={false}
-              footer={() =>
-                <div>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginRight: '20px',
-                      display: display
-                    }}
-                    onClick={() => {
-                      axios.post('http://localhost:5001/public/evaluateSave', {
-                        details: valuesTemp,
-                        id: getQueryString('id'),
-                        role: getQueryString('role'),
-                        userId: getQueryString('userId')
-                      })
-                        .then(res => {
-                          message.success(res.data.message)
-                        })
-                    }}
-                  >保存</Button>
-                  <Button
-                    style={{
-                      width: '45%',
-                      marginLeft: '20px',
-                      display: display
-                    }}
-                    onClick={(e) => {
-                      var score = calTotalValue(0, valuesTemp)
-                      if (getQueryString('role') === 'group') {
-                        axios.post('http://localhost:5001/public/evaluate', {
-                          score: score,
-                          id: getQueryString('id'),
-                          role: getQueryString('role'),
-                          userId: getQueryString('userId')
-                        }).then(res => {
-                          this.setState({
-                            committed: true
-                          })
-                          message.success(res.data.message)
-                        })
-                      } else {
-                        axios.post('http://localhost:5001/public/evaluate', {
-                          details: valuesTemp,
-                          score: score,
-                          id: getQueryString('id'),
-                          role: getQueryString('role')
-                        }).then(res => {
-                          this.setState({
-                            committed: true
-                          })
-                          message.success(res.data.message);
-                        })
-                      }
-                    }}
-                  >评分</Button>
-                </div>
-              }>
-            </Table>
-          </TabPane>
+          {
+            this.state.evalStandKeys.map((item, index) => {
+              return <TabPane tab={item} key={item} id={item} >
+                <Table columns={columns} dataSource={this.state.evalStand[item]} className="evaluate_table" bordered={true} pagination={false}>
+                </Table>
+              </TabPane>
+            })
+          }
         </Tabs>
       </div>
     )

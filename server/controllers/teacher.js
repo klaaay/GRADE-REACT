@@ -8,6 +8,7 @@ const Student = require("../models/Student");
 const Class = require("../models/Class");
 const Task = require("../models/Task");
 const TaskDone = require("../models/TaskDone");
+const EvaluateStand = require("../models/EvaluateStand")
 
 const allReciverWithGroupNumberCreater = (allReciverArray, groupNumber) => {
   var allReciverArray_withGroup = allReciverArray
@@ -79,6 +80,7 @@ exports.publish_task = (req, res, next) => {
                 allRecievedStudentGroup = allReciverWithGroupNumberCreater(allRecievedStudentGroup, groupNumber);
                 var Task_doc = new Task({
                   _id: new mongoose.Types.ObjectId(),
+                  publisherId: publisherId,
                   publisher: teacherName,
                   classes: classes,
                   title: title,
@@ -206,7 +208,6 @@ exports.task_detail = (req, res, next) => {
 }
 
 exports.class_control = (req, res, next) => {
-  console.log(req.body)
   const { selectClass, addUsers } = req.body;
   if (!selectClass || !addUsers) {
     res.send({
@@ -239,9 +240,6 @@ exports.class_control = (req, res, next) => {
                 })
                 student_doc
                   .save(function (err, doc) {
-                    console.log(1)
-                    console.log(item.name)
-                    console.log(selectClass)
                     Class
                       .update({ name: selectClass }, { $push: { classMates: item.name } })
                       .exec()
@@ -264,13 +262,26 @@ exports.class_control = (req, res, next) => {
 
 exports.get_class_list = (req, res, next) => {
   console.log(req.body)
-  const {selectClass} = req.body;
+  const { selectClass } = req.body;
   Class
-  .find({name:selectClass})
-  .exec()
-  .then(doc=>{
-    res.json({
-      classMates:doc[0].classMates
+    .find({ name: selectClass })
+    .exec()
+    .then(doc => {
+      res.json({
+        classMates: doc[0].classMates
+      })
     })
-  })
+}
+
+exports.modify_stand = (req, res, next) => {
+  const { owner, evalStand } = req.body
+  EvaluateStand
+    .update({ owner: owner }, { $set: { stand: evalStand } })
+    .exec()
+    .then(() => {
+      res.json({
+        type: 1,
+        message: '保存修改成功',
+      })
+    })
 }
