@@ -13,27 +13,6 @@ let valuesTemp = {
 
 }
 
-const calTotalValue = (total_init, values) => {
-  let keys = Object.keys(values);
-  let total = total_init;
-  keys.forEach((item, index) => {
-    total += values[item].reduce((a, b) => (a + b), 0)
-  })
-  return total;
-}
-
-function fillInitialValue(GradeDetail) {
-  for (let i = 0; i < GradeDetail['instructional'].length; i++) {
-    if (GradeDetail['instructional'][i]) {
-      $($('.eval_detail_box')[i]).val(GradeDetail['instructional'][i])
-    }
-  }
-}
-
-function callback(key) {
-  console.log(key);
-}
-
 function getQueryString(name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
   var r = window.location.search.substr(1).match(reg);
@@ -43,78 +22,106 @@ function getQueryString(name) {
   return null;
 }
 
-function find_if_saved(groupGradeDetail) {
-  if (groupGradeDetail) {
-    var flag = 0;
-    var details = {};
-    groupGradeDetail.forEach(item => {
-      if (item.userId.toString() === getQueryString('userId').toString()) {
-        flag++;
-        details = item.details;
-      }
-    })
-    if (flag) {
-      return details;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-}
 
-const columns = [{
-  title: '评价内容',
-  dataIndex: 'eval_content',
-  key: 'eval_content',
-  render: text => <a>{text}</a>,
-}, {
-  title: '评价标准',
-  dataIndex: 'eval_stand',
-  key: 'eval_stand',
-}, {
-  title: '分值(总)',
-  dataIndex: 'value_total',
-  key: 'value_total',
-}, {
-  title: '评分',
-  key: 'value',
-  dataIndex: 'value',
-  render: (text, record) => {
-    return <Input
-      className="eval_detail_box"
-      placeholder="请打分"
-      defaultValue={valuesTemp[record.value][record.index]}
-      onChange={(e) => {
-        if (e.target.value > record.value_total) {
-          message.error('超过总分值,请重新打分')
-          e.target.value = ''
-        } else {
-          valuesTemp[text][record.index] = parseFloat(e.target.value)
-        }
-      }}
-    />
-  }
-}];
 
 export default class Evaluate extends Component {
   state = {
     evalStand: {},
+    values: {},
     evalStandKeys: [],
     committed: false,
+    defalutM: ""
   }
+
+  calTotalValue = (total_init, values) => {
+    let keys = Object.keys(values);
+    let total = total_init;
+    keys.forEach((item, index) => {
+      total += values[item].reduce((a, b) => (a + b), 0)
+    })
+    return total;
+  }
+
+  fillInitialValue(GradeDetail) {
+    for (let i = 0; i < GradeDetail[this.state.defalutM].length; i++) {
+      if (GradeDetail[this.state.defalutM][i]) {
+        $($('.eval_detail_box')[i]).val(GradeDetail[this.state.defalutM][i])
+      }
+    }
+  }
+
+  callback(key) {
+    console.log(key);
+  }
+
+
+
+  find_if_saved(groupGradeDetail) {
+    if (groupGradeDetail) {
+      var flag = 0;
+      var details = {};
+      groupGradeDetail.forEach(item => {
+        if (item.userId.toString() === getQueryString('userId').toString()) {
+          flag++;
+          details = item.details;
+        }
+      })
+      if (flag) {
+        return details;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  columns = [{
+    title: '评价内容',
+    dataIndex: 'eval_content',
+    key: 'eval_content',
+    render: text => <a>{text}</a>,
+  }, {
+    title: '评价标准',
+    dataIndex: 'eval_stand',
+    key: 'eval_stand',
+  }, {
+    title: '分值(总)',
+    dataIndex: 'value_total',
+    key: 'value_total',
+  }, {
+    title: '评分',
+    key: 'value',
+    dataIndex: 'value',
+    render: (text, record) => {
+      return <Input
+        className="eval_detail_box"
+        placeholder="请打分"
+        defaultValue={valuesTemp[text][record.index]}
+        onChange={(e) => {
+          if (e.target.value > record.value_total) {
+            message.error('超过总分值,请重新打分')
+            e.target.value = ''
+          } else {
+            valuesTemp[text][record.index] = parseFloat(e.target.value)
+          }
+        }}
+      />
+    }
+  }];
 
   componentWillMount = () => {
     axios.post('http://localhost:5001/public/evaluateStandInitial', {
       publisher: getQueryString('publisher')
     })
       .then(res => {
-        console.log(res.data)
         const { evalStand } = res.data;
         valuesTemp = evalStand.initial_values
         this.setState({
           evalStand: evalStand,
-          evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values'))
+          values: valuesTemp,
+          evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values')),
+          defalutM: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values'))[0]
         })
         axios.post('http://localhost:5001/public/evaluateInitial', {
           id: getQueryString('id'),
@@ -130,7 +137,7 @@ export default class Evaluate extends Component {
               })
               if (teacherGradeDetail) {
                 valuesTemp = teacherGradeDetail;
-                fillInitialValue(teacherGradeDetail);
+                this.fillInitialValue(teacherGradeDetail);
               }
             }
             else if (role === 'self') {
@@ -140,15 +147,19 @@ export default class Evaluate extends Component {
               })
               if (selfGradeDetail) {
                 valuesTemp = selfGradeDetail;
-                fillInitialValue(selfGradeDetail);
+                console.log(valuesTemp)
+                this.setState({
+                  values: valuesTemp
+                })
+                this.fillInitialValue(selfGradeDetail);
               }
             }
             else if (role === 'group') {
               let { groupGradeDetail } = res.data.data;
-              var result = find_if_saved(groupGradeDetail)
+              var result = this.find_if_saved(groupGradeDetail)
               if (result) {
                 valuesTemp = result;
-                fillInitialValue(result);
+                this.fillInitialValue(result);
               }
             }
           })
@@ -156,9 +167,7 @@ export default class Evaluate extends Component {
   }
 
   componentDidMount = () => {
-
   }
-
 
   render() {
     const display = this.state.committed ? 'none' : 'inline-block'
@@ -168,7 +177,6 @@ export default class Evaluate extends Component {
           <Col span={16} >
             <span
               style={{
-                // color: '#1890FF',
                 marginRight: '20px',
                 marginLeft: '10px',
                 fontWeight: 'bold'
@@ -204,7 +212,7 @@ export default class Evaluate extends Component {
                 display: display
               }}
               onClick={(e) => {
-                var score = calTotalValue(0, valuesTemp)
+                var score = this.calTotalValue(0, valuesTemp)
                 if (getQueryString('role') === 'group') {
                   axios.post('http://localhost:5001/public/evaluate', {
                     score: score,
@@ -235,11 +243,11 @@ export default class Evaluate extends Component {
           </Col>
         </Row>
         <Divider />
-        <Tabs type="card" onChange={callback} className="evaluate_tabs">
+        <Tabs type="card" onChange={this.callback} className="evaluate_tabs">
           {
             this.state.evalStandKeys.map((item, index) => {
               return <TabPane tab={item} key={item} id={item} >
-                <Table columns={columns} dataSource={this.state.evalStand[item]} className="evaluate_table" bordered={true} pagination={false}>
+                <Table columns={this.columns} dataSource={this.state.evalStand[item]} className="evaluate_table" bordered={true} pagination={false}>
                 </Table>
               </TabPane>
             })

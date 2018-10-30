@@ -9,11 +9,7 @@ const FormItem = Form.Item;
 
 let evalStandTemp = {}
 
-// let evalStandTempKeys = []
-
 const TabPane = Tabs.TabPane;
-
-
 
 export default class StandSet extends Component {
 
@@ -21,7 +17,13 @@ export default class StandSet extends Component {
     evalStand: {},
     evalStandKeys: [],
     moduleNow: '',
-    visibleAddStandDetail: false
+    addEvalContent: '',
+    addEvalStand: '',
+    addValueTotal: 0,
+    addModuleName: '',
+    addModuleValue: 0,
+    visibleAddStandDetail: false,
+    visibleAddStandM: false
   }
 
   showModalStandDetail = () => {
@@ -31,8 +33,24 @@ export default class StandSet extends Component {
   }
 
   handleOkStandDetail = (e) => {
+    var newRecord = {};
+    if (evalStandTemp[this.state.moduleNow].length) {
+      var lastRecord = evalStandTemp[this.state.moduleNow][evalStandTemp[this.state.moduleNow].length - 1];
+      newRecord.key = lastRecord.key + 1;
+      newRecord.index = lastRecord.index + 1;
+    } else {
+      newRecord.key = 0;
+      newRecord.index = 0;
+    }
+    newRecord.value = this.state.moduleNow;
+    newRecord.eval_content = this.state.addEvalContent;
+    newRecord.eval_stand = this.state.addEvalStand;
+    newRecord.value_total = parseFloat(this.state.addValueTotal);
+    evalStandTemp[this.state.moduleNow].push(newRecord);
+    evalStandTemp['initial_values'][this.state.moduleNow].push(0);
     this.setState({
       visibleAddStandDetail: false,
+      evalStand: evalStandTemp
     });
   }
 
@@ -42,15 +60,36 @@ export default class StandSet extends Component {
     });
   }
 
-  // find_index = (StandModule, key) => {
-  //   var findIndex;
-  //   StandModule.forEach((item, index) => {
-  //     if (item.key === key) {
-  //       findIndex = index;
-  //     }
-  //   })
-  //   return findIndex
-  // }
+
+  showModalStandM = () => {
+    this.setState({
+      visibleAddStandM: true,
+    });
+  }
+
+  handleOkStandM = (e) => {
+    console.log(this.state.addModuleName)
+    console.log(this.state.addModuleValue)
+    var newkey = this.state.addModuleName + '(单项' + this.state.addModuleValue + '分)';
+    console.log(this.state.evalStandKeys)
+    var EvalStandKeys = this.state.evalStandKeys;
+    EvalStandKeys.push(newkey);
+    evalStandTemp[newkey] = [];
+    evalStandTemp['initial_values'][newkey] = [];
+    console.log(evalStandTemp)
+    this.setState({
+      visibleAddStandM: false,
+      evalStand: evalStandTemp,
+      evalStandKeys: EvalStandKeys
+    });
+  }
+
+  handleCancelStandM = (e) => {
+    this.setState({
+      visibleAddStandM: false,
+    });
+  }
+
 
   columns = [{
     title: '评价内容',
@@ -60,7 +99,7 @@ export default class StandSet extends Component {
       return <Input
         defaultValue={text}
         onChange={(e) => {
-          evalStandTemp[record.title][record.index]['eval_content'] = e.target.value;
+          evalStandTemp[record.value][record.index]['eval_content'] = e.target.value;
         }}
       />
     }
@@ -73,7 +112,7 @@ export default class StandSet extends Component {
         style={{ resize: 'none' }}
         defaultValue={text}
         onChange={(e) => {
-          evalStandTemp[record.title][record.index]['eval_stand'] = e.target.value;
+          evalStandTemp[record.value][record.index]['eval_stand'] = e.target.value;
         }}
       />
     }
@@ -85,7 +124,7 @@ export default class StandSet extends Component {
       return <Input
         defaultValue={text}
         onChange={(e) => {
-          evalStandTemp[record.title][record.index]['value_total'] = e.target.value;
+          evalStandTemp[record.value][record.index]['value_total'] = parseFloat(e.target.value);
         }}
       />
     }
@@ -94,23 +133,16 @@ export default class StandSet extends Component {
     dataIndex: 'operation',
     key: 'operation',
     render: (text, record) => {
-      // console.log(record)
       return <Icon type="delete" theme="outlined"
         onClick={() => {
           var delIndex = record.index;
-          console.log(delIndex)
           evalStandTemp[this.state.moduleNow].splice(record.index, 1)
+          evalStandTemp['initial_values'][this.state.moduleNow].pop(0);
           for (var i = delIndex; i < evalStandTemp[this.state.moduleNow].length; i++) {
             evalStandTemp[this.state.moduleNow][i].index = evalStandTemp[this.state.moduleNow][i].index - 1;
           }
-          console.log(evalStandTemp)
           this.setState({
             evalStand: evalStandTemp
-          }, () => {
-            // evalStandTemp[this.state.moduleNow].map(item => {
-            //   item.key = item.key - 1;
-            //   return item;
-            // })
           })
         }}
       />
@@ -126,7 +158,6 @@ export default class StandSet extends Component {
         console.log(res.data)
         const { evalStand } = res.data;
         evalStandTemp = evalStand;
-        // evalStandTempKeys = Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values'));
         this.setState({
           evalStand: evalStand,
           evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values')),
@@ -147,6 +178,7 @@ export default class StandSet extends Component {
                 width: '80%',
                 marginLeft: '20px',
               }}
+              onClick={this.showModalStandM}
             >添加评分模块
             </Button>
           </Col>
@@ -197,7 +229,10 @@ export default class StandSet extends Component {
                   pagination={false}
                   footer={() =>
                     <div>
-                      <Button type="danger" style={{ width: '45%', marginRight: '50px' }}>删除模块</Button>
+                      <Button
+                        type="danger"
+                        style={{ width: '45%', marginRight: '50px' }}
+                      >删除模块</Button>
                       <Button
                         type="primary"
                         style={{ width: '45%', marginLeft: '5px' }}
@@ -220,7 +255,14 @@ export default class StandSet extends Component {
             <FormItem
               label="评价内容"
             >
-              <Input placeholder="评价内容" />
+              <Input
+                placeholder="评价内容"
+                onChange={(e) => {
+                  this.setState({
+                    addEvalContent: e.target.value
+                  })
+                }}
+              />
             </FormItem>
             <FormItem
               label="评价标准"
@@ -228,12 +270,57 @@ export default class StandSet extends Component {
               <TextArea
                 rows={4}
                 style={{ resize: 'none' }}
+                onChange={(e) => {
+                  this.setState({
+                    addEvalStand: e.target.value
+                  })
+                }}
               />
             </FormItem>
             <FormItem
               label="分值(总)	"
             >
-              <Input placeholder="分值(总)" />
+              <Input
+                placeholder="分值(总)"
+                onChange={(e) => {
+                  this.setState({
+                    addValueTotal: e.target.value
+                  })
+                }}
+              />
+            </FormItem>
+          </Form>
+        </Modal>
+        <Modal
+          title="添加评分细则"
+          visible={this.state.visibleAddStandM}
+          onOk={this.handleOkStandM}
+          onCancel={this.handleCancelStandM}
+        >
+          <Form>
+            <FormItem
+              label="模块名称"
+            >
+              <Input
+                placeholder="模块名称"
+                onChange={(e) => {
+                  this.setState({
+                    addModuleName: e.target.value
+                  })
+                }}
+              />
+            </FormItem>
+            <FormItem
+              label="模块分值"
+            >
+              <Input
+                placeholder="模块分值"
+                onChange={(e) => {
+                  this.setState({
+                    addModuleValue: e.target.value
+                  })
+                }}
+              />
             </FormItem>
           </Form>
         </Modal>
