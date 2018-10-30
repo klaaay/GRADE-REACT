@@ -25,7 +25,6 @@ export default class Task extends Component {
       score,
       groupNumber
     } = this.props
-    console.log(restTime)
     const myAction = (committed) ? <a
       onClick={(e) => {
         browserHistory.push({

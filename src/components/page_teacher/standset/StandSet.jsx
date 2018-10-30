@@ -7,7 +7,12 @@ import axios from 'axios'
 const { TextArea } = Input;
 const FormItem = Form.Item;
 
-let evalStandTemp = {}
+let evalStandTemp = {
+}
+
+let initialValues = {
+
+}
 
 const TabPane = Tabs.TabPane;
 
@@ -47,7 +52,7 @@ export default class StandSet extends Component {
     newRecord.eval_stand = this.state.addEvalStand;
     newRecord.value_total = parseFloat(this.state.addValueTotal);
     evalStandTemp[this.state.moduleNow].push(newRecord);
-    evalStandTemp['initial_values'][this.state.moduleNow].push(0);
+    initialValues[this.state.moduleNow].push("0");
     this.setState({
       visibleAddStandDetail: false,
       evalStand: evalStandTemp
@@ -60,7 +65,6 @@ export default class StandSet extends Component {
     });
   }
 
-
   showModalStandM = () => {
     this.setState({
       visibleAddStandM: true,
@@ -68,15 +72,16 @@ export default class StandSet extends Component {
   }
 
   handleOkStandM = (e) => {
-    console.log(this.state.addModuleName)
-    console.log(this.state.addModuleValue)
     var newkey = this.state.addModuleName + '(单项' + this.state.addModuleValue + '分)';
-    console.log(this.state.evalStandKeys)
     var EvalStandKeys = this.state.evalStandKeys;
     EvalStandKeys.push(newkey);
     evalStandTemp[newkey] = [];
-    evalStandTemp['initial_values'][newkey] = [];
-    console.log(evalStandTemp)
+    initialValues[newkey] = [];
+    if (EvalStandKeys.length === 1) {
+      this.setState({
+        moduleNow: EvalStandKeys[0]
+      })
+    }
     this.setState({
       visibleAddStandM: false,
       evalStand: evalStandTemp,
@@ -90,6 +95,27 @@ export default class StandSet extends Component {
     });
   }
 
+  confirm = () => {
+    Modal.confirm({
+      title: '删除模块',
+      content: '你是否确认删除当前模块?',
+      okText: '确认',
+      cancelText: '取消',
+      onCancel: () => {
+      },
+      onOk: () => {
+        delete evalStandTemp[this.state.moduleNow];
+        var leftEvalStandKeys = Object.keys(evalStandTemp).filter(item => (item !== '_id' && item !== '__v'));
+        delete initialValues[this.state.moduleNow];
+        this.setState({
+          evalStandKeys: leftEvalStandKeys,
+          evalStand: evalStandTemp,
+          moduleNow: leftEvalStandKeys[0]
+        }, () => {
+        })
+      },
+    });
+  }
 
   columns = [{
     title: '评价内容',
@@ -137,7 +163,7 @@ export default class StandSet extends Component {
         onClick={() => {
           var delIndex = record.index;
           evalStandTemp[this.state.moduleNow].splice(record.index, 1)
-          evalStandTemp['initial_values'][this.state.moduleNow].pop(0);
+          initialValues[this.state.moduleNow].pop(0);
           for (var i = delIndex; i < evalStandTemp[this.state.moduleNow].length; i++) {
             evalStandTemp[this.state.moduleNow][i].index = evalStandTemp[this.state.moduleNow][i].index - 1;
           }
@@ -155,13 +181,13 @@ export default class StandSet extends Component {
       publisher: localStorage.getItem('id')
     })
       .then(res => {
-        console.log(res.data)
-        const { evalStand } = res.data;
+        const { evalStand, initial_values } = res.data;
         evalStandTemp = evalStand;
+        initialValues = initial_values;
         this.setState({
           evalStand: evalStand,
-          evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values')),
-          moduleNow: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values'))[0]
+          evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v')),
+          moduleNow: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v'))[0]
         })
       })
   }
@@ -170,7 +196,7 @@ export default class StandSet extends Component {
     return (
       <div>
         <Row>
-          <Col span={2}>
+          <Col span={12}>
           </Col>
           <Col span={6}>
             <Button
@@ -184,18 +210,6 @@ export default class StandSet extends Component {
           </Col>
           <Col span={6}>
             <Button
-              style={{
-                width: '80%',
-                marginLeft: '20px',
-              }}
-
-            >添加评分细则
-            </Button>
-          </Col>
-          <Col span={4}>
-          </Col>
-          <Col span={6}>
-            <Button
               type="primary"
               style={{
                 width: '80%',
@@ -205,6 +219,7 @@ export default class StandSet extends Component {
                 axios.post('http://localhost:5001/teacher/evalStandModify', {
                   owner: localStorage.getItem('id'),
                   evalStand: evalStandTemp,
+                  initial_values: initialValues
                 }).then(res => {
                   message.success(res.data.message);
                 })
@@ -215,7 +230,6 @@ export default class StandSet extends Component {
         </Row>
         <Divider />
         <Tabs onChange={(key) => {
-          console.log(key);
           this.setState({
             moduleNow: key
           })
@@ -232,6 +246,7 @@ export default class StandSet extends Component {
                       <Button
                         type="danger"
                         style={{ width: '45%', marginRight: '50px' }}
+                        onClick={this.confirm}
                       >删除模块</Button>
                       <Button
                         type="primary"

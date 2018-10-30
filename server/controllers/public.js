@@ -80,7 +80,13 @@ exports.get_initial_evaluate_stand = (req, res, next) => {
     .then(doc => {
       if (doc[0]) {
         res.json({
-          evalStand: doc[0].stand
+          evalStand: doc[0].stand,
+          initial_values: doc[0].initial_values
+        })
+      } else {
+        res.json({
+          evalStand: {},
+          initial_values: {}
         })
       }
     })

@@ -14,7 +14,6 @@ class Tasks extends Component {
   render() {
     const { publishedTasks } = this.props
     const { onStartDeleteTask } = this.props
-    console.log(publishedTasks)
     return (
       <Table
         bordered={true}
@@ -60,7 +59,6 @@ class Tasks extends Component {
             <span>
               <Icon type="profile" theme="outlined"
                 onClick={(e) => {
-                  console.log(record.key)
                   browserHistory.push({
                     pathname: '/teacher/details',
                     query: {
@@ -89,7 +87,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onStartDeleteTask: (selectId) => {
-    console.log(selectId);
     return dispatch(startDeleteTask(selectId))
   }
 })

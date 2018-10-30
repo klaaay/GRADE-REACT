@@ -16,7 +16,9 @@ function* searchClassList() {
     console.log(id);
     const data = yield call(search_class_list, id);
     console.log(data);
-    yield put({ type: 'SEARCH_CLASS_LIST_RESULT', payload: data });
+    if (data) {
+      yield put({ type: 'SEARCH_CLASS_LIST_RESULT', payload: data });
+    }
   } catch (e) {
     console.log(e)
   }

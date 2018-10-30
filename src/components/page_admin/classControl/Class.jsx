@@ -73,7 +73,6 @@ class Class extends Component {
             bordered
             dataSource={nowClassTeacherList}
             renderItem={item => {
-              console.log(item)
               return (<List.Item>{item}<div className="hidden"></div> 
               <Icon type="minus-square" theme="twoTone" 
               style={{cursor:'pointer'}}
@@ -155,7 +154,6 @@ const mapDispatchToProps = (dispatch) => ({
   onStartAddClass: e => {
     var addRole = 'class';
     var addName = $('.add_class').val();
-    console.log(addName);
     return dispatch(startAddRole(addRole, addName))
   },
   onStartAddTeacher: e => {
@@ -169,7 +167,6 @@ const mapDispatchToProps = (dispatch) => ({
     return dispatch(startAddRole(addRole, addName))
   },
   onStartGetNowClassInfo: (value) => {
-    console.log(`selected ${value}`);
     return dispatch(startGetNowClassInfo(value));
   }
 })

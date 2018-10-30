@@ -10,6 +10,18 @@ const Task = require("../models/Task");
 const TaskDone = require("../models/TaskDone");
 const EvaluateStand = require("../models/EvaluateStand")
 
+const calcuGroupScore = (
+  groupProportion,
+  groupGrade,
+  groupNumber) => {
+  var toal_group_score = 0;
+  for (let i = 0; i < groupGrade.length; i++) {
+    toal_group_score += groupGrade[i].score
+  }
+  let total_group_score_real = toal_group_score * 1.0 / groupNumber;
+  return total_group_score_real * groupProportion
+}
+
 const allReciverWithGroupNumberCreater = (allReciverArray, groupNumber) => {
   var allReciverArray_withGroup = allReciverArray
   while (groupNumber !== 1) {
@@ -207,6 +219,59 @@ exports.task_detail = (req, res, next) => {
     })
 }
 
+exports.task_detail_chart = (req, res, next) => {
+  const { id } = req.body;
+  TaskDone
+    .find({ id: id })
+    .populate('id')
+    .$where(function () {
+      return (this.teacherGradeDone && this.selfGradeDone && this.groupGradeDone);
+    })
+    .select('teacherGrade selfGrade groupGrade name score')
+    .exec()
+    .then(docs => {
+      var score_list = [];
+      docs.forEach(item => {
+        var temp = {};
+        temp['师评'] = (item.teacherGrade * (item.id.teacherProportion)).toFixed(2);
+        temp['自评'] = (item.selfGrade * (item.id.selfProportion)).toFixed(2);
+        temp['组评'] = calcuGroupScore(item.id.groupProportion, item.groupGrade, item.id.groupNumber).toFixed(2);
+        temp['总分'] = item.score;
+        temp['姓名'] = item.name;
+        score_list.push(temp);
+      })
+      score_list.sort((a, b) => {
+        return b['总分'] - a['总分']
+      })
+      var categories = []
+      var data_t = []
+      var data_s = []
+      var data_g = []
+      
+      score_list.forEach(item => {
+        categories.push(item['姓名'])
+        data_t.push(parseFloat(item['师评']))
+        data_s.push(parseFloat(item['自评']))
+        data_g.push(parseFloat(item['组评']))
+      })
+      var series = [{
+        name: '师评',
+        data: data_t
+      }, {
+        name: '自评',
+        data: data_s
+      }, {
+        name: '组评',
+        data: data_g
+      }]
+      res.json({
+        // score_list: score_list,
+        categories:categories,
+        series:series
+      })
+    })
+}
+
 exports.class_control = (req, res, next) => {
   const { selectClass, addUsers } = req.body;
   if (!selectClass || !addUsers) {
@@ -274,14 +339,36 @@ exports.get_class_list = (req, res, next) => {
 }
 
 exports.modify_stand = (req, res, next) => {
-  const { owner, evalStand } = req.body
+  const { owner, evalStand, initial_values } = req.body
+  console.log(initial_values)
   EvaluateStand
-    .update({ owner: owner }, { $set: { stand: evalStand } })
+    .find({ owner: owner })
     .exec()
-    .then(() => {
-      res.json({
-        type: 1,
-        message: '保存修改成功',
-      })
+    .then(doc => {
+      console.log(doc)
+      if (!doc[0]) {
+        var EvaluateStand_doc = new EvaluateStand({
+          owner: owner,
+          stand: evalStand,
+          initial_values: initial_values
+        })
+        EvaluateStand_doc
+          .save(() => {
+            res.json({
+              type: 1,
+              message: '保存修改成功',
+            })
+          })
+      } else {
+        EvaluateStand
+          .update({ owner: owner }, { $set: { stand: evalStand, initial_values: initial_values } })
+          .exec()
+          .then(() => {
+            res.json({
+              type: 1,
+              message: '保存修改成功',
+            })
+          })
+      }
     })
 }

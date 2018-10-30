@@ -81,8 +81,6 @@ class Group extends Component {
       dataIndex: 'groupGrade',
       key: 'groupGrade',
       render: (text, record) => {
-        console.log(text)
-        console.log(record)
         if (record.pptCommitted && record.wordCommitted && record.videoCommitted) {
           return <a
             onClick={(e) => {

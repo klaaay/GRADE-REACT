@@ -15,13 +15,9 @@ class Add extends Component {
 
 
 
-  // onHandleSelectChange = (value) => {
-  //   console.log(value);
-  // }
 
   render() {
     const { onStartAddUser, onHandleSelectChange } = this.props
-    // const { status, message } = this.props
     return (
       <Form>
         <FormItem
@@ -102,7 +98,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onHandleSelectChange: (value) => {
-    console.log(value);
     return dispatch(roleChange(value))
   },
   onStartAddUser: e => {

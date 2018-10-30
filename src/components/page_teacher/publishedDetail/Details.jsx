@@ -1,14 +1,24 @@
 import React, { Component } from 'react'
+
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
-import { Table, Input, Button, Icon, Spin, Tabs, Badge } from 'antd';
+
+import { Table, Input, Button, Icon, Spin, Tabs, Badge, Row, Col, Divider } from 'antd';
 
 import ScoreCard from './scoreCard.jsx'
 
 import './Details.less'
 
 import ReactChart from 'react-chartjs'
+import axios from 'axios'
+var ReactDOM = require('react-dom');
+
+var ReactHighcharts = require('react-highcharts');
+var HighchartsMore = require('highcharts-more');
+var HighchartsExporting = require('highcharts-exporting');
+HighchartsExporting(ReactHighcharts.Highcharts);
+
 
 const PieChart = ReactChart.Pie;
 const BarChart = ReactChart.Bar;
@@ -117,14 +127,22 @@ function callback(key) {
   console.log(key);
 }
 
+let config = {
+};
+
 class Details extends Component {
   state = {
     searchText: '',
     loading: false,
     GradeDoneTasks: [],
     GradeTasks: [],
-    ChartData: []
+    ChartData: [],
+    Card: true,
+    categories: [],
+    series: []
   };
+
+
 
   get_task_detail = async (id) => {
     let data = {
@@ -145,6 +163,8 @@ class Details extends Component {
         item.value = ChartData[index]
       })
       let GradeDoneTasks = body.data.filter(item => (item.teacherGradeDone && item.selfGradeDone && item.groupGradeDone));
+      console.log(body.data)
+      console.log(GradeDoneTasks)
       this.setState({
         loading: true,
         GradeDoneTasks: GradeDoneTasks,
@@ -284,7 +304,7 @@ class Details extends Component {
                   role: 'teacher',
                   id: record.key,
                   userId: userId,
-                  publisher:record.id.publisherId
+                  publisher: record.id.publisherId
                 }
               })
             }}
@@ -324,9 +344,115 @@ class Details extends Component {
             dataSource={this.state.GradeTasks} />
         </TabPane>
         <TabPane tab="成绩详情" key="2">
+          <Row>
+            <Col span={18}>
+            </Col>
+            <Col span={3}>
+              <Button type="primary"
+                style={
+                  {
+                    marginTop: '10px'
+                  }
+                }
+                onClick={() => {
+                  this.setState({
+                    Card: true
+                  })
+                }}
+              >
+                卡片
+              </Button>
+            </Col>
+            <Col span={3}>
+              <Button type="primary"
+                style={
+                  {
+                    marginTop: '10px'
+                  }
+                }
+                onClick={() => {
+                  this.setState({
+                    Card: false
+                  }, () => {
+                    axios.post('http://localhost:5001/teacher/detailChart', {
+                      id: document.location.search.split('=')[1]
+                    })
+                      .then((res) => {
+                        const { categories, series } = res.data;
+                        console.log(categories)
+                        console.log(series)
+                        config = {
+                          chart: {
+                            type: 'bar'
+                          },
+                          title: {
+                            text: '成绩统计表'
+                          },
+                          subtitle: {
+                            text: ''
+                          },
+                          xAxis: {
+                            categories: categories,
+                            title: {
+                              text: null
+                            }
+                          },
+                          yAxis: {
+                            min: 0,
+                            title: {
+                              text: '分数',
+                              align: 'high'
+                            },
+                            labels: {
+                              overflow: 'justify'
+                            }
+                          },
+                          tooltip: {
+                            valueSuffix: ' 分'
+                          },
+                          plotOptions: {
+                            bar: {
+                              dataLabels: {
+                                enabled: true
+                              }
+                            },
+                            series: {
+                              stacking: 'normal'
+                            }
+                          },
+                          legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'top',
+                            x: -40,
+                            y: 100,
+                            floating: true,
+                            borderWidth: 1,
+                            backgroundColor: '#FFFFFF',
+                            shadow: true
+                          },
+                          credits: {
+                            enabled: false
+                          },
+
+                          series: series
+                        };
+                        ReactDOM.render(
+                          <ReactHighcharts config={config}> </ReactHighcharts>,
+                          document.getElementById('chartAll')
+                        )
+                      })
+                  })
+                }}
+              >
+                图表图表
+              </Button>
+            </Col>
+          </Row>
+          <Divider />
           <div className="score_cards">
             {
-              this.state.GradeTasks.map((item, index) => {
+              this.state.Card ? this.state.GradeTasks.map((item, index) => {
                 return <ScoreCard
                   key={index}
                   title={item.id.title}
@@ -338,7 +464,7 @@ class Details extends Component {
                   groupMemberOrigin={item.groupMemberOrigin}
                   score={item.score}
                 />
-              })
+              }) : <div id="chartAll"></div>
             }
           </div>
         </TabPane>

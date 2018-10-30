@@ -71,7 +71,6 @@ export const get_classes = async()=>{
   try {
     const response = await fetch('http://localhost:5001/admin/getClasses', fetchOption);
     const body = await response.json();
-    console.log(body)
     return body;
   } catch (e) {
     console.log(e)
@@ -91,7 +90,6 @@ export const get_now_class_info = async(nowClass)=>{
   try {
     const response = await fetch('http://localhost:5001/admin/getClassInfo', fetchOption);
     const body = await response.json();
-    console.log(body)
     return body;
   } catch (e) {
     console.log(e)
@@ -114,7 +112,6 @@ export const class_control = async(addRole,addName,nowClass)=>{
   try {
     const response = await fetch('http://localhost:5001/admin/class_control', fetchOption);
     const body = await response.json();
-    console.log(body)
     return body;
   } catch (e) {
     console.log(e)

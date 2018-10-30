@@ -22,12 +22,10 @@ class ClassControl extends Component {
     this.setState({
       selectClass: value
     }, () => {
-      console.log(this.state.selectClass)
       axios.post('http://localhost:5001/teacher/classList', {
         selectClass: value
       })
         .then(res => {
-          console.log(res.data)
           this.setState({
             classList: res.data.classMates
           })
@@ -36,7 +34,6 @@ class ClassControl extends Component {
   }
 
   file_change = (e) => {
-    console.log(this.state.selectClass)
     var selectClass = this.state.selectClass
     var files = e.target.files;
 
@@ -58,7 +55,6 @@ class ClassControl extends Component {
       for (var sheet in workbook.Sheets) {
         if (workbook.Sheets.hasOwnProperty(sheet)) {
           fromTo = workbook.Sheets[sheet]['!ref'];
-          console.log(fromTo);
           users = users.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
           // break; // 如果只取第一张表，就取消注释这行
         }
@@ -74,6 +70,14 @@ class ClassControl extends Component {
           } else {
             message.warning(res.data.message)
           }
+          axios.post('http://localhost:5001/teacher/classList', {
+            selectClass: selectClass
+          })
+            .then(res => {
+              this.setState({
+                classList: res.data.classMates
+              })
+            })
         })
     };
     // 以二进制方式打开文件
@@ -130,7 +134,6 @@ class ClassControl extends Component {
           bordered
           dataSource={this.state.classList}
           renderItem={item => {
-            console.log(item)
             return (<List.Item>{item}<div className="hidden"></div>
               <Icon type="minus-square" theme="twoTone"
                 style={{ cursor: 'pointer' }}

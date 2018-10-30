@@ -37,7 +37,7 @@ export default class Evaluate extends Component {
     let keys = Object.keys(values);
     let total = total_init;
     keys.forEach((item, index) => {
-      total += values[item].reduce((a, b) => (a + b), 0)
+      total += parseFloat(values[item].reduce((a, b) => (a + b), 0))
     })
     return total;
   }
@@ -53,8 +53,6 @@ export default class Evaluate extends Component {
   callback(key) {
     console.log(key);
   }
-
-
 
   find_if_saved(groupGradeDetail) {
     if (groupGradeDetail) {
@@ -115,13 +113,14 @@ export default class Evaluate extends Component {
       publisher: getQueryString('publisher')
     })
       .then(res => {
-        const { evalStand } = res.data;
-        valuesTemp = evalStand.initial_values
+        const { evalStand, initial_values } = res.data;
+        console.log(initial_values)
+        valuesTemp = initial_values
         this.setState({
           evalStand: evalStand,
           values: valuesTemp,
-          evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values')),
-          defalutM: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v' && item !== 'initial_values'))[0]
+          evalStandKeys: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v')),
+          defalutM: Object.keys(evalStand).filter(item => (item !== '_id' && item !== '__v'))[0]
         })
         axios.post('http://localhost:5001/public/evaluateInitial', {
           id: getQueryString('id'),
@@ -147,7 +146,6 @@ export default class Evaluate extends Component {
               })
               if (selfGradeDetail) {
                 valuesTemp = selfGradeDetail;
-                console.log(valuesTemp)
                 this.setState({
                   values: valuesTemp
                 })

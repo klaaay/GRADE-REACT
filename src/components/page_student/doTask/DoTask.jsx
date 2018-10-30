@@ -32,7 +32,6 @@ export default class DoTask extends Component {
     }
 
     fileSelectedHandlerWord = event => {
-        console.log(event.target.files[0])
         if (event.target.files[0].type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             message.error('文件类型错误,请上传.docx文件')
         } else {
@@ -44,7 +43,6 @@ export default class DoTask extends Component {
     }
 
     fileSelectedHandlerPPT = event => {
-        console.log(event.target.files[0])
         if (event.target.files[0].type !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
             message.error('文件类型错误,请上传.pptx文件')
         } else {
@@ -56,7 +54,6 @@ export default class DoTask extends Component {
     }
 
     fileSelectedHandlerVideo = event => {
-        console.log(event.target.files[0])
         if (event.target.files[0].type !== 'video/mp4') {
             message.error('文件类型错误,请上传.mp4文件')
         } else {
