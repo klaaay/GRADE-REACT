@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router';
 
 import { Tabs, Table, Input, Button, message, Row, Col, Divider } from 'antd';
 import $ from 'jquery'
@@ -172,7 +173,7 @@ export default class Evaluate extends Component {
     return (
       <div className="card-container">
         <Row>
-          <Col span={16} >
+          <Col span={12} >
             <span
               style={{
                 marginRight: '20px',
@@ -182,7 +183,7 @@ export default class Evaluate extends Component {
             >当前评价状态:</span>
             {this.state.committed ? <Button type="primary">已评价</Button> : <Button type="danger">未评价</Button>}
           </Col>
-          <Col span={4} >
+          <Col span={5} >
             <Button
               style={{
                 width: '80%',
@@ -202,7 +203,7 @@ export default class Evaluate extends Component {
               }}
             >保存</Button>
           </Col>
-          <Col span={4} >
+          <Col span={5} >
             <Button
               style={{
                 width: '80%',
@@ -239,6 +240,24 @@ export default class Evaluate extends Component {
               }}
             >评分</Button>
           </Col>
+          {
+             getQueryString('role') === 'teacher'?<Col span={2}>
+             <Button
+               type="primary"
+               onClick={(e) => {
+                 browserHistory.push({
+                   pathname: '/teacher/details',
+                   query: {
+                     id: getQueryString('taskId')
+                   }
+                 })
+               }}
+             >
+               返回
+           </Button>
+           </Col>:null
+          }
+          
         </Row>
         <Divider />
         <Tabs type="card" onChange={this.callback} className="evaluate_tabs">

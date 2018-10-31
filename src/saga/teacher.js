@@ -42,10 +42,10 @@ function* publishTask() {
     console.log(data);
     if (data.type) {
       message.success(data.message);
+      yield put({ type: 'PUBLISHED_TASKS_RESULT', payload: data});
     } else {
       message.warning(data.message);
     }
-
   } catch (e) {
     console.log(e)
   }

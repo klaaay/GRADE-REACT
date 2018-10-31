@@ -307,7 +307,7 @@ export default class StandSet extends Component {
           </Form>
         </Modal>
         <Modal
-          title="添加评分细则"
+          title="添加评分模块"
           visible={this.state.visibleAddStandM}
           onOk={this.handleOkStandM}
           onCancel={this.handleCancelStandM}

@@ -123,10 +123,21 @@ exports.publish_task = (req, res, next) => {
                       })
                     })
                   })
-                  res.json({
-                    type: 1,
-                    message: '发布成功'
-                  })
+                  Teacher.find({ id: publisherId })
+                    .exec()
+                    .then(doc => {
+                      const name = doc[0].name;
+                      Task.find({ publisher: name }, { title: 1, publishTime: 1, classes: 1, DontDoneNumber: 1, DoneNumber: 1 }, (err, docs) => {
+                        let docs_str = JSON.stringify(docs);
+                        let docs_str_key = docs_str.replace(/_id/g, 'key');
+                        let docs_key = JSON.parse(docs_str_key);
+                        res.json({
+                          publishedTasks: docs_key,
+                          type: 1,
+                          message: '发布成功'
+                        })
+                      })
+                    })
                 })
               }
             })
@@ -247,7 +258,7 @@ exports.task_detail_chart = (req, res, next) => {
       var data_t = []
       var data_s = []
       var data_g = []
-      
+
       score_list.forEach(item => {
         categories.push(item['姓名'])
         data_t.push(parseFloat(item['师评']))
@@ -266,8 +277,8 @@ exports.task_detail_chart = (req, res, next) => {
       }]
       res.json({
         // score_list: score_list,
-        categories:categories,
-        series:series
+        categories: categories,
+        series: series
       })
     })
 }
@@ -326,7 +337,6 @@ exports.class_control = (req, res, next) => {
 }
 
 exports.get_class_list = (req, res, next) => {
-  console.log(req.body)
   const { selectClass } = req.body;
   Class
     .find({ name: selectClass })
@@ -340,12 +350,10 @@ exports.get_class_list = (req, res, next) => {
 
 exports.modify_stand = (req, res, next) => {
   const { owner, evalStand, initial_values } = req.body
-  console.log(initial_values)
   EvaluateStand
     .find({ owner: owner })
     .exec()
     .then(doc => {
-      console.log(doc)
       if (!doc[0]) {
         var EvaluateStand_doc = new EvaluateStand({
           owner: owner,

@@ -31,7 +31,7 @@ class PageTeacher extends Component {
   }
 
   componentDidMount = () => {
-    $('.homework_publish').trigger('click');
+    $('.homework_manage').trigger('click');
   }
 
   render() {
@@ -47,7 +47,7 @@ class PageTeacher extends Component {
             <img src="/logo.png" alt="" />
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1"
+            {/* <Menu.Item key="1"
               className="homework_publish"
               onClick={(e) => {
                 onClassListSearch()
@@ -56,27 +56,28 @@ class PageTeacher extends Component {
             >
               <Icon type="file-text" />
               <span>发布作业</span>
-            </Menu.Item>
-            <Menu.Item key="2"
+            </Menu.Item> */}
+            <Menu.Item key="1"
               className="homework_manage"
               onClick={(e) => {
                 this.changeRouter('published')
+                onClassListSearch()
                 onStartGetPublishedTaks()
               }}
             >
               <Icon type="database" />
               <span>作业管理</span>
             </Menu.Item>
-            <Menu.Item key="3"
+            <Menu.Item key="2"
               className="class_control"
               onClick={(e) => {
                 this.changeRouter('classControl')
               }}
             >
-              <Icon type="database" />
+              <Icon type="usergroup-add" />
               <span>班级管理</span>
             </Menu.Item>
-            <Menu.Item key="4"
+            <Menu.Item key="3"
               onClick={(e) => {
                 this.changeRouter('standSet')
               }}
@@ -84,7 +85,7 @@ class PageTeacher extends Component {
               <Icon type="key" />
               <span>标准设置</span>
             </Menu.Item>
-            <Menu.Item key="5"
+            <Menu.Item key="4"
               onClick={(e) => {
                 this.changeRouter('change')
               }}

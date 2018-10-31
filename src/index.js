@@ -13,7 +13,7 @@ import ChangePassword from './components/public/changePassword/Change'
 import ClassControl from './components/page_admin/classControl/Class.jsx'
 
 import PageTeacher from './components/page_teacher/PageTeacher.jsx'
-import TaskTeacher from './components/page_teacher/publishTask/Task.jsx'
+// import TaskTeacher from './components/page_teacher/publishTask/Task.jsx'
 import PublishedTask from './components/page_teacher/publishedTask/Tasks.jsx'
 import Details from './components/page_teacher/publishedDetail/Details.jsx'
 import TClassControl from './components/page_teacher/classControl/ClassControl'
@@ -45,8 +45,8 @@ ReactDOM.render(
           </Route>
         </Route>
         <Route path="/teacher" component={PageTeacher}>
-          <IndexRoute component={TaskTeacher} />
-          <Route path="/teacher/task" component={TaskTeacher} />
+          <IndexRoute component={PublishedTask} />
+          {/* <Route path="/teacher/task" component={TaskTeacher} /> */}
           <Route path="/teacher/published" component={PublishedTask} />
           <Route path="/teacher/details" component={Details} />
           <Route path="/teacher/evaluate" component={Evaluate} />

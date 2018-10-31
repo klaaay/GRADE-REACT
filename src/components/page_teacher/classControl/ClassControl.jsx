@@ -117,12 +117,17 @@ class ClassControl extends Component {
               ref={file => this.file = file}
             />
             <Button
+              icon="file"
+              type="primary"
               onClick={() => this.file.click()}
             >导入名单</Button>
           </Col>
           <Col span={4} >
             <Button icon="download"
-            >模板下载</Button>
+              type="primary"
+            > <a
+              style={{ color: 'white' }}
+              href="http://localhost:5001/public\excel\test.xlsx">模板下载</a> </Button>
           </Col>
         </Row>
         <Divider />

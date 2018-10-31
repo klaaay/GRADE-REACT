@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router';
 
 
-import { Table, Input, Button, Icon, Spin, Tabs, Badge, Row, Col, Divider } from 'antd';
+import { Table, Input, Button, Icon, Spin, Tabs, Badge, Row, Col, Divider, Tag } from 'antd';
 
 import ScoreCard from './scoreCard.jsx'
 
@@ -15,7 +15,7 @@ import axios from 'axios'
 var ReactDOM = require('react-dom');
 
 var ReactHighcharts = require('react-highcharts');
-var HighchartsMore = require('highcharts-more');
+// var HighchartsMore = require('highcharts-more');
 var HighchartsExporting = require('highcharts-exporting');
 HighchartsExporting(ReactHighcharts.Highcharts);
 
@@ -143,7 +143,6 @@ class Details extends Component {
   };
 
 
-
   get_task_detail = async (id) => {
     let data = {
       id: id
@@ -162,9 +161,8 @@ class Details extends Component {
       PieChartData.forEach((item, index) => {
         item.value = ChartData[index]
       })
-      let GradeDoneTasks = body.data.filter(item => (item.teacherGradeDone && item.selfGradeDone && item.groupGradeDone));
       console.log(body.data)
-      console.log(GradeDoneTasks)
+      let GradeDoneTasks = body.data.filter(item => (item.teacherGradeDone && item.selfGradeDone && item.groupGradeDone));
       this.setState({
         loading: true,
         GradeDoneTasks: GradeDoneTasks,
@@ -292,9 +290,43 @@ class Details extends Component {
     },
     {
       title: '老师评价',
-      dataIndex: 'teacherGrade',
-      key: 'teacherGrade',
+      dataIndex: 'teacherGradeDone',
+      key: 'teacherGradeDone',
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+        <div className="custom-filter-dropdown">
+          <Input
+            ref={ele => this.searchInput = ele}
+            placeholder="搜索未评价"
+            value={"搜索未评价"}
+            disabled
+            onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onPressEnter={this.handleSearch(selectedKeys, confirm)}
+          />
+          <Button
+            type="primary"
+            onClick={() => {
+              setSelectedKeys([' '])
+              setTimeout(
+                this.handleSearch(selectedKeys, confirm), 0
+              )
+            }
+            }
+            ref={ele => this.searchButtonEval = ele}
+          >搜索</Button>
+          <Button onClick={this.handleReset(clearFilters)}>重置</Button>
+        </div>
+      ),
+      filterIcon: filtered => <Icon type="smile-o" style={{ color: filtered ? '#108ee9' : '#aaa' }} />,
+      onFilter: (value, record) => !record.teacherGradeDone,
+      onFilterDropdownVisibleChange: (visible) => {
+        if (visible) {
+          setTimeout(() => {
+            this.searchInput.focus();
+          });
+        }
+      },
       render: (text, record) => {
+        console.log(text)
         if (record.pptCommitted && record.wordCommitted && record.videoCommitted) {
           return !text ? <a
             onClick={(e) => {
@@ -302,6 +334,7 @@ class Details extends Component {
                 pathname: '/teacher/evaluate',
                 query: {
                   role: 'teacher',
+                  taskId: (document.location.search.split('=')[1]),
                   id: record.key,
                   userId: userId,
                   publisher: record.id.publisherId
@@ -345,108 +378,131 @@ class Details extends Component {
         </TabPane>
         <TabPane tab="成绩详情" key="2">
           <Row>
-            <Col span={18}>
-            </Col>
-            <Col span={3}>
-              <Button type="primary"
-                style={
-                  {
-                    marginTop: '10px'
-                  }
-                }
-                onClick={() => {
-                  this.setState({
-                    Card: true
-                  })
+            <Col span={18} push={1}>
+              <Tag
+                color="#E6F7FF"
+                style={{
+                  display: this.state.Card?'inline-block':'none',
+                  marginTop: '20px',
+                  color: '#aaa'
                 }}
-              >
-                卡片
-              </Button>
+              >师评分数</Tag>
+              <Tag
+                color="#F6FFED"
+                style={{
+                  display: this.state.Card?'inline-block':'none',
+                  marginTop: '20px',
+                  color: '#aaa'
+                }}
+              >自评分数</Tag>
+              <Tag
+                color="#FFFBE6"
+                style={{
+                  display: this.state.Card?'inline-block':'none',
+                  marginTop: '20px',
+                  color: '#aaa'
+                }}
+              >组评分数</Tag>
             </Col>
-            <Col span={3}>
-              <Button type="primary"
-                style={
-                  {
-                    marginTop: '10px'
+            <Col span={6}>
+              <Button.Group >
+                <Button
+                  style={
+                    {
+                      marginTop: '10px'
+                    }
                   }
-                }
-                onClick={() => {
-                  this.setState({
-                    Card: false
-                  }, () => {
-                    axios.post('http://localhost:5001/teacher/detailChart', {
-                      id: document.location.search.split('=')[1]
+                  onClick={() => {
+                    this.setState({
+                      Card: true
                     })
-                      .then((res) => {
-                        const { categories, series } = res.data;
-                        console.log(categories)
-                        console.log(series)
-                        config = {
-                          chart: {
-                            type: 'bar'
-                          },
-                          title: {
-                            text: '成绩统计表'
-                          },
-                          subtitle: {
-                            text: ''
-                          },
-                          xAxis: {
-                            categories: categories,
-                            title: {
-                              text: null
-                            }
-                          },
-                          yAxis: {
-                            min: 0,
-                            title: {
-                              text: '分数',
-                              align: 'high'
+                  }}
+                >
+                  <Icon type="profile"
+                  />卡片显示
+                </Button>
+                <Button
+                  style={
+                    {
+                      marginTop: '10px'
+                    }
+                  }
+                  onClick={() => {
+                    this.setState({
+                      Card: false
+                    }, () => {
+                      axios.post('http://localhost:5001/teacher/detailChart', {
+                        id: document.location.search.split('=')[1]
+                      })
+                        .then((res) => {
+                          const { categories, series } = res.data;
+                          config = {
+                            chart: {
+                              type: 'bar'
                             },
-                            labels: {
-                              overflow: 'justify'
-                            }
-                          },
-                          tooltip: {
-                            valueSuffix: ' 分'
-                          },
-                          plotOptions: {
-                            bar: {
-                              dataLabels: {
-                                enabled: true
+                            title: {
+                              text: '成绩统计表'
+                            },
+                            subtitle: {
+                              text: ''
+                            },
+                            xAxis: {
+                              categories: categories,
+                              title: {
+                                text: null
                               }
                             },
-                            series: {
-                              stacking: 'normal'
-                            }
-                          },
-                          legend: {
-                            layout: 'vertical',
-                            align: 'right',
-                            verticalAlign: 'top',
-                            x: -40,
-                            y: 100,
-                            floating: true,
-                            borderWidth: 1,
-                            backgroundColor: '#FFFFFF',
-                            shadow: true
-                          },
-                          credits: {
-                            enabled: false
-                          },
+                            yAxis: {
+                              min: 0,
+                              title: {
+                                text: '分数',
+                                align: 'high'
+                              },
+                              labels: {
+                                overflow: 'justify'
+                              }
+                            },
+                            tooltip: {
+                              valueSuffix: ' 分'
+                            },
+                            plotOptions: {
+                              bar: {
+                                dataLabels: {
+                                  enabled: true
+                                }
+                              },
+                              series: {
+                                stacking: 'normal'
+                              }
+                            },
+                            legend: {
+                              layout: 'vertical',
+                              align: 'right',
+                              verticalAlign: 'top',
+                              x: -40,
+                              y: 100,
+                              floating: true,
+                              borderWidth: 1,
+                              backgroundColor: '#FFFFFF',
+                              shadow: true
+                            },
+                            credits: {
+                              enabled: false
+                            },
 
-                          series: series
-                        };
-                        ReactDOM.render(
-                          <ReactHighcharts config={config}> </ReactHighcharts>,
-                          document.getElementById('chartAll')
-                        )
-                      })
-                  })
-                }}
-              >
-                图表图表
-              </Button>
+                            series: series
+                          };
+                          ReactDOM.render(
+                            <ReactHighcharts config={config}> </ReactHighcharts>,
+                            document.getElementById('chartAll')
+                          )
+                        })
+                    })
+                  }}
+                >
+                  图表显示<Icon type="picture" />
+                </Button>
+              </Button.Group>
             </Col>
           </Row>
           <Divider />
@@ -464,7 +520,7 @@ class Details extends Component {
                   groupMemberOrigin={item.groupMemberOrigin}
                   score={item.score}
                 />
-              }) : <div id="chartAll"></div>
+              }) : <div id="chartAll" style={{ margin: '0 auto' }}></div>
             }
           </div>
         </TabPane>
