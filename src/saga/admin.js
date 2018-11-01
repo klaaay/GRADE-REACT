@@ -76,7 +76,6 @@ function* classControl() {
     const addName = yield select(state => (state.getIn(['admin', 'addName'])));
     const nowClass = yield select(state => (state.getIn(['admin', 'nowClass'])));
     const data = yield call(class_control, addRole, addName, nowClass);
-    console.log(data);
     yield put({ type: 'UPDATE_CLASSES_INFO', payload: data })
     if (data.type) {
       message.success(data.message);
@@ -101,7 +100,6 @@ function* getNowClassInfo() {
   try {
     const nowClass = yield select(state => (state.getIn(['admin', 'nowClass'])));
     const data = yield call(get_now_class_info, nowClass);
-    console.log(data)
     yield put({ type: 'CLASS_INFO_RESULT', payload: data })
   } catch (e) {
     console.log(e)

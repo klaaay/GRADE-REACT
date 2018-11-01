@@ -15,8 +15,9 @@ import axios from 'axios'
 var ReactDOM = require('react-dom');
 
 var ReactHighcharts = require('react-highcharts');
-// var HighchartsMore = require('highcharts-more');
+var HighchartsMore = require('highcharts-more');
 var HighchartsExporting = require('highcharts-exporting');
+HighchartsMore(ReactHighcharts.Highcharts);
 HighchartsExporting(ReactHighcharts.Highcharts);
 
 
@@ -124,7 +125,7 @@ let BarChartOptions = {
 const TabPane = Tabs.TabPane;
 
 function callback(key) {
-  console.log(key);
+ 
 }
 
 let config = {
@@ -161,7 +162,6 @@ class Details extends Component {
       PieChartData.forEach((item, index) => {
         item.value = ChartData[index]
       })
-      console.log(body.data)
       let GradeDoneTasks = body.data.filter(item => (item.teacherGradeDone && item.selfGradeDone && item.groupGradeDone));
       this.setState({
         loading: true,
@@ -326,7 +326,6 @@ class Details extends Component {
         }
       },
       render: (text, record) => {
-        console.log(text)
         if (record.pptCommitted && record.wordCommitted && record.videoCommitted) {
           return !text ? <a
             onClick={(e) => {
@@ -382,7 +381,7 @@ class Details extends Component {
               <Tag
                 color="#E6F7FF"
                 style={{
-                  display: this.state.Card?'inline-block':'none',
+                  display: this.state.Card ? 'inline-block' : 'none',
                   marginTop: '20px',
                   color: '#aaa'
                 }}
@@ -390,7 +389,7 @@ class Details extends Component {
               <Tag
                 color="#F6FFED"
                 style={{
-                  display: this.state.Card?'inline-block':'none',
+                  display: this.state.Card ? 'inline-block' : 'none',
                   marginTop: '20px',
                   color: '#aaa'
                 }}
@@ -398,7 +397,7 @@ class Details extends Component {
               <Tag
                 color="#FFFBE6"
                 style={{
-                  display: this.state.Card?'inline-block':'none',
+                  display: this.state.Card ? 'inline-block' : 'none',
                   marginTop: '20px',
                   color: '#aaa'
                 }}

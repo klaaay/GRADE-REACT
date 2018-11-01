@@ -82,7 +82,7 @@ class PageTeacher extends Component {
                 this.changeRouter('standSet')
               }}
             >
-              <Icon type="key" />
+              <Icon type="edit" />
               <span>标准设置</span>
             </Menu.Item>
             <Menu.Item key="4"

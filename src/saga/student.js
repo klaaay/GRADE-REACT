@@ -34,7 +34,6 @@ function* getEvalRecords() {
     // const id = yield select((state) => (state.getIn(['login', 'id'])));
     const id = localStorage.getItem("id");
     const data = yield call(get_eval_records, id);
-    console.log(data);
     yield put({ type: 'EVAL_RECORDS', payload: data })
   } catch (e) {
     console.log(e)

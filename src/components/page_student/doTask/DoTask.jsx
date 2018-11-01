@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import axios from 'axios'
 
-import { Card, message, Form, Button, Progress, Icon } from 'antd';
+import { Card, message, Form, Button, Progress, Icon, Tag } from 'antd';
 
 import './DoTask.less'
 
@@ -199,17 +199,17 @@ export default class DoTask extends Component {
                 }
                 if (word) {
                     this.setState({
-                        savedWord: word.toString().split('\\')[2]
+                        savedWord: word
                     })
                 }
                 if (ppt) {
                     this.setState({
-                        savedPPT: ppt.toString().split('\\')[2]
+                        savedPPT: ppt
                     })
                 }
                 if (video) {
                     this.setState({
-                        savedVideo: video.toString().split('\\')[2]
+                        savedVideo: video
                     })
                 }
             })
@@ -231,7 +231,8 @@ export default class DoTask extends Component {
                 <div className="task_upload">
                     <Form>
                         <FormItem
-                            label="Word"
+                            label={<Tag color="blue">Word</Tag>}
+                            colon={false}
                             labelCol={{ span: 4 }}
                             wrapperCol={{ span: 20 }}
                             style={{ marginTop: '20px' }}
@@ -267,7 +268,8 @@ export default class DoTask extends Component {
                             <Progress percent={this.state.percentWord} />
                         </FormItem>
                         <FormItem
-                            label="PPT"
+                            label={<Tag color="red">&nbsp;PPT&nbsp;</Tag>}
+                            colon={false}
                             labelCol={{ span: 4 }}
                             wrapperCol={{ span: 20 }}>
                             <div className="file_buttons">
@@ -301,7 +303,8 @@ export default class DoTask extends Component {
                             <Progress percent={this.state.percentPPT} />
                         </FormItem>
                         <FormItem
-                            label="Video"
+                            label={<Tag color="cyan">Video</Tag>}
+                            colon={false}
                             labelCol={{ span: 4 }}
                             wrapperCol={{ span: 20 }}>
                             <div className="file_buttons">
@@ -344,9 +347,9 @@ export default class DoTask extends Component {
                         </div>
                         <div className="saved">
                             <p>已保存</p>
-                            <p><Icon type="file-word" theme="twoTone" />:{this.state.savedWord}</p>
-                            <p><Icon type="file-ppt" theme="twoTone" />:{this.state.savedPPT}</p>
-                            <p><Icon type="video-camera" theme="twoTone" />:{this.state.savedVideo}</p>
+                            <p><Icon type="file-word" theme="twoTone" />:<a href={'http://localhost:5001/' + this.state.savedWord}>{this.state.savedWord.toString().split('\\')[2]}</a></p>
+                            <p><Icon type="file-ppt" theme="twoTone" />:<a href={'http://localhost:5001/' + this.state.savedPPT}>{this.state.savedPPT.toString().split('\\')[2]}</a> </p>
+                            <p><Icon type="video-camera" theme="twoTone" />:<a href={'http://localhost:5001/' + this.state.savedVideo}>{this.state.savedVideo.toString().split('\\')[2]}</a></p>
                         </div>
                     </div>
                 </div>

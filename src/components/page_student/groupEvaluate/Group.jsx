@@ -46,7 +46,9 @@ class Group extends Component {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
-      render: (text) => text
+      render: (text, record) => {
+        return text
+      }
     }, {
       title: '班级',
       dataIndex: 'class',
@@ -90,7 +92,7 @@ class Group extends Component {
                   role: 'group',
                   id: record.key,
                   userId: userId,
-                  publisher:record.id.publisherId
+                  publisher: record.id.publisherId
                 }
               })
             }}
@@ -100,12 +102,12 @@ class Group extends Component {
         }
       },
     }];
-    return <Tabs defaultActiveKey="1" 
+    return <Tabs defaultActiveKey="1"
     >
       <TabPane tab="评价通知" key="1">
         {
           askedTaskList.length > 0 ? <Table
-          bordered={true}
+            bordered={true}
             columns={columnsAskedTaskList}
             dataSource={askedTaskList} /> : <span>你暂时没有需要评价的同学</span>
         }
@@ -114,7 +116,7 @@ class Group extends Component {
       <TabPane tab="评价记录" key="2">
         {
           evalRecords.length > 0 ? <Table
-          bordered={true}
+            bordered={true}
             columns={columnsEvalRecords}
             dataSource={evalRecords} /> : <span>你暂时没有评价记录</span>
         }

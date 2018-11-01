@@ -41,14 +41,12 @@ class Tasks extends Component {
   }
 
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
     });
   }
 
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
     });
@@ -121,11 +119,14 @@ class Tasks extends Component {
             render={text => (text)}
           />
           <Column
-            title=""
+            title={<sapn><span>详情</span><Divider type="vertical" /><span>删除</span></sapn>}
             key="action"
             render={(text, record) => (
               <span>
-                <Icon type="profile" theme="outlined"
+                <Icon
+                  type="profile"
+                  theme="outlined"
+                  style={{ cursor: 'pointer' }}
                   onClick={(e) => {
                     browserHistory.push({
                       pathname: '/teacher/details',
@@ -136,7 +137,10 @@ class Tasks extends Component {
                   }}
                 />
                 <Divider type="vertical" />
-                <Icon type="delete" theme="outlined"
+                <Icon
+                  type="delete"
+                  theme="outlined"
+                  style={{ cursor: 'pointer' }}
                   onClick={(e) => {
                     onStartDeleteTask(record.key)
                   }}
@@ -148,7 +152,7 @@ class Tasks extends Component {
         <Modal
           title="布置作业"
           visible={this.state.visible}
-          onOk={()=>{
+          onOk={() => {
             this.handleOk()
             onStartTaskPublish()
             // $('.homework_manage').trigger('click')

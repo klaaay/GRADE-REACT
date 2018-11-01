@@ -52,7 +52,6 @@ export default class Evaluate extends Component {
   }
 
   callback(key) {
-    console.log(key);
   }
 
   find_if_saved(groupGradeDetail) {
@@ -115,7 +114,6 @@ export default class Evaluate extends Component {
     })
       .then(res => {
         const { evalStand, initial_values } = res.data;
-        console.log(initial_values)
         valuesTemp = initial_values
         this.setState({
           evalStand: evalStand,

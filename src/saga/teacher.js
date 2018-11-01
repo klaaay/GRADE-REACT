@@ -13,9 +13,7 @@ function* searchClassList() {
   try {
     // const id = yield select((state) => (state.getIn(['login', 'id'])));
     const id = localStorage.getItem("id");
-    console.log(id);
     const data = yield call(search_class_list, id);
-    console.log(data);
     if (data) {
       yield put({ type: 'SEARCH_CLASS_LIST_RESULT', payload: data });
     }
@@ -34,12 +32,10 @@ function* publishTask() {
     const publishTime = yield select((state) => (state.getIn(['teacher', 'publishTime'])));
     const endTime = yield select((state) => (state.getIn(['teacher', 'endTime'])));
     const teacherProportion = yield select((state) => (state.getIn(['teacher', 'teacherProportion'])));
-    console.log(teacherProportion);
     const selfProportion = yield select((state) => (state.getIn(['teacher', 'selfProportion'])));
     const groupProportion = yield select((state) => (state.getIn(['teacher', 'groupProportion'])));
     const groupNumber = yield select((state) => (state.getIn(['teacher', 'groupNumber'])));
     const data = yield call(publish_task, publisherId, classes, title, content, publishTime, endTime, teacherProportion, selfProportion, groupProportion, groupNumber);
-    console.log(data);
     if (data.type) {
       message.success(data.message);
       yield put({ type: 'PUBLISHED_TASKS_RESULT', payload: data});
@@ -57,7 +53,6 @@ function* getPublishedTaks() {
     const id = localStorage.getItem("id");
     // console.log(id);
     const data = yield call(get_published_taks, id);
-    console.log(data);
     yield put({ type: 'PUBLISHED_TASKS_RESULT', payload: data });
   } catch (e) {
     console.log(e)
@@ -69,7 +64,6 @@ function* deletePublishedTask() {
     const id = yield select((state) => (state.getIn(['teacher', 'selectId'])));
     // console.log(id);
     const data = yield call(delete_published_task, id);
-    console.log(data);
     message.success(data.message);
     // yield put({ type: 'START_DELETE_TASK', payload: data });
   } catch (e) {

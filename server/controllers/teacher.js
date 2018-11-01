@@ -260,7 +260,7 @@ exports.task_detail_chart = (req, res, next) => {
       var data_g = []
 
       score_list.forEach(item => {
-        categories.push(item['姓名'])
+        categories.push(item['姓名'] +'  ' +'<span style="font-weight:bold;color:#aaa">(' + item['总分'] + '分)</span>')
         data_t.push(parseFloat(item['师评']))
         data_s.push(parseFloat(item['自评']))
         data_g.push(parseFloat(item['组评']))
