@@ -20,7 +20,8 @@ const loginReducer = handleActions({
       status: payload.status,
       message: payload.message,
       role: payload.role,
-      id: payload.id
+      id: payload.id,
+      auth: payload.token
     })
   ),
   LOG_OUT: (state) => (
@@ -30,6 +31,7 @@ const loginReducer = handleActions({
       message: '',
       role: '',
       id: '',
+      auth:'',
       status: 'await'
     })
   )

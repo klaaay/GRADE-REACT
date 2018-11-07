@@ -8,4 +8,7 @@ import {
 export const changeUserName = text => ({ type: CHANGE_USER_NAME, payload: { userName: text } });
 export const changePassword = text => ({ type: CHANGE_PASSWORD, payload: { password: text } });
 export const validateUser = () => ({ type: VALIDATE_USER });
-export const logOut = () => ({ type: LOG_OUT });
+export const logOut = () => {
+  localStorage.clear()
+  return ({ type: LOG_OUT })
+};

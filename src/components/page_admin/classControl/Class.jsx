@@ -15,24 +15,33 @@ import './Class.less'
 
 const Option = Select.Option;
 
+const ModelInfo = {
+  class: {
+    title: '添加班级',
+    addonBefore: '班级名称'
+  },
+  teacher: {
+    title: '添加老师',
+    addonBefore: '老师名称'
+  },
+  student: {
+    title: '添加学生',
+    addonBefore: '学生名称'
+  }
+}
+
 class Class extends Component {
 
   state = {
-    modalClassVisible: false,
-    modalTeacherVisible: false,
-    modalStudentVisible: false
+    modalVisible: false,
+    role: 'class'
   }
 
-  setModalClassVisible(modalClassVisible) {
-    this.setState({ modalClassVisible });
+  setModalVisible(isVisble) {
+    this.setState({
+      modalVisible:isVisble
+    })
   }
-  setModalTeacherVisible(modalTeacherVisible) {
-    this.setState({ modalTeacherVisible });
-  }
-  setModalStudentVisible(modalStudentVisible) {
-    this.setState({ modalStudentVisible });
-  }
-
 
   changeAddRouter = (router) => {
     browserHistory.push('/admin/' + router)
@@ -40,7 +49,7 @@ class Class extends Component {
 
   render() {
     const { nowClass, classes, nowClassTeacherList, nowClassStudentList } = this.props
-    const { onStartAddClass, onStartAddTeacher, onStartAddStudent, onStartGetNowClassInfo, } = this.props
+    const { onStartAddRole, onStartGetNowClassInfo, } = this.props
     return (
       <div id="">
         <div className="class-selection">
@@ -59,7 +68,12 @@ class Class extends Component {
           <Button
             onClick={
               (e) => {
-                this.setModalClassVisible(true)
+                this.setState({
+                  role: 'class'
+                }, () => {
+                  $('.add_role').val('')
+                  this.setModalVisible(true)
+                })
               }
             }
           >添加班级</Button>
@@ -69,74 +83,58 @@ class Class extends Component {
             className="manage-teacher"
             size="small"
             header={<div><b>任课教师</b></div>}
-            footer={<Button onClick={() => this.setModalTeacherVisible(true)}>添加教师</Button>}
+            footer={<Button onClick={() => {
+              this.setState({
+                role: 'teacher'
+              }, () => {
+                $('.add_role').val('')
+                this.setModalVisible(true)
+              })
+            }}>添加教师</Button>}
             bordered
             dataSource={nowClassTeacherList}
             renderItem={item => {
-              return (<List.Item>{item}<div className="hidden"></div> 
-              <Icon type="minus-square" theme="twoTone" 
-              style={{cursor:'pointer'}}
-              onClick={(e)=>{
-                
-              }}
-              /></List.Item>)
+              return (<List.Item>{item}<div className="hidden"></div>
+                <Icon type="minus-square" theme="twoTone"
+                  style={{ cursor: 'pointer' }}
+                  onClick={(e) => {
+
+                  }}
+                /></List.Item>)
             }}
           />
           <List
             className="manage-student"
             size="small"
             header={<div><b>班级学生</b></div>}
-            footer={<Button onClick={() => this.setModalStudentVisible(true)}>添加学生</Button>}
+            footer={<Button onClick={() => {
+              this.setState({
+                role: 'student'
+              }, () => {
+                $('.add_role').val('')
+                this.setModalVisible(true)
+              })
+            }}>添加学生</Button>}
             bordered
             dataSource={nowClassStudentList}
             renderItem={item => (<List.Item>{item}<div className="hidden"></div><Icon type="minus-square" theme="twoTone" /></List.Item>)}
           />
         </div>
         <Modal
-          title="添加班级"
+          title={ModelInfo[this.state.role].title}
           centered
-          visible={this.state.modalClassVisible}
+          visible={this.state.modalVisible}
           onOk={() => {
-            onStartAddClass()
-            this.setModalClassVisible(false)
+            if ($('.add_role').val()) {
+              onStartAddRole(this.state.role)
+            }
+            this.setModalVisible(false)
           }}
-          onCancel={() => this.setModalClassVisible(false)}
+          onCancel={() => this.setModalVisible(false)}
         >
           <Input
-            className="add_class"
-            addonBefore="班级名称"
-            placeholder="" />
-
-        </Modal>
-        <Modal
-          title="添加老师"
-          centered
-          visible={this.state.modalTeacherVisible}
-          onOk={() => {
-            onStartAddTeacher()
-            this.setModalTeacherVisible(false)
-          }}
-          onCancel={() => this.setModalTeacherVisible(false)}
-        >
-          <Input
-            className="add_teacher"
-            addonBefore="老师姓名"
-            placeholder="" />
-        </Modal>
-        <Modal
-          title="添加学生"
-          centered
-          visible={this.state.modalStudentVisible}
-          onOk={() => {
-            onStartAddStudent()
-            this.setModalStudentVisible(false)
-          }}
-          onCancel={() => this.setModalStudentVisible(false)}
-        >
-          <Input
-            className="add_student"
-            addonBefore="学生姓名"
-            placeholder="" />
+            className="add_role"
+            addonBefore={ModelInfo[this.state.role].addonBefore} />
         </Modal>
       </div>
     )
@@ -151,20 +149,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  onStartAddClass: e => {
-    var addRole = 'class';
-    var addName = $('.add_class').val();
-    return dispatch(startAddRole(addRole, addName))
-  },
-  onStartAddTeacher: e => {
-    var addRole = 'teacher';
-    var addName = $('.add_teacher').val();
-    return dispatch(startAddRole(addRole, addName))
-  },
-  onStartAddStudent: e => {
-    var addRole = 'student';
-    var addName = $('.add_student').val();
-    return dispatch(startAddRole(addRole, addName))
+  onStartAddRole: (role) => {
+    var addName = $('.add_role').val();
+    return dispatch(startAddRole(role, addName))
   },
   onStartGetNowClassInfo: (value) => {
     return dispatch(startGetNowClassInfo(value));

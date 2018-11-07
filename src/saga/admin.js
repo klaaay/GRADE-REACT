@@ -38,7 +38,6 @@ function* addUser() {
     const name = yield select(state => (state.getIn(['admin', 'name'])));
     const role = yield select(state => (state.getIn(['admin', 'role'])));
     const data = yield call(add_user, userName, password, repass, name, role);
-    // yield put({ type: 'ADD_USER_RESULT', payload: data })
     if (data.type) {
       message.success(data.message);
     } else {
@@ -51,15 +50,11 @@ function* addUser() {
 
 function* changePassword() {
   try {
-    // const userName = yield select(state => (state.getIn(['login', 'userName'])));
     const userName = localStorage.getItem("userName");
-    // const relOld = yield select(state => (state.getIn(['login', 'password'])));
-    const relOld = localStorage.getItem("password");
     const oldPass = yield select(state => (state.getIn(['admin', 'oldPass'])));
     const newPass = yield select(state => (state.getIn(['admin', 'newPass'])));
     const reNewPass = yield select(state => (state.getIn(['admin', 'reNewPass'])));
-    const data = yield call(change_password, userName, relOld, oldPass, newPass, reNewPass);
-    // yield put({ type: 'CHANGE_PASSWORD_RESULT', payload: data })
+    const data = yield call(change_password, userName, oldPass, newPass, reNewPass);
     if (data.type) {
       message.success(data.message);
     } else {

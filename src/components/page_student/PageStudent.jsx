@@ -5,6 +5,8 @@ import { browserHistory } from 'react-router';
 import { Layout, Menu, Icon, Dropdown, message } from 'antd';
 import $ from 'jquery'
 
+import requireAuth from '../requireAuth'
+
 import {
   startGetTasks,
   startGetAskedTasks,
@@ -118,7 +120,7 @@ class PageStudent extends Component {
               </a>
             </Dropdown>
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520, height: '100%' }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520, height: '100%',marginBottom:0 }}>
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>
@@ -149,4 +151,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageStudent)
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuth(PageStudent))

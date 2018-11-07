@@ -26,60 +26,69 @@ class NormalLoginForm extends React.Component {
     });
   }
 
+  componentDidMount = () => {
+    localStorage.clear()
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    localStorage.clear()
+  }
+
   render() {
     const { onUserNameChange, onPasswordChange, onHandleSubmit, status, message, userName, password } = this.props
     return (
-        <Layout style={{minHeight:600}}>
-          <Header>Header</Header>
-          <Content style={{background:'white'}} >
-            <div id='login-form'>
-              <Alter
-                userName={userName}
-                password={password}
-                status={status}
-                message={message}
-              />
-              <h1>作业评分系统</h1>
-              <div className='login-form-inner'>
-                <Form onSubmit={this.handleSubmit} className="login-form">
-                  <FormItem>
-                      <Input
-                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        placeholder="用户名"
-                        onChange={onUserNameChange}
-                      />
-                  </FormItem>
-                  <FormItem>
-                      <Input
-                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        type="password"
-                        placeholder="密码"
-                        onChange={onPasswordChange}
-                      />
-                  </FormItem>
-                  <FormItem>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      className="login-form-button"
-                      onClick={onHandleSubmit}
-                    >
-                      登 陆
+      <Layout style={{ minHeight: 600 }}>
+        <Header>Header</Header>
+        <Content style={{ background: 'white' }} >
+          <div id='login-form'>
+            <Alter
+              userName={userName}
+              password={password}
+              status={status}
+              message={message}
+            />
+            <h1>作业评分系统</h1>
+            <div className='login-form-inner'>
+              <Form onSubmit={this.handleSubmit} className="login-form">
+                <FormItem>
+                  <Input
+                    prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                    placeholder="用户名"
+                    onChange={onUserNameChange}
+                  />
+                </FormItem>
+                <FormItem>
+                  <Input
+                    prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                    type="password"
+                    placeholder="密码"
+                    onChange={onPasswordChange}
+                  />
+                </FormItem>
+                <FormItem>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                    onClick={onHandleSubmit}
+                  >
+                    登 陆
                   </Button>
-                  </FormItem>
-                </Form>
-              </div>
+                </FormItem>
+              </Form>
             </div>
-          </Content>
-          <Footer style={{background:'white'}}>
-            <span
+          </div>
+        </Content>
+        <Footer style={{ background: 'white' }}>
+          <span
             style={{
               position: 'relative',
               left: '42%',
-              color:'#ccc'}}
-            > © 2018 杭州师范大学 版权所有</span>
+              color: '#ccc'
+            }}
+          > © 2018 杭州师范大学 版权所有</span>
         </Footer>
-        </Layout>
+      </Layout>
     );
   }
 }

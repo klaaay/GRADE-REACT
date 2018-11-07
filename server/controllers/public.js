@@ -32,7 +32,6 @@ const calcuScore = (
 
 exports.change_password = (req, res) => {
   var userName = req.body.userName;
-  var relOld = req.body.relOld;
   var oldPass = req.body.oldPass;
   var newPass = req.body.newPass;
   var reNewPass = req.body.reNewPass;
@@ -42,38 +41,36 @@ exports.change_password = (req, res) => {
       message: '请填写完整信息'
     })
   } else {
-    if (relOld !== oldPass) {
+    if (newPass !== reNewPass) {
       res.send({
         type: 0,
-        message: '原密码错误'
+        message: '新密码不一致'
       })
     } else {
-      if (newPass === oldPass) {
-        res.send({
-          type: 0,
-          message: '新密码不能与原密码相同'
+      User
+        .findOne({ userName: userName })
+        .exec()
+        .then(user => {
+          console.log(user)
+          if (user.password !== oldPass) {
+            res.send({
+              type: 0,
+              message: '信息填写错误'
+            })
+          } else {
+            User.update({ userName: userName }, { $set: { password: newPass } }).exec();
+            res.send({
+              type: 1,
+              message: '密码修改成功'
+            })
+          }
         })
-      } else {
-        if (newPass !== reNewPass) {
-          res.send({
-            type: 0,
-            message: '输入两次密码不一致'
-          })
-        } else {
-          User.update({ userName: userName }, { $set: { password: newPass } }).exec();
-          res.send({
-            type: 1,
-            message: '密码修改成功'
-          })
-        }
-      }
     }
   }
 }
 
 exports.get_initial_evaluate_stand = (req, res, next) => {
   const { publisher } = req.body
-  // console.log(publisher)
   EvaluateStand
     .find({ owner: publisher })
     .exec()

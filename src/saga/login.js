@@ -1,8 +1,6 @@
 import { call, takeLatest, select, put } from 'redux-saga/effects'
 import { browserHistory } from 'react-router';
-
 import { login_confirm } from '../api/login.js'
-
 
 //login
 function* loginConfirm() {
@@ -18,7 +16,6 @@ function* loginConfirm() {
       localStorage.setItem("role", data.role);
       localStorage.setItem("id", data.id);
       localStorage.setItem("userName", userName);
-      localStorage.setItem("password", password);
       localStorage.setItem("name",data.name);
       if (role === 'admin') {
         browserHistory.push('/admin');

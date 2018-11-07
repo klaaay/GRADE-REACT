@@ -5,6 +5,8 @@ import { browserHistory } from 'react-router';
 import { Layout, Menu, Icon, Dropdown, message } from 'antd';
 import $ from 'jquery'
 
+import requireAuth from '../requireAuth'
+
 import {
   classListSearch,
   startGetPublishedTaks
@@ -47,16 +49,6 @@ class PageTeacher extends Component {
             <img src="/logo.png" alt="" />
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            {/* <Menu.Item key="1"
-              className="homework_publish"
-              onClick={(e) => {
-                onClassListSearch()
-                this.changeRouter('task')
-              }}
-            >
-              <Icon type="file-text" />
-              <span>发布作业</span>
-            </Menu.Item> */}
             <Menu.Item key="1"
               className="homework_manage"
               onClick={(e) => {
@@ -134,7 +126,7 @@ class PageTeacher extends Component {
               </a>
             </Dropdown>
           </Header>
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520 }}>
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 520, marginBottom: 0 }}>
             {this.props.children}
           </Content>
           <Footer style={{ textAlign: 'center' }}>
@@ -163,4 +155,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageTeacher)
+export default connect(mapStateToProps, mapDispatchToProps)(requireAuth(PageTeacher))

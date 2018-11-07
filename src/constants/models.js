@@ -1,11 +1,14 @@
 import Immutable from 'immutable'
 
+const auth = localStorage.getItem('token')
+
 export const LoginState = Immutable.fromJS({
   userName: '',
   password: '',
   message: '',
   role: '',
   id: '',
+  auth: auth,
   status: 'await'
 })
 
@@ -60,5 +63,5 @@ export const StudentPageState = Immutable.fromJS({
   taskList: [],
   //groupEvaluate
   askedTaskList: [],
-  evalRecords:[]
+  evalRecords: []
 })

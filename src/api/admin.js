@@ -41,10 +41,9 @@ export const add_user = async (userName, password, repass,name, role) => {
   }
 }
 
-export const change_password = async (userName, relOld, oldPass, newPass, reNewPass) => {
+export const change_password = async (userName, oldPass, newPass, reNewPass) => {
   let data = {
     userName: userName,
-    relOld: relOld,
     oldPass: oldPass,
     newPass: newPass,
     reNewPass: reNewPass

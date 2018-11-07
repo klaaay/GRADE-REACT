@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import { Table, Icon } from 'antd';
 
-import './Teacher.less'
 
 const columns = [{
   title: '用户名',

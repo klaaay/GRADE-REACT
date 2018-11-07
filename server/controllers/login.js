@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 exports.user_login = (req, res, next) => {
   var userName = req.body.userName;
-  console.log(req.body)
+  // console.log(req.body)
   User.find({ userName: userName }, function (err, doc) {
     if (doc[0]) {
       var password = req.body.password;
