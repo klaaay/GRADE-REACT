@@ -1,31 +1,43 @@
 #doTask {
+  .ant-form-item-control {
+    line-height: 33px !important;
+  }
+
   height: 100%;
   display: flex;
+
   .task_info,
   .task_upload {
     flex-basis: 50%;
     margin: 10px;
   }
+
   .task_upload {
     border: 1px solid #f0f2f5;
+
     label {
       font-weight: bold;
     }
+
     .file_buttons {
       display: flex;
       justify-content: flex-start;
       flex-wrap: nowrap;
+
       .file_button {
         flex-basis: 33%;
-        button{
-          width:80%;
+
+        button {
+          width: 80%;
         }
       }
     }
+
     .info {
       display: flex;
       margin-left: 60px;
-      margin-top: -20px;
+
+      // margin-top: -20px;
       .selected,
       .saved {
         flex-basis: 50%;

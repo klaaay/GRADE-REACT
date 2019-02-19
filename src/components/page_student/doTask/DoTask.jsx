@@ -72,7 +72,7 @@ export default class DoTask extends Component {
         fdWord.append('id', this.props.location.state._id)
         fdWord.append('action', action)
         if (action === 'save') {
-            axios.post('http://localhost:5001/student/word', fdWord, {
+            axios.post('http://119.23.201.7:5001/student/word', fdWord, {
                 onUploadProgress: progressEvent => {
                     this.setState({
                         percentWord: Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -88,7 +88,7 @@ export default class DoTask extends Component {
             if (!this.state.savedWord) {
                 message.warning('请先所选保存文件');
             } else {
-                axios.post('http://localhost:5001/student/word', fdWord)
+                axios.post('http://119.23.201.7:5001/student/word', fdWord)
                     .then((res) => {
                         this.setState({
                             percentWord: 100,
@@ -108,7 +108,7 @@ export default class DoTask extends Component {
         fdPPT.append('id', this.props.location.state._id)
         fdPPT.append('action', action)
         if (action === 'save') {
-            axios.post('http://localhost:5001/student/ppt', fdPPT, {
+            axios.post('http://119.23.201.7:5001/student/ppt', fdPPT, {
                 onUploadProgress: progressEvent => {
                     this.setState({
                         percentPPT: Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -124,7 +124,7 @@ export default class DoTask extends Component {
             if (!this.state.savedPPT) {
                 message.warning('请先所选保存文件');
             } else {
-                axios.post('http://localhost:5001/student/ppt', fdPPT)
+                axios.post('http://119.23.201.7:5001/student/ppt', fdPPT)
                     .then((res) => {
                         this.setState({
                             percentPPT: 100,
@@ -144,7 +144,7 @@ export default class DoTask extends Component {
         fdVideo.append('id', this.props.location.state._id)
         fdVideo.append('action', action)
         if (action === 'save') {
-            axios.post('http://localhost:5001/student/video', fdVideo, {
+            axios.post('http://119.23.201.7:5001/student/video', fdVideo, {
                 onUploadProgress: progressEvent => {
                     this.setState({
                         percentVideo: Math.round((progressEvent.loaded / progressEvent.total) * 100)
@@ -160,7 +160,7 @@ export default class DoTask extends Component {
             if (!this.state.savedVideo) {
                 message.warning('请先所选保存文件');
             } else {
-                axios.post('http://localhost:5001/student/video', fdVideo)
+                axios.post('http://119.23.201.7:5001/student/video', fdVideo)
                     .then((res) => {
                         this.setState({
                             percentVideo: 100,
@@ -173,7 +173,7 @@ export default class DoTask extends Component {
     }
 
     componentDidMount = () => {
-        axios.post('http://localhost:5001/student/initialTaskInfo', { _id: this.props.location.state._id })
+        axios.post('http://119.23.201.7:5001/student/initialTaskInfo', { _id: this.props.location.state._id })
             .then(req => {
                 const { data } = req;
                 const { word, ppt, video, wordCommitted, pptCommitted, videoCommitted } = data.data;
@@ -347,9 +347,9 @@ export default class DoTask extends Component {
                         </div>
                         <div className="saved">
                             <p>已保存</p>
-                            <p><Icon type="file-word" theme="twoTone" />:<a href={'http://localhost:5001/' + this.state.savedWord}>{this.state.savedWord.toString().split('\\')[2]}</a></p>
-                            <p><Icon type="file-ppt" theme="twoTone" />:<a href={'http://localhost:5001/' + this.state.savedPPT}>{this.state.savedPPT.toString().split('\\')[2]}</a> </p>
-                            <p><Icon type="video-camera" theme="twoTone" />:<a href={'http://localhost:5001/' + this.state.savedVideo}>{this.state.savedVideo.toString().split('\\')[2]}</a></p>
+                            <p><Icon type="file-word" theme="twoTone" />:<a href={'http://119.23.201.7:5001/' + this.state.savedWord}>{this.state.savedWord.toString().split('\\')[2]}</a></p>
+                            <p><Icon type="file-ppt" theme="twoTone" />:<a href={'http://119.23.201.7:5001/' + this.state.savedPPT}>{this.state.savedPPT.toString().split('\\')[2]}</a> </p>
+                            <p><Icon type="video-camera" theme="twoTone" />:<a href={'http://119.23.201.7:5001/' + this.state.savedVideo}>{this.state.savedVideo.toString().split('\\')[2]}</a></p>
                         </div>
                     </div>
                 </div>

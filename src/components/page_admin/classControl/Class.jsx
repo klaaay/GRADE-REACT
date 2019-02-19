@@ -71,7 +71,7 @@ class Class extends Component {
                 this.setState({
                   role: 'class'
                 }, () => {
-                  $('.add_role').val('')
+                  $('.add_role input').val('')
                   this.setModalVisible(true)
                 })
               }
@@ -87,7 +87,7 @@ class Class extends Component {
               this.setState({
                 role: 'teacher'
               }, () => {
-                $('.add_role').val('')
+                $('.add_role input').val('')
                 this.setModalVisible(true)
               })
             }}>添加教师</Button>}
@@ -111,7 +111,7 @@ class Class extends Component {
               this.setState({
                 role: 'student'
               }, () => {
-                $('.add_role').val('')
+                $('.add_role input').val('')
                 this.setModalVisible(true)
               })
             }}>添加学生</Button>}
@@ -125,7 +125,7 @@ class Class extends Component {
           centered
           visible={this.state.modalVisible}
           onOk={() => {
-            if ($('.add_role').val()) {
+            if ($('.add_role input').val()) {
               onStartAddRole(this.state.role)
             }
             this.setModalVisible(false)
@@ -150,7 +150,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onStartAddRole: (role) => {
-    var addName = $('.add_role').val();
+    var addName = $('.add_role input').val();
     return dispatch(startAddRole(role, addName))
   },
   onStartGetNowClassInfo: (value) => {

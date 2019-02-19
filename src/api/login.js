@@ -10,7 +10,8 @@ export const login_confirm = async (userName, password) => {
     body: user_str
   }
   try {
-    const response = await fetch('http://localhost:5001/login', fetchOption);
+    // const response = await fetch('http://localhost:5001/login', fetchOption);
+    const response = await fetch('http://119.23.201.7:5001/login', fetchOption);
     const body = await response.json();
     return body;
   } catch (e) {

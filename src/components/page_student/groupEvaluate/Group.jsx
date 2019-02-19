@@ -59,7 +59,7 @@ class Group extends Component {
       dataIndex: 'wordCommitted',
       key: 'wordCommitted',
       render: (text, record) => {
-        return text ? <a href={'http://localhost:5000/' + record.word}><Icon type="file-word" theme={"twoTone"} /></a> : <Icon type="file-word" theme={"outlined"} />
+        return text ? <a href={'http://119.23.201.7:5001/' + record.word}><Icon type="file-word" theme={"twoTone"} /></a> : <Icon type="file-word" theme={"outlined"} />
       },
     },
     {
@@ -67,7 +67,7 @@ class Group extends Component {
       dataIndex: 'pptCommitted',
       key: 'pptCommitted',
       render: (text, record) => {
-        return text ? <a href={'http://localhost:5000/' + record.ppt}><Icon type="file-ppt" theme={"twoTone"} /></a> : <Icon type="file-ppt" theme={"outlined"} />
+        return text ? <a href={'http://119.23.201.7:5001/' + record.ppt}><Icon type="file-ppt" theme={"twoTone"} /></a> : <Icon type="file-ppt" theme={"outlined"} />
       },
     },
     {
@@ -75,7 +75,7 @@ class Group extends Component {
       dataIndex: 'videoCommitted',
       key: 'videoCommitted',
       render: (text, record) => {
-        return text ? <a href={'http://localhost:5000/' + record.video}><Icon type="video-camera" theme={"twoTone"} /></a> : <Icon type="video-camera" theme={"outlined"} />
+        return text ? <a href={'http://119.23.201.7:5001/' + record.video}><Icon type="video-camera" theme={"twoTone"} /></a> : <Icon type="video-camera" theme={"outlined"} />
       },
     },
     {

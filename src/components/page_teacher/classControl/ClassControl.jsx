@@ -22,7 +22,7 @@ class ClassControl extends Component {
     this.setState({
       selectClass: value
     }, () => {
-      axios.post('http://localhost:5001/teacher/classList', {
+      axios.post('http://119.23.201.7:5001/teacher/classList', {
         selectClass: value
       })
         .then(res => {
@@ -59,7 +59,7 @@ class ClassControl extends Component {
           // break; // 如果只取第一张表，就取消注释这行
         }
       }
-      axios.post('http://localhost:5001/teacher/classControl',
+      axios.post('http://119.23.201.7:5001/teacher/classControl',
         {
           selectClass: selectClass,
           addUsers: users
@@ -70,7 +70,7 @@ class ClassControl extends Component {
           } else {
             message.warning(res.data.message)
           }
-          axios.post('http://localhost:5001/teacher/classList', {
+          axios.post('http://119.23.201.7:5001/teacher/classList', {
             selectClass: selectClass
           })
             .then(res => {
@@ -127,7 +127,7 @@ class ClassControl extends Component {
               type="primary"
             > <a
               style={{ color: 'white' }}
-              href="http://localhost:5001/public\excel\test.xlsx">模板下载</a> </Button>
+              href="http://119.23.201.7:5001/public\excel\test.xlsx">模板下载</a> </Button>
           </Col>
         </Row>
         <Divider />

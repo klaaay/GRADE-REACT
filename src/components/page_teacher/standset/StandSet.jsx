@@ -177,7 +177,7 @@ export default class StandSet extends Component {
   ];
 
   componentWillMount = () => {
-    axios.post('http://localhost:5001/public/evaluateStandInitial', {
+    axios.post('http://119.23.201.7:5001/public/evaluateStandInitial', {
       publisher: localStorage.getItem('id')
     })
       .then(res => {
@@ -216,7 +216,7 @@ export default class StandSet extends Component {
                 marginLeft: '20px',
               }}
               onClick={() => {
-                axios.post('http://localhost:5001/teacher/evalStandModify', {
+                axios.post('http://119.23.201.7:5001/teacher/evalStandModify', {
                   owner: localStorage.getItem('id'),
                   evalStand: evalStandTemp,
                   initial_values: initialValues

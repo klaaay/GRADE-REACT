@@ -22,7 +22,6 @@ function* getAskedTasks() {
     // const id = yield select((state) => (state.getIn(['login', 'id'])));
     const id = localStorage.getItem("id");
     const data = yield call(get_asked_tasks, id);
-    console.log(data);
     yield put({ type: 'GROUP_EVALUATE_TASKS', payload: data })
   } catch (e) {
     console.log(e);
